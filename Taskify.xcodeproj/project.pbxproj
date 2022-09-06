@@ -21,6 +21,7 @@
 		B686279528C625B900A3886E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B686279328C625B900A3886E /* GoogleService-Info.plist */; };
 		B686279828C62B1000A3886E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B686279728C62B1000A3886E /* FirebaseAnalytics */; };
 		B686279A28C62B1000A3886E /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B686279928C62B1000A3886E /* FirebaseAnalyticsSwift */; };
+		B68627A128C7736D00A3886E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B68627A028C7736D00A3886E /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		B686277B28C6247000A3886E /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		B686277D28C6247000A3886E /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
 		B686279328C625B900A3886E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B686279E28C76DEB00A3886E /* Taskify--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Taskify--iOS--Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			files = (
 				B686279A28C62B1000A3886E /* FirebaseAnalyticsSwift in Frameworks */,
 				B686279828C62B1000A3886E /* FirebaseAnalytics in Frameworks */,
+				B68627A128C7736D00A3886E /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +96,7 @@
 		B686275128C6246A00A3886E = {
 			isa = PBXGroup;
 			children = (
+				B686279E28C76DEB00A3886E /* Taskify--iOS--Info.plist */,
 				B686275628C6246B00A3886E /* Shared */,
 				B686276528C6247000A3886E /* macOS */,
 				B686276E28C6247000A3886E /* Tests iOS */,
@@ -168,6 +172,7 @@
 			packageProductDependencies = (
 				B686279728C62B1000A3886E /* FirebaseAnalytics */,
 				B686279928C62B1000A3886E /* FirebaseAnalyticsSwift */,
+				B68627A028C7736D00A3886E /* FirebaseFirestore */,
 			);
 			productName = "Taskify (iOS)";
 			productReference = B686275E28C6247000A3886E /* Taskify.app */;
@@ -263,6 +268,7 @@
 			mainGroup = B686275128C6246A00A3886E;
 			packageReferences = (
 				B686279628C62B1000A3886E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				B686279F28C7736D00A3886E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = B686275F28C6247000A3886E /* Products */;
 			projectDirPath = "";
@@ -482,6 +488,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Taskify--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -511,6 +518,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Taskify--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -718,6 +726,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		B686279F28C7736D00A3886E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -730,6 +746,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B686279628C62B1000A3886E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsSwift;
+		};
+		B68627A028C7736D00A3886E /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B686279F28C7736D00A3886E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
