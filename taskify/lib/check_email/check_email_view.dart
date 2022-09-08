@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskify/create_new_password/create_new_password_view.dart';
+import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:taskify/util.dart';
 
 class CheckEmailView extends StatelessWidget {
@@ -45,7 +46,7 @@ class CheckEmailView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         child: Text(
-                          'We have sent password recovery instructions to your email.',
+                          'We have sent one time password to your email. Please write it there.',
                           style: Theme.of(context).textTheme.subtitle1,
                           textAlign: TextAlign.center,
                         ),
@@ -57,21 +58,30 @@ class CheckEmailView extends StatelessWidget {
                   height: 32,
                 ),
                 Container(
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      //navigate to create new password view
-                      Util.routeToWidget(context, CreateNewPasswordView());
-                    },
-                    child: Text(
-                      'Open email app',
-                      style: TextStyle(fontSize: 20),
-                    ),
+                  height: 50,
+                  child: TextFormField(
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
                   height: 32,
                 ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: ElevatedButton(
+                      onPressed: () {
+                        //navigate to check email view
+                        Util.routeToWidget(context, CreateNewPasswordView());
+                      },
+                      child: Text(
+                        'Verify',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )),
+                  ],
+                )
               ],
             ),
             Column(
@@ -83,7 +93,9 @@ class CheckEmailView extends StatelessWidget {
                   children: [
                     Text('or'),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Util.routeToWidget(context, SendInstructionsView());
+                      },
                       child: Text('try another email address'),
                     ),
                   ],
