@@ -33,6 +33,7 @@ class _AddList extends State<AddList> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     var isChecked = false;
     return Scaffold(
         appBar: AppBar(
@@ -117,17 +118,16 @@ class _AddList extends State<AddList> {
                   child: DropdownButtonFormField(
                       //style
                       decoration: InputDecoration(
-                          hintText: 'Ex: Home',
                           contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          )),
+                        vertical: 10,
+                        horizontal: 10,
+                      )),
 
                       //style: Theme.of(context).inputDecorationTheme.border,
                       // focusColor: Color.fromARGB(255, 69, 31, 156),
                       //  borderRadius: BorderRadius.circular(25),
                       isExpanded: true,
-                      hint: Text('Select any category',
+                      hint: Text('Choose category',
                           style: TextStyle(fontSize: 15)),
                       //style
 
