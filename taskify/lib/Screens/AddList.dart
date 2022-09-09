@@ -34,7 +34,7 @@ class _AddList extends State<AddList> {
     final double height = MediaQuery.of(context).size.height;
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    var isChecked = false;
+    bool? isChecked = false;
     return Scaffold(
         appBar: AppBar(
           leadingWidth: 50,
@@ -155,10 +155,14 @@ class _AddList extends State<AddList> {
                 ),
 
                 CheckboxListTile(
+                  activeColor: Color(0xff7b39ed),
+                  checkColor: Color(0xff7b39ed),
                   title: Text("Do you want it to be shared?"),
                   value: isChecked,
-                  onChanged: (isChecked) {
-                    isChecked = true;
+                  onChanged: (newValue) {
+                    setState(() {
+                      isChecked = newValue;
+                    });
                   },
                 ),
 
