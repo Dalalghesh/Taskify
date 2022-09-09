@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/util.dart';
 
 import 'AddTask.dart';
@@ -15,7 +16,9 @@ class InviteFriend extends StatelessWidget {
         leadingWidth: 50,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {
+            Util.routeToWidget(context, AddList());
+          },
         ),
         actions: [
           Padding(
@@ -67,6 +70,25 @@ class InviteFriend extends StatelessWidget {
                     style: TextStyle(fontSize: 20),
                   ),
                 )),
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.grey.shade600,
+                      textStyle: const TextStyle(fontSize: 18),
+                    ),
+                    onPressed: () {
+                      Util.routeToWidget(context, AddTask());
+                    },
+                    child: const Text('Later'),
+                  ),
+                ),
               ],
             ),
           ],
