@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:taskify/Screens/InviteFriend.dart';
 import 'package:taskify/util.dart';
+import 'package:flutter/material.dart';
 
 void main() {
+  //Initializing Database when starting the application.
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(AddTask());
 }
 
@@ -61,7 +64,7 @@ class _AddTask extends State<AddTask> {
                 Align(
                     alignment: Alignment.center,
                     child: Image.asset(
-                      "/Users/raghad/Desktop/Taskify/taskify/assets/AddTasks.png",
+                      "assets/AddTasks.png",
                       height: 200,
                       width: 200,
                     )),
@@ -225,7 +228,7 @@ class _AddTask extends State<AddTask> {
                           final snackBar =
                               SnackBar(content: Text("Created successfully"));
                           Util.routeToWidget(context, InviteFriend());
-                          _scaffoldKey.currentState!.showSnackBar(snackBar);
+                          // _scaffoldKey.currentState!.showSnackBar(snackBar);
                         }
                       },
                       child: Text(

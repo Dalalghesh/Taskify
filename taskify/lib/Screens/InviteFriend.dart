@@ -3,6 +3,7 @@ import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/util.dart';
 
 import 'AddTask.dart';
+import 'package:flutter/material.dart';
 
 class InviteFriend extends StatelessWidget {
   //const SendInstructionsView({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class InviteFriend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late String email;
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 50,
@@ -40,13 +42,34 @@ class InviteFriend extends StatelessWidget {
             SizedBox(
               height: 16,
             ),
-            Text(
-              'Enter your friends\' email:',
-              style: Theme.of(context).textTheme.subtitle1,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              child: Text(
+                'Enter your friends\' email:',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
             SizedBox(
               height: 8,
             ),
+            TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Ex: John@gmail.com',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty)
+                    return "Please enter an email";
+                  else
+                    return null;
+                },
+                onChanged: (value) {
+                  email = value;
+                },
+                style: Theme.of(context).textTheme.subtitle1),
             Container(
               height: 50,
               child: TextFormField(
