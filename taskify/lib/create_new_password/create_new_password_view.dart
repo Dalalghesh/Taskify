@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 
-class CreateNewPasswordView extends StatelessWidget {
-  const CreateNewPasswordView({Key? key}) : super(key: key);
+class CreateNewPasswordView extends StatefulWidget {
+  _CreateNewPasswordView createState() => _CreateNewPasswordView();
+}
 
+class _CreateNewPasswordView extends State<CreateNewPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 30,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
-        ),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/create.png',
+                  height: 300,
+                  width: 300,
+                ),
+              ],
+            ),
             SizedBox(
               height: 16,
             ),

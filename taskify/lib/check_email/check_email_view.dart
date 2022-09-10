@@ -3,9 +3,11 @@ import 'package:taskify/create_new_password/create_new_password_view.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:taskify/util.dart';
 
-class CheckEmailView extends StatelessWidget {
-  const CheckEmailView({Key? key}) : super(key: key);
+class CheckEmailView extends StatefulWidget {
+  _CheckEmailView createState() => _CheckEmailView();
+}
 
+class _CheckEmailView extends State<CheckEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +21,10 @@ class CheckEmailView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.mail_outline_rounded,
-                      size: 100,
+                    Image.asset(
+                      'assets/msg.png',
+                      height: 300,
+                      width: 300,
                     ),
                   ],
                 ),
@@ -60,6 +63,7 @@ class CheckEmailView extends StatelessWidget {
                 Container(
                   height: 50,
                   child: TextFormField(
+                    //controller: emailController,
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
@@ -93,10 +97,10 @@ class CheckEmailView extends StatelessWidget {
                   children: [
                     Text('or'),
                     TextButton(
+                      child: Text('try another email address'),
                       onPressed: () {
                         Util.routeToWidget(context, SendInstructionsView());
                       },
-                      child: Text('try another email address'),
                     ),
                   ],
                 )

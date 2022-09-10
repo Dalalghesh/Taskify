@@ -1,9 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/check_email/check_email_view.dart';
 import 'package:taskify/util.dart';
 
-class SendInstructionsView extends StatelessWidget {
-  const SendInstructionsView({Key? key}) : super(key: key);
+class SendInstructionsView extends StatefulWidget {
+  _SendInstructionsView createState() => _SendInstructionsView();
+}
+
+class _SendInstructionsView extends State<SendInstructionsView> {
+  late String _email;
+  final auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class SendInstructionsView extends StatelessWidget {
               height: 16,
             ),
             Text(
-              'Enter the email associated with your account and we\'ll send an email with instructions to reset your password',
+              'Enter the email associated with your account and we\'ll send an email with verification code to reset your password',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             SizedBox(
@@ -58,6 +64,11 @@ class SendInstructionsView extends StatelessWidget {
               child: TextFormField(
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                onChanged: (value) {
+                  setState(() {
+                    _email = value;
+                  });
+                },
               ),
             ),
             SizedBox(
@@ -68,11 +79,33 @@ class SendInstructionsView extends StatelessWidget {
                 Expanded(
                     child: ElevatedButton(
                   onPressed: () {
-                    //navigate to check email view
-                    Util.routeToWidget(context, CheckEmailView());
+                    try {
+                      auth.sendPasswordResetEmail(email: _email);
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text(
+                                'Please check your email to reset your password'),
+                          );
+                        },
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      print(e);
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text(e.message.toString()),
+                          );
+                        },
+                      );
+                    }
+
+                    //Util.routeToWidget(context, LoginPage());
                   },
                   child: Text(
-                    'Send Instructions',
+                    'Send',
                     style: TextStyle(fontSize: 20),
                   ),
                 )),
