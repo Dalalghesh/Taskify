@@ -1,51 +1,27 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/home/navigation.dart';
-//import 'package:spincircle_bottom_bar/modals.dart';
-//import 'package:spincircle_bottom_bar/spincircle_bottom_bar.dart';
+import 'package:get/get.dart';
+import 'package:taskify/nav_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Taskify App',
+    return GetMaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeBottom(),
-    );
-  }
-}
-
-class HomeBottom extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => navigationstate()));
-                },
-                child: const Text(
-                  "SpinCircle",
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      home: NavBar(tabs: 0),
     );
   }
 }

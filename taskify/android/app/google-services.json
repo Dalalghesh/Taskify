@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "750046757369-ar21eplrr642dg00qdh8qavgpgmcdmdr.apps.googleusercontent.com",
+              "client_id": "750046757369-4104o3t2ttaqncjeih6u75ntq89sllnd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "ksu.Taskify"
+                "bundle_id": "com.example.taskify"
               }
             }
           ]
