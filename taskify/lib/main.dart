@@ -5,6 +5,10 @@ import 'package:taskify/InviteFriend.dart';
 import 'package:taskify/received_invitations.dart';
 import 'package:taskify/send_invitation.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:taskify/Notifications.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 
 // #7b39ed - primary color
 
@@ -19,8 +23,6 @@ Future<void> _handleBackgroundMessaging(RemoteMessage message)async{
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  //notifications 
-  FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessaging);
   runApp(MyApp());
 }
 
@@ -73,7 +75,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xff7b39ed),
         primarySwatch: primarySwatch,
       ),
-      home: Add_Category(),
+      home: notifications(),
     );
   }
 }
