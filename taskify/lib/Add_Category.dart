@@ -150,7 +150,7 @@ void getCategory() async{
                               SnackBar(content: Text("Created successfully"));
 
                                  _firestore.collection('Category').add({
-                        'Name': Category!,
+                                 'Name': Category!,
                        }
                        );
 
