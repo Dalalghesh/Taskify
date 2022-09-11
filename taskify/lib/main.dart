@@ -3,12 +3,11 @@ import 'package:taskify/Screens/AddList.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-//import 'package:taskify/send_instructions/send_instructions_view.dart';
-// #7b39ed - primary color
-
 void main() async {
   //Initializing Database when starting the application.
+
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }

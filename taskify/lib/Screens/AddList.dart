@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:taskify/Screens/AddTask.dart';
 import 'package:taskify/Screens/InviteFriend.dart';
@@ -11,16 +9,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'firebase_options.dart';
 
 //import 'op';
-void main() {
-  runApp(AddList());
-}
-/*
+
 void main() async {
   //Initializing Database when starting the application.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(AddList());
-}*/
+}
 
 Widget build(BuildContext context) {
   return MaterialApp(

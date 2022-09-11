@@ -39,6 +39,13 @@ class InviteFriend extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
+            Align(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  "assets/AddList.png",
+                  height: 200,
+                  width: 200,
+                )),
             SizedBox(
               height: 16,
             ),
@@ -70,13 +77,6 @@ class InviteFriend extends StatelessWidget {
                   email = value;
                 },
                 style: Theme.of(context).textTheme.subtitle1),
-            Container(
-              height: 50,
-              child: TextFormField(
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-            ),
             SizedBox(
               height: 16,
             ),
