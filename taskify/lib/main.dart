@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:taskify/Screens/AddList.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 
 void main() async {
   //Initializing Database when starting the application.
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
             headline4:
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             subtitle1: TextStyle(
-              color: Colors.grey.shade600,
+              color: Colors.black,
             )),
         appBarTheme: AppBarTheme(
             backgroundColor: Colors.transparent,
