@@ -5,10 +5,7 @@ import 'package:taskify/util.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-//import 'firebase_options.dart';
-
-//import 'op';
+import 'package:intl/intl.dart';
 
 void main() async {
   //Initializing Database when starting the application.
@@ -41,9 +38,9 @@ class _AddList extends State<AddList> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     bool? isChecked = false;
+
     late String listt;
     late String category;
     return Scaffold(
@@ -169,16 +166,16 @@ class _AddList extends State<AddList> {
                 ),
 
                 CheckboxListTile(
-                  activeColor: Color(0xff7b39ed),
-                  checkColor: Color(0xff7b39ed),
-                  title: Text("Do you want it to be shared?"),
-                  value: isChecked,
-                  onChanged: (newValue) {
-                    setState(() {
-                      isChecked = newValue;
-                    });
-                  },
-                ),
+                    activeColor: Color(0xff7b39ed),
+                    checkColor: Color(0xff7b39ed),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: Text("Do you want it to be shared?"),
+                    value: isChecked,
+                    onChanged: (bool? value) {
+                      isChecked = value;
+                      print(
+                          isChecked); // How did value change to true at this point?
+                    }),
 
                 SizedBox(
                   height: 8,
@@ -198,8 +195,10 @@ class _AddList extends State<AddList> {
                             'Category': category,
                             'Name': listt,
                           });
-                          Util.routeToWidget(context, InviteFriend());
-                          // _scaffoldKey.currentState!.showSnackBar(snackBar);
+                          if (isChecked == true)
+                            Util.routeToWidget(context, InviteFriend());
+                          else
+                            Util.routeToWidget(context, AddTask());
                         }
                       },
                       child: Text(
