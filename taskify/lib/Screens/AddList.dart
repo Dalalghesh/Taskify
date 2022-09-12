@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/Screens/AddTask.dart';
 import 'package:taskify/Screens/InviteFriend.dart';
@@ -27,9 +28,12 @@ class AddList extends StatefulWidget {
 }
 
 class _AddList extends State<AddList> {
+  var selectCategory;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   //const SendInstructionsView({Key? key}) : super(key: key);
   final _firestore = FirebaseFirestore.instance;
-  final formKey = GlobalKey<FormState>(); //key for form
+  //final formKey = GlobalKey<FormState>(); //key for form
   bool buttonenabled = false;
   late final String documentId;
 
@@ -90,7 +94,7 @@ class _AddList extends State<AddList> {
                   ),
                 ),
                 SizedBox(
-                  height: 5,
+                  height: 3,
                 ),
                 TextFormField(
                     decoration: InputDecoration(
@@ -124,45 +128,59 @@ class _AddList extends State<AddList> {
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
-
-                Container(
-                  child: DropdownButtonFormField(
-                      //style
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      )),
-
-                      //style: Theme.of(context).inputDecorationTheme.border,
-                      // focusColor: Color.fromARGB(255, 69, 31, 156),
-                      //  borderRadius: BorderRadius.circular(25),
-                      isExpanded: true,
-                      hint: Text('Choose category',
-                          style: TextStyle(fontSize: 15)),
-                      //style
-
-                      items: <String>['Home', 'University', 'Work', 'Grocery']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        category = value.toString();
-                      },
-                      validator: (value) {
-                        if (value == null)
-                          return "Please choose category";
-                        else
-                          return null;
-                      }),
-                ),
-                //-----------------------End of Categorey-----------------------
-
                 SizedBox(
-                  height: 8,
+                  height: 3,
+                ),
+                StreamBuilder<QuerySnapshot>(
+                  stream:
+                      FirebaseFirestore.instance.collection('cat').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      Text("Loading");
+                    } else {
+                      List<DropdownMenuItem> Categories = [];
+                      for (int i = 0;
+                          i < (snapshot.data! as QuerySnapshot).docs.length;
+                          i++) {
+                        DocumentSnapshot ds = snapshot.data!.docs[i];
+                        Categories.add(
+                          DropdownMenuItem(
+                            child: Text(ds.id),
+                            value: "${ds.id}",
+                          ),
+                        );
+                      }
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(
+                            child: DropdownButtonFormField2<dynamic>(
+                                scrollbarAlwaysShow: true,
+                                itemHeight: 35,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 15),
+                                items: Categories,
+                                onChanged: (categoreyValue) {
+                                  setState(() {
+                                    selectCategory = categoreyValue;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null)
+                                    return "Please choose category";
+                                  else
+                                    return null;
+                                },
+                                value: selectCategory,
+                                isExpanded: true,
+                                hint: new Text("Choose category",
+                                    style: TextStyle(fontSize: 15))),
+                          ),
+                        ],
+                      );
+                    }
+                    return Text("");
+                  },
                 ),
 
                 CheckboxListTile(
@@ -173,13 +191,9 @@ class _AddList extends State<AddList> {
                     value: isChecked,
                     onChanged: (bool? value) {
                       isChecked = value;
-                      print(
-                          isChecked); // How did value change to true at this point?
+                      print(isChecked);
+                      // How did value change to true at this point?
                     }),
-
-                SizedBox(
-                  height: 8,
-                ),
 
                 Row(
                   children: [
@@ -191,9 +205,9 @@ class _AddList extends State<AddList> {
                           final snackBar =
                               SnackBar(content: Text("Created successfully"));
                           print(listt);
-                          print(category);
+                          print(selectCategory);
                           _firestore.collection('List').add({
-                            'Category': category,
+                            'Category': selectCategory,
                             'Name': listt,
                           });
                           CoolAlert.show(
