@@ -49,7 +49,7 @@ class _CheckEmailView extends State<CheckEmailView> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         child: Text(
-                          'We have sent one time password to your email. Please write it there.',
+                          'We have sent you an email to reset your password please check your email,after resting your password please click next',
                           style: Theme.of(context).textTheme.subtitle1,
                           textAlign: TextAlign.center,
                         ),
@@ -60,27 +60,16 @@ class _CheckEmailView extends State<CheckEmailView> {
                 SizedBox(
                   height: 32,
                 ),
-                Container(
-                  height: 50,
-                  child: TextFormField(
-                    //controller: emailController,
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 32,
-                ),
                 Row(
                   children: [
                     Expanded(
                         child: ElevatedButton(
                       onPressed: () {
-                        //navigate to check email view
-                        Util.routeToWidget(context, CreateNewPasswordView());
+                        //navigate to check login page
+                        //Util.routeToWidget(context, LoginPage());
                       },
                       child: Text(
-                        'Verify',
+                        'next',
                         style: TextStyle(fontSize: 20),
                       ),
                     )),

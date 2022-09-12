@@ -8,8 +8,35 @@ class SendInstructionsView extends StatefulWidget {
 }
 
 class _SendInstructionsView extends State<SendInstructionsView> {
-  late String _email;
+  String _email;
   final auth = FirebaseAuth.instance;
+  final emailController = TextEditingController();
+
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  Future passReset() async {
+    bool n = true;
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      n = false;
+      print(e);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(e.message.toString()),
+            );
+          });
+    }
+    if (n) {
+      Util.routeToWidget(context, CheckEmailView());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +73,7 @@ class _SendInstructionsView extends State<SendInstructionsView> {
               height: 16,
             ),
             Text(
-              'Enter the email associated with your account and we\'ll send an email with verification code to reset your password',
+              'Enter the email associated with your account and we\'ll send an email to reset your password',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             SizedBox(
@@ -62,6 +89,7 @@ class _SendInstructionsView extends State<SendInstructionsView> {
             Container(
               height: 50,
               child: TextFormField(
+                controller: emailController,
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 onChanged: (value) {
@@ -79,30 +107,7 @@ class _SendInstructionsView extends State<SendInstructionsView> {
                 Expanded(
                     child: ElevatedButton(
                   onPressed: () {
-                    try {
-                      auth.sendPasswordResetEmail(email: _email);
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text(
-                                'Please check your email to reset your password'),
-                          );
-                        },
-                      );
-                    } on FirebaseAuthException catch (e) {
-                      print(e);
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text(e.message.toString()),
-                          );
-                        },
-                      );
-                    }
-
-                    //Util.routeToWidget(context, LoginPage());
+                    passReset();
                   },
                   child: Text(
                     'Send',
