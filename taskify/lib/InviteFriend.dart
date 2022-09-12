@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:taskify/received_invitations.dart';
 import 'package:taskify/util.dart';
 import 'package:flutter/material.dart';
+
+import 'invitation/screens/received_invitations.dart';
 
 class InviteFriend extends StatelessWidget {
   //const SendInstructionsView({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class InviteFriend extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Util.routeToWidget(context, received_inviations());
+            Util.routeToWidget(context, RecievedInvitations());
           },
         ),
         actions: [
@@ -40,7 +41,7 @@ class InviteFriend extends StatelessWidget {
             Align(
                 alignment: Alignment.center,
                 child: Image.asset(
-                'assets/Online world-cuate-2.png',
+                  'assets/Online world-cuate-2.png',
                   height: 200,
                   width: 200,
                 )),
@@ -84,7 +85,7 @@ class InviteFriend extends StatelessWidget {
                     child: ElevatedButton(
                   onPressed: () {
                     //navigate to check email view
-                    Util.routeToWidget(context, received_inviations());
+                    Util.routeToWidget(context, RecievedInvitations());
                   },
                   child: Text(
                     'Invite',
@@ -105,7 +106,7 @@ class InviteFriend extends StatelessWidget {
                       textStyle: const TextStyle(fontSize: 18),
                     ),
                     onPressed: () {
-                      Util.routeToWidget(context, received_inviations());
+                      Util.routeToWidget(context, RecievedInvitations());
                     },
                     child: const Text('Later'),
                   ),
