@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:taskify/Screens/InviteFriend.dart';
 import 'package:taskify/util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 
 void main() {
   //Initializing Database when starting the application.
@@ -22,6 +24,26 @@ class AddTask extends StatefulWidget {
 
 class _AddTask extends State<AddTask> {
   DateTime dateTime = new DateTime.now();
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => Container(
+              height: 216,
+              padding: const EdgeInsets.only(top: 6.0),
+              // The Bottom margin is provided to align the popup above the system navigation bar.
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              // Provide a background color for the popup.
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              // Use a SafeArea widget to avoid system overlaps.
+              child: SafeArea(
+                top: false,
+                child: child,
+              ),
+            ));
+  }
+
   final formKey = GlobalKey<FormState>(); //key for form
   late DateTime selectedDateTime;
   bool pressed = false;
@@ -33,8 +55,9 @@ class _AddTask extends State<AddTask> {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          leadingWidth: 50,
+          leadingWidth: 40,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -47,7 +70,8 @@ class _AddTask extends State<AddTask> {
             )
           ],
         ),
-        body: Container(
+        body: SingleChildScrollView(
+            child: Container(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: formKey, //key for form
@@ -59,17 +83,17 @@ class _AddTask extends State<AddTask> {
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 0,
                 ),
                 Align(
                     alignment: Alignment.center,
                     child: Image.asset(
                       "assets/AddTasks.png",
-                      height: 200,
+                      height: 190,
                       width: 200,
                     )),
                 SizedBox(
-                  height: 16,
+                  height: 10,
                 ),
 
                 //-----------------------List name-----------------------
@@ -203,19 +227,42 @@ class _AddTask extends State<AddTask> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
-                    'Deadline:',
+                    'Deadline: (optionally)',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
-                /* ElevatedButton(
-                    child: Text(
-                        '${dateTime.day}/${dateTime.month}/${dateTime.year}'),
-                    onPressed: () async {
-                      final date = await pickDate();
-                    }),*/
-
                 SizedBox(
-                  height: 8,
+                  height: 2,
+                ),
+                _DatePickerItem(
+                  children: <Widget>[
+                    CupertinoButton(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
+                      disabledColor: CupertinoColors.quaternarySystemFill,
+
+                      // Display a CupertinoDatePicker in dateTime picker mode.
+                      onPressed: () => _showDialog(
+                        CupertinoDatePicker(
+                          minimumDate: dateTime,
+                          initialDateTime: dateTime,
+                          use24hFormat: false,
+                          // This is called when the user changes the dateTime.
+                          onDateTimeChanged: (DateTime newDateTime) {
+                            setState(() => dateTime = newDateTime);
+                          },
+                        ),
+                      ),
+
+                      child: Text(
+                        '            ${dateTime.month}/${dateTime.day}/${dateTime.year}                  ${dateTime.hour}:${dateTime.minute}',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
                 ),
 
                 Row(
@@ -239,13 +286,16 @@ class _AddTask extends State<AddTask> {
                   ],
                 ),
                 SizedBox(
-                  height: 5,
+                  height: 0,
                 ),
                 Row(
                   children: [
                     Expanded(
                       child: TextButton(
                         style: TextButton.styleFrom(
+                          minimumSize: Size(50, 40),
+                          padding: EdgeInsets.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           primary: Colors.grey.shade600,
                           textStyle: const TextStyle(fontSize: 18),
                         ),
@@ -261,7 +311,7 @@ class _AddTask extends State<AddTask> {
               ],
             ),
           ),
-        ));
+        )));
   }
 
   Future<DateTime?> pickDate() => showDatePicker(
@@ -270,4 +320,48 @@ class _AddTask extends State<AddTask> {
         firstDate: DateTime(1900),
         lastDate: DateTime(1900),
       );
+}
+
+// This class simply decorates a row of widgets.
+class _DatePickerItem extends StatelessWidget {
+  const _DatePickerItem({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    OutlinedButton.styleFrom(
+      side: BorderSide(color: Color(0xff7b39ed)),
+    );
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border(
+          top: BorderSide(
+            color: CupertinoColors.inactiveGray,
+            width: 0.5,
+          ),
+          bottom: BorderSide(
+            color: CupertinoColors.inactiveGray,
+            width: 0.5,
+          ),
+          left: BorderSide(
+            color: CupertinoColors.inactiveGray,
+            width: 0.5,
+          ),
+          right: BorderSide(
+            color: CupertinoColors.inactiveGray,
+            width: 0.5,
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: children,
+        ),
+      ),
+    );
+  }
 }
