@@ -105,18 +105,16 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xff7b39ed),
         primarySwatch: primarySwatch,
       ),
-      home: MyHomePage(),
+      home: Add_Category(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
 class _MyHomePageState extends State<MyHomePage> {
 
  late int _totalNotifications;
