@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:cool_alert/cool_alert.dart';
 
 void main() async {
   //Initializing Database when starting the application.
@@ -30,7 +31,6 @@ class _AddList extends State<AddList> {
   final _firestore = FirebaseFirestore.instance;
   final formKey = GlobalKey<FormState>(); //key for form
   bool buttonenabled = false;
-
   late final String documentId;
 
   //final dropdownlist = <String>['Home', 'University', 'Work', 'Grocery'];
@@ -180,6 +180,7 @@ class _AddList extends State<AddList> {
                 SizedBox(
                   height: 8,
                 ),
+
                 Row(
                   children: [
                     Expanded(
@@ -195,10 +196,13 @@ class _AddList extends State<AddList> {
                             'Category': category,
                             'Name': listt,
                           });
-                          if (isChecked == true)
-                            Util.routeToWidget(context, InviteFriend());
-                          else
-                            Util.routeToWidget(context, AddTask());
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: "List created successfuly!",
+                            confirmBtnColor: const Color(0xff7b39ed),
+                            onConfirmBtnTap: () => route(isChecked),
+                          );
                         }
                       },
                       child: Text(
@@ -212,5 +216,37 @@ class _AddList extends State<AddList> {
             ),
           ),
         ));
+  }
+
+  void route(bool? isChecked) {
+    if (isChecked == true)
+      Util.routeToWidget(context, InviteFriend());
+    else
+      Util.routeToWidget(context, AddTask());
+    //print(text);
+  }
+
+  Widget _buildButton(
+      {VoidCallback? onTap, required String text, Color? color}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: MaterialButton(
+        color: color,
+        minWidth: double.infinity,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        onPressed: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

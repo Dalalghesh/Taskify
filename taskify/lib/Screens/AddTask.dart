@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/Screens/InviteFriend.dart';
 import 'package:taskify/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
+import 'package:cool_alert/cool_alert.dart';
 
 void main() {
   //Initializing Database when starting the application.
@@ -270,12 +272,17 @@ class _AddTask extends State<AddTask> {
                     Expanded(
                         child: ElevatedButton(
                       onPressed: () {
-                        //navigate to check email view
                         if (formKey.currentState!.validate()) {
                           final snackBar =
                               SnackBar(content: Text("Created successfully"));
-                          Util.routeToWidget(context, InviteFriend());
-                          // _scaffoldKey.currentState!.showSnackBar(snackBar);
+
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: "List created successfuly!",
+                            confirmBtnColor: const Color(0xff7b39ed),
+                            onConfirmBtnTap: () => route(),
+                          );
                         }
                       },
                       child: Text(
@@ -320,6 +327,35 @@ class _AddTask extends State<AddTask> {
         firstDate: DateTime(1900),
         lastDate: DateTime(1900),
       );
+
+  void route() {
+    //route it to home page
+    Util.routeToWidget(context, AddList());
+  }
+
+  Widget _buildButton(
+      {VoidCallback? onTap, required String text, Color? color}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: MaterialButton(
+        color: color,
+        minWidth: double.infinity,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        onPressed: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 // This class simply decorates a row of widgets.
