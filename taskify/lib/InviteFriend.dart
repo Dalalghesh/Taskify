@@ -109,6 +109,7 @@ class InviteFriend extends StatelessWidget {
                       Util.routeToWidget(context, RecievedInvitations());
                     },
                     child: const Text('Later'),
+                    
                   ),
                 ),
               ],

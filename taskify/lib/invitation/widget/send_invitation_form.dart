@@ -45,8 +45,8 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
           SizedBox(
             height: 80,
             child: TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Ex: Sara@gmail.com',
+                decoration: InputDecoration(
+                  hintText: 'Ex: John@gmail.com',
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 10,
@@ -64,7 +64,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                     ?.copyWith(color: Colors.black)),
           ),
           const SizedBox(
-            height: 16,
+            height: 0,
           ),
           ElevatedButton(
             onPressed: () async => await sendInviation(),
@@ -98,6 +98,23 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
             },
             child: const Text("Logout"),
           ),
+          Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.grey.shade600,
+                      textStyle: const TextStyle(fontSize: 18),
+                    ),
+                    onPressed: () {
+                      //Util.routeToWidget(context, RecievedInvitations());
+                    },
+                    child: const Text('Later'),
+                    
+                  ),
+                ),
+              ],
+            ),
         ],
       ),
     );
