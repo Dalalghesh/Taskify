@@ -3,6 +3,7 @@ import 'package:taskify/received_invitations.dart';
 import 'package:taskify/util.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class notifications extends StatelessWidget {
   //const SendInstructionsView({Key? key}) : super(key: key);
