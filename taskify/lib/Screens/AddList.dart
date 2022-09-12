@@ -16,11 +16,58 @@ void main() async {
   runApp(AddList());
 }
 
-Widget build(BuildContext context) {
-  return MaterialApp(
-    home: AddList(),
-  );
-}
+// class _ListPageState extends State<AddList> {
+//   late Future<dynamic> _data;
+//   Future getUsers() async {
+//     var firestore = FirebaseFirestore.instance;
+//     firestore.collection("users").get();
+//     QuerySnapshot qn = await firestore.collection("users").get();
+//     return qn.docs;
+//   }
+
+//   navigateToDetail(DocumentSnapshot users) {
+//     Navigator.push(context,
+//         MaterialPageRoute(builder: (context) => _AddList(users: users)));
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     _data = getUsers();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: FutureBuilder(
+//         future: _data,
+//         builder: (context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.waiting) {
+//             return Text("Loading ...");
+//           } else {
+//             return ListView.builder(
+//               itemCount: snapshot.data.length,
+//               itemBuilder: (context, index) {
+//                 return ListTile(
+//                     title: Text(snapshot.data[index].data['name']),
+//                     onTap: () {
+//                       navigateToDetail(snapshot.data[index]);
+//                     });
+//               },
+//             );
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }
+
+// Widget build(BuildContext context) {
+//   return MaterialApp(
+//     home: AddList(),
+//   );
+// }
 
 class AddList extends StatefulWidget {
   @override
@@ -28,6 +75,10 @@ class AddList extends StatefulWidget {
 }
 
 class _AddList extends State<AddList> {
+  //final DocumentSnapshot users;
+
+  // _AddList({Key key, @required this.users}) : super(key: key);
+
   var selectCategory;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -37,11 +88,19 @@ class _AddList extends State<AddList> {
   bool buttonenabled = false;
   late final String documentId;
 
-  //final dropdownlist = <String>['Home', 'University', 'Work', 'Grocery'];
   String selectedValue = '';
 
   @override
   Widget build(BuildContext context) {
+    Stream? postStream =
+        FirebaseFirestore.instance.collection('users1').snapshots();
+
+    // Stream? posts = FirebaseFirestore.instance.collection('users1').doc('bERJgJI288LgROb1gUN3');
+    // FirebaseFirestore.instance
+    //     .collection('users1')
+    //     .doc('bERJgJI288LgROb1gUN3')
+    //     .snapshots();
+
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     bool? isChecked = false;
 
@@ -52,7 +111,9 @@ class _AddList extends State<AddList> {
           leadingWidth: 50,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () {}, // home page
+            onPressed: () {
+              Util.routeToWidget(context, AddTask());
+            }, // home page
           ),
           actions: [
             Padding(
@@ -132,20 +193,22 @@ class _AddList extends State<AddList> {
                   height: 3,
                 ),
                 StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection('cat').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('users1')
+                      .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      Text("Loading");
-                    } else {
+                    if (snapshot.hasData) {
+                      var doc = snapshot.data?.docs;
+
                       List<DropdownMenuItem> Categories = [];
                       for (int i = 0;
                           i < (snapshot.data! as QuerySnapshot).docs.length;
                           i++) {
+                        //bERJgJI288LgROb1gUN3
                         DocumentSnapshot ds = snapshot.data!.docs[i];
                         Categories.add(
                           DropdownMenuItem(
-                            child: Text(ds.id),
+                            child: Text(ds.get('email')),
                             value: "${ds.id}",
                           ),
                         );
@@ -178,10 +241,13 @@ class _AddList extends State<AddList> {
                           ),
                         ],
                       );
+                    } else {
+                      Text("Loading");
                     }
                     return Text("");
                   },
                 ),
+                //-----------------------End of Categorey-----------------------
 
                 CheckboxListTile(
                     activeColor: Color(0xff7b39ed),

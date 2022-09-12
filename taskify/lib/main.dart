@@ -5,8 +5,6 @@ import 'firebase_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:get/get.dart';
-import 'package:taskify/nav_bar.dart';
-import 'package:taskify/send_instructions/send_instructions_view.dart';
 
 void main() async {
   //Initializing Database when starting the application.

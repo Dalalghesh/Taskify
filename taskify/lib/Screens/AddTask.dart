@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/Screens/InviteFriend.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 void main() {
   //Initializing Database when starting the application.
@@ -25,6 +27,8 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTask extends State<AddTask> {
+  var selectCategory;
+
   DateTime dateTime = new DateTime.now();
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -130,7 +134,6 @@ class _AddTask extends State<AddTask> {
                   height: 8,
                 ),
                 //-----------------------Categorey-----------------------
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
@@ -138,41 +141,59 @@ class _AddTask extends State<AddTask> {
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
-
-                Container(
-                  child: DropdownButtonFormField(
-                      //style
-                      decoration: InputDecoration(
-                          hintText: 'Home',
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          )),
-
-                      //style: Theme.of(context).inputDecorationTheme.border,
-                      // focusColor: Color.fromARGB(255, 69, 31, 156),
-                      //  borderRadius: BorderRadius.circular(25),
-                      isExpanded: true,
-                      hint: Text('Select any category',
-                          style: TextStyle(fontSize: 15)),
-                      //style
-
-                      items: <String>['Home', 'University', 'Work', 'Grocery']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                SizedBox(
+                  height: 3,
+                ),
+                StreamBuilder<QuerySnapshot>(
+                  stream:
+                      FirebaseFirestore.instance.collection('cat').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      Text("Loading");
+                    } else {
+                      List<DropdownMenuItem> Categories = [];
+                      for (int i = 0;
+                          i < (snapshot.data! as QuerySnapshot).docs.length;
+                          i++) {
+                        DocumentSnapshot ds = snapshot.data!.docs[i];
+                        Categories.add(
+                          DropdownMenuItem(
+                            child: Text(ds.id),
+                            value: "${ds.id}",
+                          ),
                         );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                      validator: (value) {
-                        if (value == null)
-                          return "Please choose category";
-                        else
-                          return null;
-                      }),
+                      }
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(
+                            child: DropdownButtonFormField2<dynamic>(
+                                scrollbarAlwaysShow: true,
+                                itemHeight: 35,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 15),
+                                items: Categories,
+                                onChanged: (categoreyValue) {
+                                  setState(() {
+                                    selectCategory = categoreyValue;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null)
+                                    return "Please choose category";
+                                  else
+                                    return null;
+                                },
+                                value: selectCategory,
+                                isExpanded: true,
+                                hint: new Text("Choose category",
+                                    style: TextStyle(fontSize: 15))),
+                          ),
+                        ],
+                      );
+                    }
+                    return Text("");
+                  },
                 ),
                 //-----------------------End of Categorey-----------------------
                 SizedBox(
@@ -195,10 +216,6 @@ class _AddTask extends State<AddTask> {
                             vertical: 10,
                             horizontal: 10,
                           )),
-
-                      //style: Theme.of(context).inputDecorationTheme.border,
-                      // focusColor: Color.fromARGB(255, 69, 31, 156),
-                      //  borderRadius: BorderRadius.circular(25),
                       isExpanded: true,
                       hint: Text('Choose priority',
                           style: TextStyle(fontSize: 15)),
