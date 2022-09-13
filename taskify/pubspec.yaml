@@ -40,6 +40,7 @@ dependencies:
   firebase_auth: ^3.8.0
   firebase_messaging: ^13.0.1
   flutter_local_notifications: ^9.9.1
+  cool_alert: ^1.1.0
   overlay_support:
 
 dev_dependencies:

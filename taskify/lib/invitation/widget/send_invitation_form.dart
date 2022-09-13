@@ -7,7 +7,7 @@ import '../../authentication/widgets/platform_dialogue.dart';
 import '../../utils/validators.dart';
 import '../provider/invitation.dart';
 import '../screens/received_invitations.dart';
-
+import 'package:cool_alert/cool_alert.dart';
 class SendInvitationForm extends StatefulWidget {
   const SendInvitationForm({
     Key? key,
@@ -26,24 +26,40 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       if (validate ?? false) {
         _formKey.currentState?.save();
         await context.read<InvitaitonProvider>().sendInvitation(email!);
-        showPlatformDialogue(
-            context: context, title: "Invitation sent successfully");
+         CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: "Invitation sent successfully",
+                            confirmBtnColor: const Color(0xff7b39ed),
+                           // onConfirmBtnTap: () => route(isChecked),
+                          );
+        // showPlatformDialogue(
+        //     context: context, title: "Invitation sent successfully");
         _formKey.currentState?.reset();
       }
     } catch (e) {
       _formKey.currentState?.reset();
-      showPlatformDialogue(context: context, title: e.toString());
+      //showPlatformDialogue(context: context, title: e.toString());
+      CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.error,
+                            text: "A user with that email does not exists",
+                            confirmBtnColor: const Color(0xff7b39ed),
+                           // onConfirmBtnTap: () => route(isChecked),
+                          );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+     String name = "";
     return Form(
+      
       key: _formKey,
       child: Column(
         children: [
           SizedBox(
-            height: 80,
+            height: 70,
             child: TextFormField(
                 decoration: InputDecoration(
                   hintText: 'Ex: John@gmail.com',
@@ -56,6 +72,13 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                 onSaved: (value) {
                   email = value;
                 },
+                 onChanged: (val) {
+              setState(() {
+                name = val;
+                print(name);
+              });
+              
+            },
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.done,
                 style: Theme.of(context)
@@ -63,6 +86,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                     .subtitle1
                     ?.copyWith(color: Colors.black)),
           ),
+          
           const SizedBox(
             height: 0,
           ),
@@ -116,6 +140,29 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               ],
             ),
         ],
+      ),
+    );
+  }
+  Widget _buildButton(
+      {VoidCallback? onTap, required String text, Color? color}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: MaterialButton(
+        color: color,
+        minWidth: double.infinity,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        onPressed: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }
