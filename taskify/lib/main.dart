@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
-import 'package:taskify/push_Notifications.dart';
-
 import 'package:firebase_core/firebase_core.dart';
-import 'Notification_badge.dart';
 import 'authentication/screens/login_screen.dart';
 import 'authentication/screens/signup_screen.dart';
 import 'invitation/screens/received_invitations.dart';
 import 'invitation/screens/send_invitation.dart';
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
