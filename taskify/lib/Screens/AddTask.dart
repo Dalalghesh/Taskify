@@ -27,8 +27,11 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTask extends State<AddTask> {
-  var selectCategory;
-
+  var selectedList;
+  final _firestore = FirebaseFirestore.instance;
+  late String taskk;
+  var priority;
+  var description;
   DateTime dateTime = new DateTime.now();
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -54,7 +57,6 @@ class _AddTask extends State<AddTask> {
   late DateTime selectedDateTime;
   bool pressed = false;
   bool buttonenabled = false;
-  String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +97,8 @@ class _AddTask extends State<AddTask> {
                     alignment: Alignment.center,
                     child: Image.asset(
                       "assets/AddTasks.png",
-                      height: 190,
-                      width: 200,
+                      height: 250,
+                      width: 250,
                     )),
                 SizedBox(
                   height: 10,
@@ -127,7 +129,14 @@ class _AddTask extends State<AddTask> {
                       else
                         return null;
                     },
+                    onChanged: (value) {
+                      setState(() {
+                        taskk = value;
+                      });
+                      print(taskk);
+                    },
                     style: Theme.of(context).textTheme.subtitle1),
+
                 //-----------------------End of list name-----------------------
 
                 SizedBox(
@@ -137,7 +146,7 @@ class _AddTask extends State<AddTask> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
-                    'Categorey:',
+                    'List:',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
@@ -145,20 +154,22 @@ class _AddTask extends State<AddTask> {
                   height: 3,
                 ),
                 StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection('cat').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('List1')
+                      .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      Text("Loading");
-                    } else {
-                      List<DropdownMenuItem> Categories = [];
+                    if (snapshot.hasData) {
+                      var doc = snapshot.data?.docs;
+
+                      List<DropdownMenuItem> Listss = [];
                       for (int i = 0;
                           i < (snapshot.data! as QuerySnapshot).docs.length;
                           i++) {
+                        //bERJgJI288LgROb1gUN3
                         DocumentSnapshot ds = snapshot.data!.docs[i];
-                        Categories.add(
+                        Listss.add(
                           DropdownMenuItem(
-                            child: Text(ds.id),
+                            child: Text(ds.get('List_Id')),
                             value: "${ds.id}",
                           ),
                         );
@@ -172,21 +183,21 @@ class _AddTask extends State<AddTask> {
                                 itemHeight: 35,
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15),
-                                items: Categories,
+                                items: Listss,
                                 onChanged: (categoreyValue) {
                                   setState(() {
-                                    selectCategory = categoreyValue;
+                                    selectedList = categoreyValue;
                                   });
                                 },
                                 validator: (value) {
                                   if (value == null)
-                                    return "Please choose category";
+                                    return "Please choose list";
                                   else
                                     return null;
                                 },
-                                value: selectCategory,
+                                value: selectedList,
                                 isExpanded: true,
-                                hint: new Text("Choose category",
+                                hint: new Text("Choose list",
                                     style: TextStyle(fontSize: 15))),
                           ),
                         ],
@@ -229,7 +240,10 @@ class _AddTask extends State<AddTask> {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        setState(() {});
+                        setState(() {
+                          priority = value;
+                        });
+                        print(priority);
                       },
                       validator: (value) {
                         if (value == null)
@@ -246,7 +260,7 @@ class _AddTask extends State<AddTask> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
-                    'Deadline: (optionally)',
+                    'Deadline:',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
@@ -281,6 +295,42 @@ class _AddTask extends State<AddTask> {
                   ],
                 ),
                 SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
+                    'Task description:',
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                    minLines: 3,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      // hintText: 'Ex: Assignment',
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty)
+                        return "Please enter a description";
+                      else
+                        return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        description = value;
+                      });
+                      print(description);
+                    },
+                    style: Theme.of(context).textTheme.subtitle1),
+                SizedBox(
                   height: 15,
                 ),
 
@@ -292,7 +342,16 @@ class _AddTask extends State<AddTask> {
                         if (formKey.currentState!.validate()) {
                           final snackBar =
                               SnackBar(content: Text("Created successfully"));
-
+                          _firestore.collection("Task1").doc().set({
+                            'TaskID': taskk,
+                            'CategoryName': '',
+                            'ListID': 't1',
+                            'deadline': dateTime,
+                            'isDone': false,
+                            'priority': priority,
+                            'Description': description,
+                            'uID': 'ZfITEhTBOmayoUpqp1ohgGoqmTe2',
+                          });
                           CoolAlert.show(
                             context: context,
                             type: CoolAlertType.success,
@@ -343,6 +402,7 @@ class _AddTask extends State<AddTask> {
         initialDate: dateTime,
         firstDate: DateTime(1900),
         lastDate: DateTime(1900),
+        //helpText: 'Choose deadline',
       );
 
   void route() {
