@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskify/Add_Category.dart';
 import 'package:taskify/util.dart';
 import 'package:flutter/material.dart';
 
@@ -106,9 +107,10 @@ class InviteFriend extends StatelessWidget {
                       textStyle: const TextStyle(fontSize: 18),
                     ),
                     onPressed: () {
-                      Util.routeToWidget(context, RecievedInvitations());
+                      Util.routeToWidget(context, Add_Category());
                     },
                     child: const Text('Later'),
+                    
                     
                   ),
                 ),
