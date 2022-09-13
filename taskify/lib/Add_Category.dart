@@ -6,6 +6,7 @@ import 'package:taskify/util.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:cool_alert/cool_alert.dart';
 
 
 
@@ -146,8 +147,13 @@ void getCategory() async{
                     
                         //navigate to check email view
                         if (formKey.currentState!.validate()) {
-                          final snackBar =
-                              SnackBar(content: Text("Created successfully"));
+                           CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: "Created successfully",
+                            confirmBtnColor: const Color(0xff7b39ed),
+                           // onConfirmBtnTap: () => route(isChecked),
+                          );
 
                                  _firestore.collection('Category').add({
                                  'Name': Category!,
