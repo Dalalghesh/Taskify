@@ -43,7 +43,8 @@ class InvitaitonProvider with ChangeNotifier {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> _getInv(String email) async* {
     try {
-      yield* _firebaseFirestore
+      var firebaseFirestore = _firebaseFirestore;
+      yield* firebaseFirestore
           .collection(InvitationModel.collectionName)
           .where("recieverEmail", isEqualTo: email)
           .snapshots();
