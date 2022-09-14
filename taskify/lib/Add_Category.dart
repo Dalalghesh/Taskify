@@ -144,7 +144,7 @@ void getCategory() async{
                           );
 
                              //    _firestore.collection('Category').add({'Name': Category!,} );
-
+//
                                
                               /*var firebaseUser =  FirebaseAuth.instance.currentUser;
                               final docRef = FirebaseFirestore.instance.collection('users1').doc(uid);
