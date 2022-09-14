@@ -2,12 +2,9 @@ import 'package:taskify/screens/create_new_password_view.dart';
 import 'package:taskify/screens/home_screen.dart';
 import 'package:taskify/screens/send_instructions_view.dart';
 import 'package:taskify/utils/validators.dart';
-// import 'package:taskify/widgets/primary_button.dart';
-// import 'package:taskify/widgets/primary_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/util.dart';
-// import '../../utils/app_colors.dart';
 import '../widgets/custom_header.dart';
 import '../widgets/platform_dialogue.dart';
 import 'signup_screen.dart';
@@ -205,10 +202,10 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email: email, password: password);
       isLoading = false;
       setState(() {});
-      // Navigator.of(context)
-      //     .pushReplacement(MaterialPageRoute(builder: (context) {
-      //   return const HomeScreen();
-      // }));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return const HomeScreen();
+      }));
     } catch (e) {
       isLoading = false;
       setState(() {});

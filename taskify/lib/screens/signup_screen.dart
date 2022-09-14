@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskify/screens/login_screen.dart';
-// import 'package:taskify/screens/home/home_screen.dart';
 import 'package:taskify/utils/validators.dart';
 import 'package:taskify/util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../widgets/custom_header.dart';
 import '../../widgets/platform_dialogue.dart';
+import 'home_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -285,16 +284,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'uid': userCredential.user!.uid,
         'timestamp': FieldValue.serverTimestamp(),
       };
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+      final docRef = FirebaseFirestore.instance.collection('users1').doc(uid);
       await docRef.set(userData, SetOptions(merge: true));
       isLoading = false;
       setState(() {});
       Navigator.of(context).popUntil((route) => route.isFirst);
-      // Navigator.of(context)
-      //     .pushReplacement(MaterialPageRoute(builder: (context) {
-      //   return const HomeScreen();
-      // }
-      // ));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return const HomeScreen();
+      }));
     } catch (e) {
       isLoading = false;
       setState(() {});

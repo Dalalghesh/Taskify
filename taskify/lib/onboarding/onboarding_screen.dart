@@ -107,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           final screenToOpen =
                               FirebaseAuth.instance.currentUser == null
                                   ? const LoginScreen()
-                                  : const LoginScreen(); /////////////
+                                  : const HomeScreen();
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
