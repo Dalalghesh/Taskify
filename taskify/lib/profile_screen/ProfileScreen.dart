@@ -1,12 +1,10 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:taskify/constants.dart';
-import 'package:taskify/widgets/profile_list_item.dart';
 import 'package:taskify/util.dart';
-import 'package:taskify/send_instructions/send_instructions_view.dart';
 
 class ProfileScreen extends StatefulWidget {
   _ProfileScreen createState() => _ProfileScreen();
@@ -60,8 +58,15 @@ class _ProfileScreen extends State<ProfileScreen> {
                 Expanded(
                     child: ElevatedButton(
                   onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                    //Util.routeToWidget(context, CheckEmailView());
+                    CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.confirm,
+                      text: 'Do you want to logout',
+                      confirmBtnText: 'Yes',
+                      cancelBtnText: 'No',
+                      confirmBtnColor: Colors.green,
+                      onConfirmBtnTap: () => FirebaseAuth.instance.signOut(),
+                    );
                   },
                   child: Text(
                     'Logout',

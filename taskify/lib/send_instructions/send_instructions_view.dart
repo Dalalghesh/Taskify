@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/check_email/check_email_view.dart';
 import 'package:taskify/util.dart';
+import 'package:cool_alert/cool_alert.dart';
 
 class SendInstructionsView extends StatefulWidget {
   _SendInstructionsView createState() => _SendInstructionsView();
 }
 
 class _SendInstructionsView extends State<SendInstructionsView> {
-  String _email;
   final auth = FirebaseAuth.instance;
   final emailController = TextEditingController();
 
@@ -25,13 +25,13 @@ class _SendInstructionsView extends State<SendInstructionsView> {
     } on FirebaseAuthException catch (e) {
       n = false;
       print(e);
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(e.message.toString()),
-            );
-          });
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: 'Oops...',
+        text: e.message.toString(),
+        loopAnimation: false,
+      );
     }
     if (n) {
       Util.routeToWidget(context, CheckEmailView());
@@ -92,11 +92,6 @@ class _SendInstructionsView extends State<SendInstructionsView> {
                 controller: emailController,
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                onChanged: (value) {
-                  setState(() {
-                    _email = value;
-                  });
-                },
               ),
             ),
             SizedBox(
