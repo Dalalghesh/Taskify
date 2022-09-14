@@ -13,8 +13,8 @@ class SingleInvitaionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal:4),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -60,7 +60,7 @@ class SingleInvitaionItem extends StatelessWidget {
                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   style:
-                      ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 105, 202, 108)),
+                      ElevatedButton.styleFrom(primary: Color.fromARGB(255, 105, 202, 108)),
                 ),
               ),
               const SizedBox(
@@ -74,7 +74,7 @@ class SingleInvitaionItem extends StatelessWidget {
                     "Reject",
                     style: TextStyle(color: Colors.white),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 238, 89, 79)),
+                  style: ElevatedButton.styleFrom(primary : Color.fromARGB(255, 238, 89, 79)),
                 ),
               ),
             ],

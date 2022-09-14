@@ -3,11 +3,29 @@ import 'package:provider/provider.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 import '../widget/send_invitation_form.dart';
 
-class SendInvitation extends StatelessWidget {
+class SendInvitation extends StatefulWidget {
   static const routeName = "/Send-notfication";
   const SendInvitation({Key? key}) : super(key: key);
 
   @override
+  State<SendInvitation> createState() => _SendInvitationState();
+}
+
+
+class _SendInvitationState extends State<SendInvitation> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchEmails(context);
+  }
+  fetchEmails(context)async{
+    await Future.delayed(Duration(milliseconds: 200));
+    Provider.of<InvitaitonProvider>(context, listen: false).getUsersEmail();
+  }
+  @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

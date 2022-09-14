@@ -11,6 +11,8 @@ import 'invitation/screens/send_invitation.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+ 
+  
   runApp(MyApp());
 }
 
