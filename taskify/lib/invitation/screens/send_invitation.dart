@@ -16,30 +16,24 @@ class SendInvitation extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {},
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-          )
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
             Text(
-              'Invite Friend ',
+              ' Send Invitation',
               style: Theme.of(context).textTheme.headline4,
-            ),SizedBox(
-              height: 10,
             ),
-            Align(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/Online world-cuate-2.png',
-                  height: 200,
-                  width: 200,
-                )),
-            SizedBox(
+            const SizedBox(
+              height: 16,
+            ),
+            // Image.asset(
+            //   'assets/Online world-cuate.png',
+            //   height: 300,
+            //   width: 300,
+            // ),
+            const SizedBox(
               height: 16,
             ),
             Text(
