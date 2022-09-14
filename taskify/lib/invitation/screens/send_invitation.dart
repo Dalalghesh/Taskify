@@ -36,8 +36,8 @@ class SendInvitation extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Image.asset(
                   'assets/Online world-cuate-2.png',
-                  height: 200,
-                  width: 200,
+                  height: 250,
+                  width: 250,
                 )),
             SizedBox(
               height: 16,

@@ -13,15 +13,15 @@ class SingleInvitaionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: const [
           BoxShadow(
             color: Colors.black12,
-            spreadRadius: 1,
+            spreadRadius: 1.5,
             blurRadius: 1,
           )
         ],
@@ -33,7 +33,7 @@ class SingleInvitaionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Email Address",
+                "You have invitation from",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -57,10 +57,10 @@ class SingleInvitaionItem extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     "Accept",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                      ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 105, 202, 108)),
                 ),
               ),
               const SizedBox(
@@ -74,7 +74,7 @@ class SingleInvitaionItem extends StatelessWidget {
                     "Reject",
                     style: TextStyle(color: Colors.white),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 238, 89, 79)),
                 ),
               ),
             ],
