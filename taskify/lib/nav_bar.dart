@@ -7,7 +7,7 @@ import 'package:taskify/Add_Category.dart';
 import 'package:taskify/screens/home_screen.dart';
 import 'package:taskify/screens/tasks_screen.dart';
 
-import 'screens/screens/todo_list_screen.dart';
+import 'screens/todo_list_screen.dart';
 
 class NavBar extends StatefulWidget {
   NavBar({Key? key, required this.tabs}) : super(key: key);
