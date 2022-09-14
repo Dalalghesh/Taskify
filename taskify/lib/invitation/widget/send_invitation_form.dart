@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:taskify/Add_Category.dart';
 import 'package:taskify/authentication/screens/login_screen.dart';
-import 'package:taskify/Add_Category.dart';
+
 import '../../authentication/widgets/platform_dialogue.dart';
-import '../../util.dart';
 import '../../utils/validators.dart';
 import '../provider/invitation.dart';
 import '../screens/received_invitations.dart';
@@ -74,12 +72,13 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                 onSaved: (value) {
                   email = value;
                 },
-                /* onChanged: (val) {
+                 onChanged: (val) {
               setState(() {
                 name = val;
                 print(name);
-              });         
-            },*/
+              });
+              
+            },
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.done,
                 style: Theme.of(context)
@@ -132,7 +131,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                       textStyle: const TextStyle(fontSize: 18),
                     ),
                     onPressed: () {
-                      Util.routeToWidget(context, Add_Category());
+                      //Util.routeToWidget(context, RecievedInvitations());
                     },
                     child: const Text('Later'),
                     

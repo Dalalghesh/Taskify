@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,9 +44,18 @@ void getCategory() async{
   FirebaseMessaging.onMessage.listen((event) {
     print('FCM ,Message received');
   });
-  
+  //storeNotificationToken();
  }
 
+ /*bool isLoding = false;
+ 
+ storeNotificationToken()async{
+  String? token = await FirebaseMessaging.instance.getToken();
+  FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set(
+    {
+      'token':token
+    },SetOptions(merge: true));
+ }*/
   
   @override
   Widget build(BuildContext context) {
@@ -86,8 +94,8 @@ void getCategory() async{
                     alignment: Alignment.center,
                     child: Image.asset(
               'assets/Category.png',
-                      height: 250,
-                      width: 250,
+                      height: 200,
+                      width: 200,
                     )),
                 SizedBox(
                   height: 16,
@@ -102,7 +110,7 @@ void getCategory() async{
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 TextFormField(
                 onChanged: (value) {
@@ -123,13 +131,13 @@ void getCategory() async{
                     },
                     style: Theme.of(context).textTheme.subtitle1),
                 SizedBox(
-                  height: 15,
+                  height: 8,
                 ),
                 Row(
                   children: [
                     Expanded(
                         child: ElevatedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         
                        //print(Category);
                     
@@ -143,39 +151,11 @@ void getCategory() async{
                            // onConfirmBtnTap: () => route(isChecked),
                           );
 
-                             //    _firestore.collection('Category').add({'Name': Category!,} );
+                                 _firestore.collection('Category').add({
+                                 'Name': Category!,
+                       }
+                       );
 
-                               
-                              /*var firebaseUser =  FirebaseAuth.instance.currentUser;
-                              final docRef = FirebaseFirestore.instance.collection('users1').doc(uid);
-                            FirebaseFirestore.instance.collection("users").where('uid')=
-                             DocumentReference docRef = FirebaseFirestore.instance.collection('users1').doc(firebaseUser.uid);*/
-
-                             DocumentReference docRef = FirebaseFirestore.instance.collection('uesrs1').doc();
-                             DocumentSnapshot doc = await docRef.get();
-                             List? tags = doc.data() as List?;
-                             if (tags?.contains(Category)==false){
-                              docRef.update({
-                                'tags':FieldValue.arrayUnion([Category])}
-                              );
-                              CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.success,
-                            text: "Category Created successfully",
-                            confirmBtnColor: const Color(0xff7b39ed),
-                           // onConfirmBtnTap: () => route(isChecked),
-                          );
-                             }
-                             else {
-                               CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.error,
-                            text: "Category  already exists",
-                            confirmBtnColor: const Color(0xff7b39ed),
-                          
-                          );
-                              
-                             }
 
                           //Util.routeToWidget(context, InviteFriend());
                           //_scaffoldKey.currentState!.showSnackBar(snackBar);
