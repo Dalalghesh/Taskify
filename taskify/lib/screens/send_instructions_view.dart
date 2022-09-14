@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taskify/check_email/check_email_view.dart';
+import 'package:taskify/screens/check_email_view.dart';
+import 'package:taskify/screens/login_screen.dart';
 import 'package:taskify/util.dart';
 
 class SendInstructionsView extends StatelessWidget {
@@ -10,10 +11,6 @@ class SendInstructionsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 50,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
-        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -47,7 +44,7 @@ class SendInstructionsView extends StatelessWidget {
               height: 16,
             ),
             Text(
-              'Email address',
+              'Email address:',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             SizedBox(
@@ -56,8 +53,19 @@ class SendInstructionsView extends StatelessWidget {
             Container(
               height: 50,
               child: TextFormField(
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                validator: (value) {
+                  if (value!.isEmpty)
+                    return "Please enter an email";
+                  else
+                    return null;
+                },
+                decoration: InputDecoration(
+                  hintText: 'Ex: John@gmail.com',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                ),
               ),
             ),
             SizedBox(

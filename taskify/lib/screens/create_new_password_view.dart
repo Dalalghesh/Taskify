@@ -7,10 +7,6 @@ class CreateNewPasswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Back',
-          style: TextStyle(color: Colors.black),
-        ),
         leadingWidth: 30,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

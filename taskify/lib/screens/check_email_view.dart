@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taskify/create_new_password/create_new_password_view.dart';
+import 'package:taskify/screens/create_new_password_view.dart';
+import 'package:taskify/screens/send_instructions_view.dart';
 import 'package:taskify/util.dart';
 
 class CheckEmailView extends StatelessWidget {
@@ -83,7 +84,9 @@ class CheckEmailView extends StatelessWidget {
                   children: [
                     Text('or'),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Util.routeToWidget(context, SendInstructionsView());
+                      },
                       child: Text('try another email address'),
                     ),
                   ],
