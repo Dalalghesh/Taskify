@@ -7,38 +7,9 @@ import 'package:taskify/invitation/models/invitation.dart';
 import 'package:cool_alert/cool_alert.dart';
 
 class InvitaitonProvider with ChangeNotifier {
-  
-  
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   List<InvitationModel> invitations = [];
-  List<String> emails = [];
-  List<String> filteredEmails = [];
-
-
-  Future<void> getUsersEmail()async{
-    final currentUserEmail = _firebaseAuth.currentUser?.email;
-    final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
-    if(res.docs.isNotEmpty){
-      for(int i =0; i< res.docs.length;i++){
-        emails.add(res.docs[i]['email']);
-      }
-      filteredEmails = emails;
-    }
-    notifyListeners();
-    
-  }
-  
-  filterEmail(query){
-    filteredEmails = emails.where((element) => element.contains(query)).toList();
-    notifyListeners();
-  }
-  
-  
-  
-  
-  
-  
   Future<void> sendInvitation(String email) async {
     //Getting current user email
     final currentUserEmail = _firebaseAuth.currentUser?.email;

@@ -35,17 +35,24 @@ class RecievedInvitations extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(18.0),
               width: mediaQuery.size.width,
               child: Column(
                 children: [
-                  Text(
+                /*  Text(
                     'Received Invitation',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   const SizedBox(
                     height: 16,
-                  ),
+                  ),*/
+                   Text(
+                  'Received Invitations',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                   StreamBuilder(
                     stream: context.read<InvitaitonProvider>().getInvitations(),
                     builder: (context, snapshot) {
