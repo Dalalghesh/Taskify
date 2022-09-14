@@ -42,9 +42,6 @@ dependencies:
   flutter_local_notifications: ^9.9.1
   cool_alert: ^1.1.0
   overlay_support:
-  get: ^4.6.5
-  table_calendar: ^3.0.7
-  curved_nav_bar: ^0.0.2
 
 dev_dependencies:
   flutter_test:
