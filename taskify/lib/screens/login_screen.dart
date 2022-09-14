@@ -100,13 +100,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 50,
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'At least 8 Character',
+                        hintText: '********',
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10,
                           horizontal: 10,
                         ),
                       ),
-                      controller: _emailController,
+                      controller: _passwordController,
                       maxLines: 1,
                       obscureText: true,
                       textInputAction: TextInputAction.done,
