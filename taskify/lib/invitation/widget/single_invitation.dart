@@ -33,7 +33,7 @@ class SingleInvitaionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Email Address",
+                "Received invitation from",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -57,10 +57,10 @@ class SingleInvitaionItem extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     "Accept",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                      ElevatedButton.styleFrom(primary: Color.fromARGB(255, 115, 184, 118)),
                 ),
               ),
               const SizedBox(
@@ -74,7 +74,7 @@ class SingleInvitaionItem extends StatelessWidget {
                     "Reject",
                     style: TextStyle(color: Colors.white),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  style: ElevatedButton.styleFrom(primary : Color.fromARGB(255, 232, 107, 98)),
                 ),
               ),
             ],
