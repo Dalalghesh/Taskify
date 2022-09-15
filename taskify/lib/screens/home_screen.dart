@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController pageController = PageController();
     return WillPopScope(
       onWillPop: () async {
         Get.clearRouteTree();
@@ -21,30 +20,12 @@ class HomeScreen extends StatelessWidget {
         body: GetBuilder<UserController>(
           init: UserController(),
           builder: (sx) => PageView(
-            controller: pageController,
+            controller: sx.pageController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              CategoriesScreen(
-                  onTap: () => pageController.nextPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.decelerate
-                  ),
-              ),
-              TodoList(
-                  onCloseTap: () => pageController.previousPage(
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.decelerate),
-                  onNextTap: () => pageController.nextPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.decelerate),
-              ),
-              TasksScreen(
-                onCloseTap: () {
-                  pageController.previousPage(
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.decelerate);
-                },
-              )
+              const CategoriesScreen(),
+              TodoList(),
+              TasksScreen(),
             ],
           ),
         ),
