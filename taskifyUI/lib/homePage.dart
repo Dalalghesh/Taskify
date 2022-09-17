@@ -58,7 +58,7 @@ class NavBarState extends State<NavBar> {
           activeIcon: Container(
             padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(
-                color: Color(0xff3F1883), shape: BoxShape.circle),
+                color: Color(0xff7b39ed), shape: BoxShape.circle),
             child: const Icon(
               Icons.add,
               size: 50,
@@ -68,7 +68,7 @@ class NavBarState extends State<NavBar> {
           inActiveIcon: Container(
             padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(
-                color: Color(0xff3F1883), shape: BoxShape.circle),
+                color: Color(0xff7b39ed), shape: BoxShape.circle),
             child: const Icon(
               Icons.add,
               size: 50,
@@ -76,7 +76,7 @@ class NavBarState extends State<NavBar> {
             ),
           ),
           text: ""),
-      navBarBackgroundColor: const Color(0xff3F1883),
+      navBarBackgroundColor: const Color(0xff7b39ed),
       appBarItems: [
         FABBottomAppBarItem(
           activeIcon: const Icon(
@@ -130,7 +130,7 @@ class NavBarState extends State<NavBar> {
               width: Get.width * 0.75,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 68, 43, 112),
+                color: Color(0xff7b39ed),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: GestureDetector(
@@ -153,7 +153,7 @@ class NavBarState extends State<NavBar> {
                 width: Get.width * 0.75,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xff3F1883),
+                  color: const Color(0xff7b39ed),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: GestureDetector(
@@ -175,7 +175,7 @@ class NavBarState extends State<NavBar> {
               width: Get.width * 0.75,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xff3F1883),
+                color: Color(0xff7b39ed),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: GestureDetector(
