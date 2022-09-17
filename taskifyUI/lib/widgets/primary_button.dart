@@ -40,7 +40,9 @@ class PrimaryButton extends StatelessWidget {
       color: color ?? (isOutline ? Colors.transparent : theme.primaryColor),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: isOutline ? BorderSide(color: theme.primaryColor, width: 2) : BorderSide.none,
+        side: isOutline
+            ? BorderSide(color: theme.primaryColor, width: 2)
+            : BorderSide.none,
       ),
       onPressed: disabled ? null : onTap,
       child: child ??
@@ -55,7 +57,7 @@ class PrimaryButton extends StatelessWidget {
                         : isOutline
                             ? theme.primaryColor
                             : Colors.white),
-                fontSize: 14,
+                fontSize: 20,
                 letterSpacing: 0.8,
               ),
             ),

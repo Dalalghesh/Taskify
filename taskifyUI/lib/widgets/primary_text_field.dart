@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/app_colors.dart';
 
-
 class PrimaryTextField extends StatelessWidget {
   const PrimaryTextField({
     Key? key,
@@ -48,9 +47,12 @@ class PrimaryTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentBorder = border ??
         OutlineInputBorder(
-          borderSide: const BorderSide(width: 0, color: Colors.transparent),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade400),
         );
+    OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +62,9 @@ class PrimaryTextField extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black.withOpacity(0.70)),
+              fontSize: 18,
+              color: Colors.grey.shade600,
+            ),
           ),
         ),
         const SizedBox(height: 6),
@@ -89,14 +93,16 @@ class PrimaryTextField extends StatelessWidget {
               },
               textAlignVertical: TextAlignVertical.center,
               textInputAction: textInputAction ??
-                  (nextNode == null ? TextInputAction.done : TextInputAction.next),
+                  (nextNode == null
+                      ? TextInputAction.done
+                      : TextInputAction.next),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: (maxLines ?? 1) > 1 ? 16 : 0,
                 ),
                 errorMaxLines: 3,
-                fillColor: AppColors.grayshade,
+                fillColor: Colors.white,
                 filled: true,
                 border: currentBorder,
                 enabledBorder: currentBorder,
