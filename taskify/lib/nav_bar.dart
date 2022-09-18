@@ -3,11 +3,11 @@ import 'package:curved_nav_bar/fab_bar/fab_bottom_app_bar_item.dart';
 import 'package:curved_nav_bar/flutter_curved_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskify/screens/ProfileScreen.dart';
 import 'package:taskify/screens/home_screen.dart';
 import 'package:taskify/screens/tasks_screen.dart';
 
 import 'screens/todo_list_screen.dart';
-
 
 class NavBar extends StatefulWidget {
   NavBar({Key? key, required this.tabs}) : super(key: key);
@@ -20,9 +20,9 @@ class NavBar extends StatefulWidget {
 
 Widget GetTab(int index) {
   print(index);
-  if(index == 0) {
+  if (index == 0) {
     return HomeScreen();
-  } else if(index == 1) {
+  } else if (index == 1) {
     return TodoList();
   } else {
     return TasksScreen();
@@ -30,11 +30,10 @@ Widget GetTab(int index) {
 }
 
 class NavBarState extends State<NavBar> {
-
   @override
   Widget build(BuildContext context) {
     List<Widget> tabs = [
-      GetTab(widget.tabs),
+      HomeScreen(),
       Container(
         height: Get.height,
         color: Colors.blue,
@@ -43,10 +42,7 @@ class NavBarState extends State<NavBar> {
         height: Get.height,
         color: Colors.pinkAccent,
       ),
-      Container(
-        height: Get.height,
-        color: Colors.grey,
-      )
+      ProfileScreen()
     ];
     return CurvedNavBar(
       actionButton: CurvedActionBar(
@@ -56,8 +52,8 @@ class NavBarState extends State<NavBar> {
           },
           activeIcon: Container(
             padding: const EdgeInsets.all(8),
-            decoration:
-            const BoxDecoration(color: Color(0xff3F1883), shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+                color: Color(0xff3F1883), shape: BoxShape.circle),
             child: const Icon(
               Icons.add,
               size: 50,
@@ -66,8 +62,8 @@ class NavBarState extends State<NavBar> {
           ),
           inActiveIcon: Container(
             padding: const EdgeInsets.all(8),
-            decoration:
-            const BoxDecoration(color: Color(0xff3F1883), shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+                color: Color(0xff3F1883), shape: BoxShape.circle),
             child: const Icon(
               Icons.add,
               size: 50,
@@ -78,16 +74,15 @@ class NavBarState extends State<NavBar> {
       navBarBackgroundColor: const Color(0xff3F1883),
       appBarItems: [
         FABBottomAppBarItem(
-            activeIcon: const Icon(
-              Icons.home,
-              color: Colors.green,
-            ),
-            inActiveIcon: const Icon(
-              Icons.home,
-              color: Colors.white,
-            ),
-            text: '',
-
+          activeIcon: const Icon(
+            Icons.home,
+            color: Colors.green,
+          ),
+          inActiveIcon: const Icon(
+            Icons.home,
+            color: Colors.white,
+          ),
+          text: '',
         ),
         FABBottomAppBarItem(
           activeIcon: const Icon(
@@ -99,7 +94,6 @@ class NavBarState extends State<NavBar> {
             color: Colors.white,
           ),
           text: '',
-
         ),
         FABBottomAppBarItem(
             activeIcon: const Icon(
@@ -136,7 +130,10 @@ class NavBarState extends State<NavBar> {
               ),
               child: const Text(
                 'ADD TASK',
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -150,11 +147,13 @@ class NavBarState extends State<NavBar> {
               ),
               child: const Text(
                 'ADD CATEGORY',
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400),
                 textAlign: TextAlign.center,
               ),
             ),
-
             const SizedBox(height: 20),
             Container(
               width: Get.width * 0.75,
@@ -165,7 +164,10 @@ class NavBarState extends State<NavBar> {
               ),
               child: const Text(
                 'ADD TODO LIST',
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400),
                 textAlign: TextAlign.center,
               ),
             ),
