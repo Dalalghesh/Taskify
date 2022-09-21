@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:taskify/create_new_password/create_new_password_view.dart';
+import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:taskify/util.dart';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:taskify/screens/auth/login_screen.dart';
 
-class CheckEmailView extends StatelessWidget {
-  const CheckEmailView({Key? key}) : super(key: key);
+class CheckEmailView extends StatefulWidget {
+  _CheckEmailView createState() => _CheckEmailView();
+}
 
+class _CheckEmailView extends State<CheckEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,9 +22,10 @@ class CheckEmailView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.mail_outline_rounded,
-                      size: 100,
+                    Image.asset(
+                      'assets/msg.png',
+                      height: 300,
+                      width: 300,
                     ),
                   ],
                 ),
@@ -45,7 +50,7 @@ class CheckEmailView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         child: Text(
-                          'We have sent password recovery instructions to your email.',
+                          'We have sent you an email to reset your password please check your email,after resting your password please click next',
                           style: Theme.of(context).textTheme.subtitle1,
                           textAlign: TextAlign.center,
                         ),
@@ -56,22 +61,21 @@ class CheckEmailView extends StatelessWidget {
                 SizedBox(
                   height: 32,
                 ),
-                Container(
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      //navigate to create new password view
-                      Util.routeToWidget(context, CreateNewPasswordView());
-                    },
-                    child: Text(
-                      'Open email app',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 32,
-                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: ElevatedButton(
+                      onPressed: () {
+                        //navigate to check login page
+                        Util.routeToWidget(context, LoginScreen());
+                      },
+                      child: Text(
+                        'next',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )),
+                  ],
+                )
               ],
             ),
             Column(
@@ -83,8 +87,10 @@ class CheckEmailView extends StatelessWidget {
                   children: [
                     Text('or'),
                     TextButton(
-                      onPressed: () {},
                       child: Text('try another email address'),
+                      onPressed: () {
+                        Util.routeToWidget(context, SendInstructionsView());
+                      },
                     ),
                   ],
                 )

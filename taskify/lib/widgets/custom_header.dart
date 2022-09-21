@@ -1,7 +1,6 @@
+import 'package:taskify/utils/app_colors.dart';
+import 'package:taskify/utils/text_styles.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/app_colors.dart';
-import '../../utils/text_styles.dart';
 
 class CustomHeader extends StatelessWidget {
   final String text;

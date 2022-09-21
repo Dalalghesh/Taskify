@@ -1,7 +1,7 @@
+import 'package:taskify/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/app_colors.dart';
-import '../../utils/validators.dart';
+import '../utils/validators.dart';
 
 class TitledDropDown<T> extends StatelessWidget {
   final String title;

@@ -1,17 +1,18 @@
+import 'package:taskify/homePage.dart';
+import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
+import 'package:taskify/utils/validators.dart';
+import 'package:taskify/widgets/primary_button.dart';
+import 'package:taskify/widgets/primary_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:taskify/authentication/widgets/custom_header.dart';
-import 'package:taskify/authentication/widgets/platform_dialogue.dart';
-import 'package:taskify/authentication/widgets/primary_button.dart';
-import 'package:taskify/authentication/widgets/primary_text_field.dart';
+import 'package:taskify/send_instructions/send_instructions_view.dart';
 
-import '../../invitation/screens/send_invitation.dart';
 import '../../utils/app_colors.dart';
-import '../../utils/validators.dart';
+import '../../widgets/custom_header.dart';
+import '../../widgets/platform_dialogue.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const routeName = "/login-screen";
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -79,32 +80,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "At least 8 Character",
                     controller: _passwordController,
                   ),
-                  // const SizedBox(height: 4),
-                  // InkWell(
-                  //   onTap: () {
-                  //     Navigator.of(context).push(
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const ForgetPasswordScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.end,
-                  //       children: [
-                  //         Text(
-                  //           "Forgot Password?",
-                  //           style: TextStyle(
-                  //             color: AppColors.deepPurple.withOpacity(0.7),
-                  //             fontWeight: FontWeight.w500,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 4),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SendInstructionsView(),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color: AppColors.deepPurple.withOpacity(0.7),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   PrimaryButton(
                     disabled: isLoading,
                     text: isLoading ? "Loading ..." : 'Sign In',
@@ -165,7 +165,10 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email: email, password: password);
       isLoading = false;
       setState(() {});
-      Navigator.of(context).pushReplacementNamed(SendInvitation.routeName);
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return NavBar(tabs: 0);
+      }));
     } catch (e) {
       isLoading = false;
       setState(() {});

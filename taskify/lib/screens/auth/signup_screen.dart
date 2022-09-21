@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:taskify/screens/auth/login_screen.dart';
+import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
+import 'package:taskify/utils/validators.dart';
+import 'package:taskify/widgets/primary_button.dart';
+import 'package:taskify/widgets/primary_text_field.dart';
+import 'package:taskify/widgets/titled_drop_down.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:taskify/authentication/widgets/custom_header.dart';
-import 'package:taskify/authentication/widgets/platform_dialogue.dart';
-import 'package:taskify/authentication/widgets/primary_button.dart';
-import 'package:taskify/authentication/widgets/primary_text_field.dart';
-import 'package:taskify/authentication/widgets/titled_drop_down.dart';
 
-import '../../invitation/screens/send_invitation.dart';
 import '../../utils/app_colors.dart';
-import '../../utils/validators.dart';
+import '../../widgets/custom_header.dart';
+import '../../widgets/platform_dialogue.dart';
 
 class SignUpScreen extends StatefulWidget {
-  static const routeName = "/sign-up-screen";
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override
@@ -194,12 +194,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'uid': userCredential.user!.uid,
         'timestamp': FieldValue.serverTimestamp(),
       };
-      final docRef = FirebaseFirestore.instance.collection('users1').doc(uid);
+      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
       await docRef.set(userData, SetOptions(merge: true));
       isLoading = false;
       setState(() {});
       Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.of(context).pushReplacementNamed(SendInvitation.routeName);
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return const LoginScreen();
+      }));
     } catch (e) {
       isLoading = false;
       setState(() {});

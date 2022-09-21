@@ -1,6 +1,5 @@
+import 'package:taskify/utils/app_colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -58,7 +57,7 @@ class PrimaryButton extends StatelessWidget {
                         : isOutline
                             ? theme.primaryColor
                             : Colors.white),
-                fontSize: 14,
+                fontSize: 20,
                 letterSpacing: 0.8,
               ),
             ),
