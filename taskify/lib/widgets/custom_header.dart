@@ -22,7 +22,7 @@ class CustomHeader extends StatelessWidget {
               onTap: () => Navigator.of(context).pop(),
               child: const Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color: AppColors.whiteshade,
+                color: Color.fromARGB(0, 248, 249, 250),
                 size: 24,
               ),
             ),

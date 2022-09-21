@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
             width: MediaQuery.of(context).size.width,
             color: AppColors.deepPurple,
           ),
-          const SafeArea(child: CustomHeader(text: 'Log In.')),
+          const SafeArea(child: CustomHeader(text: 'Log In')),
           Container(
             margin: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.135),

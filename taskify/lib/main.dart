@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskify/screens/auth/login_screen.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -30,10 +31,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Taskify',
       theme: ThemeData(
         iconTheme: IconThemeData(color: Color(0xff7b39ed)),
         inputDecorationTheme: InputDecorationTheme(
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 10,
+            ),
+            //contentPadding: EdgeInsets.all(10),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: Colors.grey.shade400),
@@ -52,7 +58,7 @@ class MyApp extends StatelessWidget {
             headline4:
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             subtitle1: TextStyle(
-              color: Colors.grey.shade600,
+              color: Colors.black,
             )),
         appBarTheme: AppBarTheme(
             backgroundColor: Colors.transparent,
@@ -61,7 +67,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xff7b39ed),
         primarySwatch: primarySwatch,
       ),
-      home: OnboardingScreen(),
+      home: LoginScreen(),
     );
   }
 }
