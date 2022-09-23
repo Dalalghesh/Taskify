@@ -48,7 +48,9 @@ dependencies:
   animated_radio_buttons: ^1.0.0
   flutter_cupertino_datetime_picker: ^3.0.0
   firebase_messaging: ^13.0.2
-  flutter_vector_icons: ^2.0.0
+  calendar_date_picker2: ^0.2.4
+  provider:
+  flutter_typeahead: ^4.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskify/appstate.dart';
+import 'package:taskify/invitation/screens/send_invitation.dart';
 import '../homePage.dart';
 import 'AddTask.dart';
 import 'package:taskify/util.dart';
@@ -66,6 +69,7 @@ class _AddList extends State<AddList> {
 
   @override
   Widget build(BuildContext context) {
+    AppState provider = Provider.of<AppState>(context, listen: false);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     getUserData();
 
@@ -84,157 +88,167 @@ class _AddList extends State<AddList> {
             )
           ],
         ),
-        body: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey, //key for form
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Add List',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      "assets/AddList.png",
-                      height: 250,
-                      width: 250,
-                    )),
-                SizedBox(
-                  height: 16,
-                ),
-
-                //-----------------------List name-----------------------
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  child: Text(
-                    'List Name:',
-                    style: Theme.of(context).textTheme.subtitle1,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey, //key for form
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Add List',
+                    style: Theme.of(context).textTheme.headline4,
                   ),
-                ),
-                SizedBox(
-                  height: 3,
-                ),
-                TextFormField(
-                    keyboardType: TextInputType.text,
-                    controller: CAtegoryNameController,
-                    decoration: InputDecoration(
-                      hintText: 'Ex: SWE444',
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        "assets/AddList.png",
+                        height: 250,
+                        width: 250,
+                      )),
+                  SizedBox(
+                    height: 16,
+                  ),
+
+                  //-----------------------List name-----------------------
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'List Name:',
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty || value == null || value.trim() == '')
-                        return "Please enter a name";
-                      else
-                        return null;
-                    },
-                    onChanged: (value) async {
-                      listt = value;
-                    },
-                    style: Theme.of(context).textTheme.subtitle1),
-                //-----------------------End of list name-----------------------
-
-                SizedBox(
-                  height: 8,
-                ),
-
-                //-----------------------Categorey-----------------------
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  child: Text(
-                    'Categorey:',
-                    style: Theme.of(context).textTheme.subtitle1,
                   ),
-                ),
-
-                SizedBox(
-                  height: 3,
-                ),
-
-                DropdownButtonFormField2<String>(
-                    scrollbarAlwaysShow: true,
-                    itemHeight: 35,
-                    style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
-                    items: <String>['', '', '', '']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
+                  SizedBox(
+                    height: 3,
+                  ),
+                  TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: CAtegoryNameController,
+                      decoration: InputDecoration(
+                        hintText: 'Ex: SWE444',
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 10,
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (categoreyValue) {
-                      setState(() {
-                        selectCategory = categoreyValue;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null)
-                        return "Please choose category";
-                      else
-                        return null;
-                    },
-                    value: selectCategory,
-                    isExpanded: true,
-                    hint: new Text("Choose category",
-                        style: TextStyle(fontSize: 15))),
-
-                //-----------------------End of Categorey-----------------------
-
-                CheckboxListTile(
-                    activeColor: Color(0xff7b39ed),
-                    //checkColor: Color(0xff7b39ed),
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text("Do you want it to be shared?"),
-                    value: isChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isChecked = value;
-                      });
-                      print(isChecked);
-                      // How did value change to true at this point?
-                    }),
-
-                Row(
-                  children: [
-                    Expanded(
-                        child: ElevatedButton(
-                      onPressed: () {
-                        //navigate to check email view
-                        if (formKey.currentState!.validate()) {
-                          final snackBar =
-                              SnackBar(content: Text("Added successfully"));
-                          print(listt);
-                          print(selectCategory);
-
-                          CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.success,
-                            text: "List Added successfuly!",
-                            confirmBtnColor: const Color(0xff7b39ed),
-                            onConfirmBtnTap: () => route(isChecked),
-                          );
-                        }
-                      },
-                      child: Text(
-                        'Add',
-                        style: TextStyle(fontSize: 20),
                       ),
-                    )),
-                  ],
-                ),
-              ],
+                      validator: (value) {
+                        if (value!.isEmpty || value == null || value.trim() == '')
+                          return "Please enter a name";
+                        else
+                          return null;
+                      },
+                      onChanged: (value) async {
+                        listt = value;
+                      },
+                      style: Theme.of(context).textTheme.subtitle1),
+                  //-----------------------End of list name-----------------------
+
+                  SizedBox(
+                    height: 8,
+                  ),
+
+                  //-----------------------Categorey-----------------------
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Categorey:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 3,
+                  ),
+
+                  DropdownButtonFormField2<String>(
+                      scrollbarAlwaysShow: true,
+                      itemHeight: 35,
+                      style: TextStyle(
+                          color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
+                      items: provider.categories
+                          .map((value) {
+                        return DropdownMenuItem(
+                          value:  value.toString(),
+                          child: Text(
+                            value,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (categoreyValue) {
+                        setState(() {
+                          selectCategory = categoreyValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null)
+                          return "Please choose category";
+                        else
+                          return null;
+                      },
+                      value: selectCategory,
+                      isExpanded: true,
+                      hint: new Text("Choose category",
+                          style: TextStyle(fontSize: 15))),
+
+                  //-----------------------End of Categorey-----------------------
+
+                  CheckboxListTile(
+                      activeColor: Color(0xff7b39ed),
+                      //checkColor: Color(0xff7b39ed),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: Text("Do you want it to be shared?"),
+                      value: isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isChecked = value;
+                        });
+                        print(isChecked);
+                        // How did value change to true at this point?
+                      }),
+
+                  Row(
+                    children: [
+                      Expanded(
+                          child: ElevatedButton(
+                        onPressed: ()async {
+                          //navigate to check email view
+                          if (formKey.currentState!.validate()) {
+                            final snackBar =
+                                SnackBar(content: Text("Added successfully"));
+                            print(listt);
+                            print(selectCategory);
+
+                           await  FirebaseFirestore.instance.collection('List').add(
+                                {
+                                  'CategoryName': selectCategory ,
+                                  'List': listt,
+                                  'UID': FirebaseAuth.instance.currentUser!.email,
+                                  'isPrivate': isChecked,
+                                });
+
+                            CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.success,
+                              text: "List Added successfuly!",
+                              confirmBtnColor: const Color(0xff7b39ed),
+                              onConfirmBtnTap: () => route(isChecked),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'Add',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      )),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ));
@@ -242,7 +256,7 @@ class _AddList extends State<AddList> {
 
   void route(bool? isChecked) {
     if (isChecked == true)
-      Util.routeToWidget(context, AddTask()); ///////////
+      Util.routeToWidget(context, SendInvitation()); ///////////
     else
       Util.routeToWidget(context, AddTask());
     //print(text);

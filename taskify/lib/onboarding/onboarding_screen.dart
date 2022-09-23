@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskify/homePage.dart';
+
 import '../screens/auth/login_screen.dart';
 import '../screens/ProfileScreen/profileScreen.dart';
 
@@ -51,12 +53,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           const SizedBox(height: 10.0),
                           Text(
                             contents[index].title ?? "",
-                            style: Theme.of(context).textTheme.headline1,
+
+                            style: Theme.of(context).textTheme.headline4,
                           ),
-                          const SizedBox(height: 1.0),
+                          const SizedBox(height: 10.0),
                           Text(
                             contents[index].description ?? "",
-                            style: Theme.of(context).textTheme.headline2,
+                            style: Theme.of(context).textTheme.headline6,
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -73,14 +76,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       builder: (context, currentIndex, child) {
                         return AnimatedContainer(
                           duration: const Duration(milliseconds: 250),
-                          height: 15,
-                          width: currentIndex == index ? 55 : 30,
+                          height: 8,
+                          width: currentIndex == index ? 50 : 25,
                           margin: const EdgeInsets.only(right: 5),
                           decoration: BoxDecoration(
                             boxShadow: const [
                               BoxShadow(
                                 color: Colors.black45,
-                                blurRadius: 7,
+                                blurRadius: 3,
                               )
                             ],
                             borderRadius: BorderRadius.circular(20),
@@ -106,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           final screenToOpen =
                               FirebaseAuth.instance.currentUser == null
                                   ? const LoginScreen()
-                                  : const HomeScreen();
+                                  :  NavBar(tabs: 0,);
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -122,7 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       },
                       child: Text(
                         index == contents.length - 1 ? "Continue" : "Next",
-                        style: Theme.of(context).textTheme.headline3,
+                      //  style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
                   );
