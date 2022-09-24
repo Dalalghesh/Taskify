@@ -32,7 +32,9 @@ class _SendInvitationState extends State<SendInvitation> {
         leadingWidth: 50,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           Padding(

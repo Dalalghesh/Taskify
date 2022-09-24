@@ -256,9 +256,12 @@ class _AddList extends State<AddList> {
 
   void route(bool? isChecked) {
     if (isChecked == true)
-      Util.routeToWidget(context, SendInvitation()); ///////////
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SendInvitation()));
+      //Util.routeToWidget(context, SendInvitation()); ///////////
     else
-      Util.routeToWidget(context, AddTask());
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddTask()));
+
+    // Util.routeToWidget(context, AddTask());
     //print(text);
   }
 

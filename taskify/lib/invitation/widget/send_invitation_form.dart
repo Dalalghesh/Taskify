@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
+import 'package:taskify/homePage.dart';
 
 import 'package:taskify/screens/AddList.dart';
 
@@ -182,7 +183,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                           textStyle: const TextStyle(fontSize: 18),
                         ),
                         onPressed: () {
-                          Util.routeToWidget(context, AddList());
+                          Util.routeToWidget(context, NavBar(tabs: 0));
                         },
                         child: const Text('Later'),
 

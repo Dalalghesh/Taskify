@@ -1,3 +1,4 @@
+
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:taskify/invitation/models/invitation.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:taskify/models/users.dart';
 
 class InvitaitonProvider with ChangeNotifier {
   
@@ -21,6 +23,12 @@ class InvitaitonProvider with ChangeNotifier {
     final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
     if(res.docs.isNotEmpty){
       for(int i =0; i< res.docs.length;i++){
+        // UserModel userModel = UserModel(
+        //   email: res.docs[i]['email'],
+        //   categories: res.docs[i]['categories'],
+        //   docId: res.docs[i].id
+        // );
+        //emails.add(userModel);
         emails.add(res.docs[i]['email']);
       }
       filteredEmails = emails;

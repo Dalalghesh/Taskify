@@ -27,7 +27,7 @@ class _TaskScreenState extends State<TaskScreen> {
   }
   getTask()async{
     print(widget.category);
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: 100));
     Provider.of<AppState>(context, listen: false).getTasks(widget.category, widget.list);
 
   }
@@ -37,11 +37,16 @@ class _TaskScreenState extends State<TaskScreen> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+        // elevation: 0,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(widget.list, style: TextStyle(color: Colors.black, fontSize: 18),),
       ),
 
-      body: provider.tasksLoading ? Center(child: CircularProgressIndicator(),): ListView.builder(
+      body: provider.tasksLoading ? Center(child: CircularProgressIndicator(),):
+      provider.tasks.isEmpty ? Center(child: Text('List is empty', style: TextStyle(color: Colors.black, fontSize: 18),)):
+
+      ListView.builder(
           itemCount: provider.tasks.length,
           shrinkWrap: true,
 
