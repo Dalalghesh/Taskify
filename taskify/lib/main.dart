@@ -4,11 +4,16 @@ import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'Services /LocalNotificationService.dart';
 import 'firebase_options.dart';
 
 import 'package:taskify/onboarding/onboarding_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+
 // #7b39ed - primary color
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = flutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -29,6 +34,9 @@ class MyApp extends StatelessWidget {
     900: Color(0xff7b39ed),
   });
 
+  void initializ(){
+  LocalNotificationService.initializ(flutterLocalNotificationsPlugin);
+  }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
