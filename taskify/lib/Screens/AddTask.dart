@@ -1,43 +1,103 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:taskify/Screens/AddList.dart';
-import 'package:taskify/Screens/InviteFriend.dart';
+import 'package:provider/provider.dart';
+import 'package:taskify/appstate.dart';
+import 'package:taskify/homePage.dart';
+import 'package:taskify/models/task_list.dart';
+import 'package:taskify/utils/validators.dart';
+import 'AddList.dart';
+// import 'package:taskify/Screens/InviteFriend.dart';
 import 'package:taskify/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:taskify/firebase_options.dart';
+import 'package:animated_radio_buttons/animated_radio_buttons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() {
+void main() async {
   //Initializing Database when starting the application.
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(AddTask());
 }
 
-Widget build(BuildContext context) {
-  return MaterialApp(
-    home: AddTask(),
-  );
-}
+// Widget build(BuildContext context) {
+//   return MaterialApp(
+//     home: AddTask(),
+//   );
+// }
 
 class AddTask extends StatefulWidget {
+  const AddTask({Key? key}) : super(key: key);
+
   @override
   _AddTask createState() => _AddTask();
 }
 
+late var userData;
+Future<void> getUserData() async {
+  var user = FirebaseAuth.instance.currentUser;
+  userData = user!.uid;
+  //print(userData);
+}
+
 class _AddTask extends State<AddTask> {
+  var selectCategory1;
+  var selectCategory;
+
+
+  String Category = '';
+  List<TaskListModel> lList = [];
+  String? c;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getlists();
+
+    });
+    super.initState();
+  }
+
+  // TextEditingController categoryController = TextEditingController();
+  void getlists() async {
+    print('hi');
+    lList=  await Provider.of<AppState>(context, listen: false).getListForTask();
+   // lList = Provider.of<AppState>(context, listen: false).taskList;
+   // lList = res['lists'];
+    if (lList.isEmpty) {
+      print('GG');
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "You don't have lists, create list first!",
+        confirmBtnColor: const Color(0xff7b39ed),
+        onConfirmBtnTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddList())),
+      );
+    }
+
+    print(lList);
+  }
+
+  int myVar = 1;
   var selectedList;
   final _firestore = FirebaseFirestore.instance;
   late String taskk;
   var priority;
+  String? docid;
   var description;
   DateTime dateTime = new DateTime.now();
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) => Container(
-              height: 216,
+              height: 250,
               padding: const EdgeInsets.only(top: 6.0),
               // The Bottom margin is provided to align the popup above the system navigation bar.
               margin: EdgeInsets.only(
@@ -60,7 +120,10 @@ class _AddTask extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
+    AppState provider = Provider.of<AppState>(context, listen: true);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -69,7 +132,7 @@ class _AddTask extends State<AddTask> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Util.routeToWidget(context, InviteFriend());
+              Util.routeToWidget(context, NavBar(tabs: 0));
             },
           ),
           actions: [
@@ -78,7 +141,9 @@ class _AddTask extends State<AddTask> {
             )
           ],
         ),
-        body: SingleChildScrollView(
+        body: provider.taskListLoading ?
+            Center(child: CircularProgressIndicator(),):
+        SingleChildScrollView(
             child: Container(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -117,22 +182,24 @@ class _AddTask extends State<AddTask> {
                 ),
                 TextFormField(
                     decoration: InputDecoration(
-                      hintText: 'Ex: Assignment',
+                      hintText: 'At least 3 characters',
                       contentPadding: EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 10,
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty)
-                        return "Please enter a name";
-                      else
-                        return null;
+                      if (value!.isEmpty || value == null || value.trim() == '')
+                        return "Please enter Category name";
+                       else if (value.length <= 2) {
+                        return "Please enter at least 2 characters";
+                      }
+                      return null;
                     },
                     onChanged: (value) {
-                      setState(() {
+                    //  setState(() async {
                         taskk = value;
-                      });
+                    //  });
                       print(taskk);
                     },
                     style: Theme.of(context).textTheme.subtitle1),
@@ -142,7 +209,53 @@ class _AddTask extends State<AddTask> {
                 SizedBox(
                   height: 8,
                 ),
-                //-----------------------Categorey-----------------------
+                //-----------------------list-----------------------
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
+                    'Category:',
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                DropdownButtonFormField2<String>(
+                    scrollbarAlwaysShow: true,
+                    itemHeight: 35,
+                    style: TextStyle(
+                        color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
+                    items:  provider.categories
+                    .map((value) {
+                      return DropdownMenuItem<String>(
+                        value: value.toString(),
+                        child: Text(
+                          value,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (categoreyValue) {
+
+                      setState(() {
+                        selectCategory1 = categoreyValue;
+                      });
+                      print(selectCategory1);
+                      provider.filterList(selectCategory1);
+                    },
+                    validator: (value) {
+                      if (value == null)
+                        return "Please choose category";
+                      else
+                        return null;
+                    },
+                    value: selectCategory1,
+                    isExpanded: true,
+                    hint: new Text("Choose category",
+                        style: TextStyle(fontSize: 15))),
+                SizedBox(
+                  height: 8,
+                ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
@@ -153,59 +266,43 @@ class _AddTask extends State<AddTask> {
                 SizedBox(
                   height: 3,
                 ),
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('List1')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var doc = snapshot.data?.docs;
 
-                      List<DropdownMenuItem> Listss = [];
-                      for (int i = 0;
-                          i < (snapshot.data! as QuerySnapshot).docs.length;
-                          i++) {
-                        //bERJgJI288LgROb1gUN3
-                        DocumentSnapshot ds = snapshot.data!.docs[i];
-                        Listss.add(
-                          DropdownMenuItem(
-                            child: Text(ds.get('List_Id')),
-                            value: "${ds.id}",
-                          ),
-                        );
-                      }
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(
-                            child: DropdownButtonFormField2<dynamic>(
-                                scrollbarAlwaysShow: true,
-                                itemHeight: 35,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 15),
-                                items: Listss,
-                                onChanged: (categoreyValue) {
-                                  setState(() {
-                                    selectedList = categoreyValue;
-                                  });
-                                },
-                                validator: (value) {
-                                  if (value == null)
-                                    return "Please choose list";
-                                  else
-                                    return null;
-                                },
-                                value: selectedList,
-                                isExpanded: true,
-                                hint: new Text("Choose list",
-                                    style: TextStyle(fontSize: 15))),
-                          ),
-                        ],
+                DropdownButtonFormField2<String>(
+                    scrollbarAlwaysShow: true,
+                    itemHeight: 35,
+
+                    style: TextStyle(
+                        color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
+                    items: provider.taskList
+                        .map(( value) {
+                      return DropdownMenuItem<String>(
+                        value: value.list.toString(),
+                        child: Text(
+                          value.list,
+                        ),
                       );
-                    }
-                    return Text("");
-                  },
-                ),
+                    }).toList(),
+                    onChanged: provider.disableDropDown ? null:
+                        (value) {
+                    //  print('doc12343'+value.());
+                      setState(() {
+                        docid = value;
+                        selectCategory = value;
+
+
+                      });
+                   },
+                    validator: (value) {
+                      if (value == null)
+                        return "Please choose list";
+                      else
+                        return null;
+                    },
+                    value: selectCategory,
+                    isExpanded: true,
+                    hint: new Text("Choose list",
+                        style: TextStyle(fontSize: 15))),
+
                 //-----------------------End of Categorey-----------------------
                 SizedBox(
                   height: 8,
@@ -219,38 +316,38 @@ class _AddTask extends State<AddTask> {
                   ),
                 ),
                 Container(
-                  child: DropdownButtonFormField(
-                      //style
-                      decoration: InputDecoration(
-                          hintText: 'Home',
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          )),
-                      isExpanded: true,
-                      hint: Text('Choose priority',
-                          style: TextStyle(fontSize: 15)),
-                      //style
-
-                      items:
-                          <String>['High', 'Medium', 'Low'].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          priority = value;
-                        });
-                        print(priority);
-                      },
-                      validator: (value) {
-                        if (value == null)
-                          return "Please choose priority";
-                        else
-                          return null;
-                      }),
+                  child: AnimatedRadioButtons(
+                    backgroundColor: Color.fromARGB(0, 255, 238, 88),
+                    value: myVar,
+                    layoutAxis: Axis.horizontal,
+                    buttonRadius: 16.0,
+                    items: [
+                      AnimatedRadioButtonItem(
+                          label: "High",
+                          labelTextStyle:
+                              TextStyle(color: Colors.black, fontSize: 15),
+                          color: Color.fromARGB(255, 223, 123, 123),
+                          fillInColor: Color.fromARGB(255, 243, 207, 207)),
+                      AnimatedRadioButtonItem(
+                          label: "Medium",
+                          labelTextStyle:
+                              TextStyle(color: Colors.black, fontSize: 15),
+                          color: Color.fromARGB(255, 223, 180, 123),
+                          fillInColor: Color.fromARGB(255, 238, 211, 153)),
+                      AnimatedRadioButtonItem(
+                          label: "Low",
+                          labelTextStyle:
+                              TextStyle(color: Colors.black, fontSize: 15),
+                          color: Color.fromARGB(255, 152, 224, 154),
+                          fillInColor: Color.fromARGB(255, 213, 241, 228))
+                    ],
+                    onChanged: (value) {
+                      print(value);
+                      setState(() {
+                        myVar = value;
+                      });
+                    },
+                  ),
                 ),
 
                 SizedBox(
@@ -260,7 +357,7 @@ class _AddTask extends State<AddTask> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
-                    'Deadline:',
+                    'Deadline: (optionally)',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
@@ -288,7 +385,7 @@ class _AddTask extends State<AddTask> {
                       ),
 
                       child: Text(
-                        '            ${dateTime.month}/${dateTime.day}/${dateTime.year}                  ${dateTime.hour}:${dateTime.minute}',
+                        '            ${dateTime.month}/${dateTime.day}/${dateTime.year}   -   ${dateTime.hour}:${dateTime.minute}',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
@@ -308,7 +405,7 @@ class _AddTask extends State<AddTask> {
                   height: 5,
                 ),
                 TextFormField(
-                    minLines: 3,
+                    minLines: 1,
                     maxLines: 5,
                     decoration: InputDecoration(
                       // hintText: 'Ex: Assignment',
@@ -338,20 +435,23 @@ class _AddTask extends State<AddTask> {
                   children: [
                     Expanded(
                         child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: ()async {
                         if (formKey.currentState!.validate()) {
+                          await FirebaseFirestore.instance.collection('tasks').add({
+                            'CategoryName': selectCategory1,
+                            'UID': FirebaseAuth.instance.currentUser!.email,
+                            'Task': taskk,
+                            'ListName': docid,
+                            'Priority': myVar == 0 ? 'High' : myVar == 1 ? 'Medium': 'Low',
+                            'Deadline': dateTime,
+                            'description': description,
+
+                          });
+
+
                           final snackBar =
                               SnackBar(content: Text("Created successfully"));
-                          _firestore.collection("Task1").doc().set({
-                            'TaskID': taskk,
-                            'CategoryName': '',
-                            'ListID': 't1',
-                            'deadline': dateTime,
-                            'isDone': false,
-                            'priority': priority,
-                            'Description': description,
-                            'uID': 'ZfITEhTBOmayoUpqp1ohgGoqmTe2',
-                          });
+
                           CoolAlert.show(
                             context: context,
                             type: CoolAlertType.success,
@@ -369,28 +469,46 @@ class _AddTask extends State<AddTask> {
                   ],
                 ),
                 SizedBox(
-                  height: 0,
+                  height: 20,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size(50, 40),
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          primary: Colors.grey.shade600,
-                          textStyle: const TextStyle(fontSize: 18),
-                        ),
-                        onPressed: () {
-                          //home pagee
-                          Util.routeToWidget(context, InviteFriend());
-                        },
-                        child: const Text('Later'),
-                      ),
+                Center(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.grey.shade600,
+                      textStyle: const TextStyle(fontSize: 18),
                     ),
-                  ],
+                    onPressed: () {
+                      Util.routeToWidget(context, NavBar(tabs: 0));
+                    },
+                    child: const Text('Later'),
+
+                  ),
+
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: TextButton(
+                //         style: TextButton.styleFrom(
+                //           minimumSize: Size(50, 40),
+                //           padding: EdgeInsets.zero,
+                //           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                //           primary: Colors.grey.shade600,
+                //           textStyle: const TextStyle(fontSize: 18),
+                //         ),
+                //         onPressed: () {
+                //           //home pagee
+                //           Util.routeToWidget(context, AddList());
+                //         },
+                //         child: const Text('Later'),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -407,7 +525,7 @@ class _AddTask extends State<AddTask> {
 
   void route() {
     //route it to home page
-    Util.routeToWidget(context, AddList());
+    Util.routeToWidget(context, NavBar(tabs: 0));
   }
 
   Widget _buildButton(
@@ -477,4 +595,11 @@ class _DatePickerItem extends StatelessWidget {
       ),
     );
   }
+
+  // validate(value) {
+  //   if (value == null)
+  //     return "Please choose priority";
+  //   else
+  //     return null;
+  // }
 }

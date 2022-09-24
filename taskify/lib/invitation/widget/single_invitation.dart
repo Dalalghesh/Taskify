@@ -59,8 +59,8 @@ class SingleInvitaionItem extends StatelessWidget {
                     "Accept",
                     style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      primary: Color.fromARGB(255, 115, 184, 118)),
+                  style:
+                      ElevatedButton.styleFrom(primary: Color.fromARGB(255, 115, 184, 118)),
                 ),
               ),
               const SizedBox(
@@ -72,10 +72,9 @@ class SingleInvitaionItem extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     "Reject",
-                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    style: TextStyle(color: Colors.white),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      primary: Color.fromARGB(255, 232, 107, 98)),
+                  style: ElevatedButton.styleFrom(primary : Color.fromARGB(255, 232, 107, 98)),
                 ),
               ),
             ],

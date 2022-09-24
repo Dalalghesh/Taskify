@@ -1,8 +1,7 @@
-import 'package:taskify/screens/profileScreen.dart';
+import 'package:taskify/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
-import 'onboarding/onboarding_screen.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -21,6 +20,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return _Unfocus(child: child);
       },
+      // home: FirebaseAuth.instance.currentUser == null ? const LoginScreen() : const HomeScreen(),
       home: const OnboardingScreen(),
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
-import 'package:taskify/screens/send_instructions_view.dart';
+import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -16,19 +16,17 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static const int _deepPurplePrimaryValue = 0xFF673AB7;
-
   final MaterialColor primarySwatch = MaterialColor(0xff7b39ed, <int, Color>{
-    50: Color(0xFFEDE7F6),
-    100: Color(0xFFD1C4E9),
-    200: Color(0xFFB39DDB),
-    300: Color(0xFF9575CD),
-    400: Color(0xFF7E57C2),
-    500: Color(_deepPurplePrimaryValue),
-    600: Color(0xFF5E35B1),
-    700: Color(0xFF512DA8),
-    800: Color(0xFF4527A0),
-    900: Color(0xFF311B92),
+    50: Color(0xff7b39ed),
+    100: Color(0xff7b39ed),
+    200: Color(0xff7b39ed),
+    300: Color(0xff7b39ed),
+    400: Color(0xff7b39ed),
+    500: Color(0xff7b39ed),
+    600: Color(0xff7b39ed),
+    700: Color(0xff7b39ed),
+    800: Color(0xff7b39ed),
+    900: Color(0xff7b39ed),
   });
 
   @override
@@ -63,7 +61,7 @@ class MyApp extends StatelessWidget {
                 headline4:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 subtitle1: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
+                  color: Colors.grey.shade600,
                 )),
             appBarTheme: AppBarTheme(
                 backgroundColor: Colors.transparent,
