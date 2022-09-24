@@ -64,7 +64,6 @@ class _AddTask extends State<AddTask> {
     // lList = Provider.of<AppState>(context, listen: false).taskList;
     // lList = res['lists'];
     if (lList.isEmpty) {
-      print('GG');
       CoolAlert.show(
         context: context,
         type: CoolAlertType.error,
@@ -175,6 +174,7 @@ class _AddTask extends State<AddTask> {
                         height: 5,
                       ),
                       TextFormField(
+                          maxLength: 15,
                           decoration: InputDecoration(
                             hintText: 'At least 3 characters',
                             contentPadding: EdgeInsets.symmetric(
@@ -188,7 +188,7 @@ class _AddTask extends State<AddTask> {
                                 value.trim() == '')
                               return "Please enter Category name";
                             else if (value.length <= 2) {
-                              return "Please enter at least 2 characters";
+                              return "Please enter at least 3 characters";
                             }
                             return null;
                           },
@@ -219,6 +219,7 @@ class _AddTask extends State<AddTask> {
                         height: 3,
                       ),
                       DropdownButtonFormField2<String>(
+                          buttonHeight: 18,
                           scrollbarAlwaysShow: true,
                           itemHeight: 35,
                           style: TextStyle(
@@ -264,6 +265,7 @@ class _AddTask extends State<AddTask> {
                       ),
 
                       DropdownButtonFormField2<String>(
+                          buttonHeight: 18,
                           scrollbarAlwaysShow: true,
                           itemHeight: 35,
                           style: TextStyle(
@@ -403,6 +405,7 @@ class _AddTask extends State<AddTask> {
                         height: 5,
                       ),
                       TextFormField(
+                          maxLength: 150,
                           minLines: 1,
                           maxLines: 5,
                           decoration: InputDecoration(
@@ -465,27 +468,27 @@ class _AddTask extends State<AddTask> {
                               }
                             },
                             child: Text(
-                              'Add',
+                              'ADD',
                               style: TextStyle(fontSize: 20),
                             ),
                           )),
                         ],
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 2,
                       ),
-                      Center(
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            primary: Colors.grey.shade600,
-                            textStyle: const TextStyle(fontSize: 18),
-                          ),
-                          onPressed: () {
-                            Util.routeToWidget(context, NavBar(tabs: 0));
-                          },
-                          child: const Text('Later'),
-                        ),
-                      ),
+                      // Center(
+                      //   child: TextButton(
+                      //     style: TextButton.styleFrom(
+                      //       primary: Colors.grey.shade600,
+                      //       textStyle: const TextStyle(fontSize: 18),
+                      //     ),
+                      //     onPressed: () {
+                      //       Util.routeToWidget(context, NavBar(tabs: 0));
+                      //     },
+                      //     child: const Text('Later'),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 20,
                       ),

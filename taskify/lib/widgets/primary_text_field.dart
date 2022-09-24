@@ -62,8 +62,8 @@ class PrimaryTextField extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey.shade600,
+              fontSize: 16,
+              color: Color.fromARGB(255, 0, 0, 0),
             ),
           ),
         ),
