@@ -1,7 +1,7 @@
-import 'package:taskify/onboarding/onboarding_screen.dart';
+import 'package:taskify/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
-// import 'app_theme.dart';
+import 'app_theme.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,8 +15,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      //theme: AppTheme.lightTheme,
-      // themeMode: ThemeMode.system,
+      theme: AppTheme.lightTheme,
+      themeMode: ThemeMode.system,
       builder: (context, child) {
         return _Unfocus(child: child);
       },

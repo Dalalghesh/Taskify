@@ -1,5 +1,5 @@
-// import 'package:taskify/utils/app_colors.dart';
-// import 'package:taskify/utils/text_styles.dart';
+import 'package:taskify/utils/app_colors.dart';
+import 'package:taskify/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomHeader extends StatelessWidget {
@@ -22,7 +22,7 @@ class CustomHeader extends StatelessWidget {
               onTap: () => Navigator.of(context).pop(),
               child: const Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: AppColors.whiteshade,
                 size: 24,
               ),
             ),
@@ -30,7 +30,7 @@ class CustomHeader extends StatelessWidget {
           ],
           Text(
             text,
-            // style: KTextStyle.headerTextStyle,
+            style: KTextStyle.headerTextStyle,
           )
         ],
       ),

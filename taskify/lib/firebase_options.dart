@@ -53,7 +53,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '750046757369',
     projectId: 'taskify-e4ca5',
     storageBucket: 'taskify-e4ca5.appspot.com',
-    iosClientId: '750046757369-6q3clb8ashbr4tf8p36f6ribfmmkpqer.apps.googleusercontent.com',
+    iosClientId:
+        '750046757369-6q3clb8ashbr4tf8p36f6ribfmmkpqer.apps.googleusercontent.com',
     iosBundleId: 'com.cracklog.faay',
   );
 }

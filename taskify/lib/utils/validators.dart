@@ -12,12 +12,12 @@ class Validators {
     }
 
     const p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(gmail.com)$';
 
     final regExp = RegExp(p);
 
     if (!regExp.hasMatch(email.trim())) {
-      return 'Please Enter Valid Email Address';
+      return 'Please Enter Gamil Email Address';
     }
     return null;
   }
@@ -33,7 +33,8 @@ class Validators {
     return null;
   }
 
-  static String? confirmPasswordValidator(String? password, String? oldPassword) {
+  static String? confirmPasswordValidator(
+      String? password, String? oldPassword) {
     if (password!.isEmpty) {
       return 'Please fill in the password';
     }
