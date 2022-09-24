@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             padding: EdgeInsets.only(
-              right: 10,
+              right: 15,
             ),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
             icon: Icon(
               Icons.logout_outlined,
               color: Color.fromRGBO(255, 255, 255, 1),
-              size: 35,
+              size: 30,
             ),
           ),
         ],
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 19,
+                      height: 69,
                     ),
                     Text(
                       '${FirebaseAuth.instance.currentUser!.displayName}',

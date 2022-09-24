@@ -4,7 +4,6 @@ import 'package:curved_nav_bar/flutter_curved_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskify/invitation/screens/received_invitations.dart';
-
 import 'package:taskify/screens/AddList.dart';
 import 'package:taskify/screens/AddTask.dart';
 import 'package:taskify/screens/Add_Category.dart';
@@ -28,9 +27,14 @@ Widget GetTab(int index) {
   if (index == 0) {
     return Home_Screen();
   } else if (index == 1) {
-    return TodoList(category: '',);
+    return TodoList(
+      category: '',
+    );
   } else {
-    return TaskScreen(category: '', list: '',);
+    return TaskScreen(
+      category: '',
+      list: '',
+    );
   }
 }
 
@@ -47,7 +51,7 @@ class NavBarState extends State<NavBar> {
       // ),
       Container(
         height: Get.height,
-        color: Colors.pinkAccent,
+        color: Color.fromARGB(255, 207, 205, 206),
       ),
       HomeScreen()
     ];
@@ -64,7 +68,7 @@ class NavBarState extends State<NavBar> {
             child: const Icon(
               Icons.add,
               size: 50,
-              color: Colors.green,
+              color: Color.fromARGB(255, 170, 170, 170),
             ),
           ),
           inActiveIcon: Container(
@@ -83,7 +87,7 @@ class NavBarState extends State<NavBar> {
         FABBottomAppBarItem(
           activeIcon: const Icon(
             Icons.home,
-            color: Colors.green,
+            color: Color.fromARGB(255, 170, 170, 170),
           ),
           inActiveIcon: const Icon(
             Icons.home,
@@ -94,7 +98,7 @@ class NavBarState extends State<NavBar> {
         FABBottomAppBarItem(
           activeIcon: const Icon(
             Icons.notifications,
-            color: Colors.green,
+            color: Color.fromARGB(255, 170, 170, 170),
           ),
           inActiveIcon: const Icon(
             Icons.notifications,
@@ -105,7 +109,7 @@ class NavBarState extends State<NavBar> {
         FABBottomAppBarItem(
             activeIcon: const Icon(
               Icons.calendar_today_sharp,
-              color: Colors.green,
+              color: Color.fromARGB(255, 170, 170, 170),
             ),
             inActiveIcon: const Icon(
               Icons.calendar_today_sharp,
@@ -115,7 +119,7 @@ class NavBarState extends State<NavBar> {
         FABBottomAppBarItem(
             activeIcon: const Icon(
               Icons.person,
-              color: Colors.green,
+              color: Color.fromARGB(255, 170, 170, 170),
             ),
             inActiveIcon: const Icon(
               Icons.person,
@@ -128,29 +132,6 @@ class NavBarState extends State<NavBar> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: Get.width * 0.75,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Color(0xff7b39ed),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => AddTask()));
-                },
-                child: const Text(
-                  'ADD TASK',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
             Container(
                 width: Get.width * 0.75,
                 padding: const EdgeInsets.all(20),
@@ -186,7 +167,30 @@ class NavBarState extends State<NavBar> {
                       .push(MaterialPageRoute(builder: (context) => AddList()));
                 },
                 child: const Text(
-                  'ADD TODO LIST',
+                  'ADD LIST',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              width: Get.width * 0.75,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Color(0xff7b39ed),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => AddTask()));
+                },
+                child: const Text(
+                  'ADD TASK',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

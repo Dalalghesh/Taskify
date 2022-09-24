@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskify/screens/auth/login_screen.dart';
-import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
+import 'package:taskify/util.dart';
 import 'package:taskify/utils/validators.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:taskify/widgets/primary_text_field.dart';
@@ -38,37 +38,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leadingWidth: 50,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Util.routeToWidget(context, LoginScreen());
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+          )
+        ],
+      ),
       body: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: AppColors.deepPurple,
-          ),
-          const SafeArea(child: CustomHeader(text: 'Sign Up.')),
-          Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.135),
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: AppColors.whiteshade,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
-            ),
+            padding: const EdgeInsets.all(16.0),
             child: Form(
               key: formKey,
               child: ListView(
-                padding: const EdgeInsets.all(16),
+                //padding: const EdgeInsets.all(16),
                 children: [
-                  SizedBox(
-                    height: 200,
-                    width: double.infinity,
-                    child:
-                        Center(child: Image.asset("assets/images/login.jpeg")),
+                  Text(
+                    'Sign Up',
+                    style: Theme.of(context).textTheme.headline4,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        "assets/images/login.jpeg",
+                        height: 250,
+                        width: 250,
+                      )),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  //  const SizedBox(height: 24),
                   PrimaryTextField(
                     title: "First Name",
                     hintText: "First Name",
@@ -87,9 +97,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 16),
                   PrimaryTextField(
                     title: "Email",
-                    hintText: "Email",
+                    hintText: "Must be gmail address",
                     textInputAction: TextInputAction.next,
-                    validator: Validators.emptyValidator,
+                    // validator: Validators.emptyValidator,
+                    validator: Validators.emailValidator,
+
                     controller: _emailController,
                   ),
                   const SizedBox(height: 16),
@@ -135,7 +147,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           text: TextSpan(
                             text: "Already have an account? ",
                             style: TextStyle(
-                              color: AppColors.deepPurple.withOpacity(0.7),
+                              color:
+                                  Color.fromARGB(255, 0, 0, 0).withOpacity(0.7),
                               fontWeight: FontWeight.w500,
                             ),
                             children: const [

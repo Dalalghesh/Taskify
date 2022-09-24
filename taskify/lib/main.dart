@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
                 headline4:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 subtitle1: TextStyle(
-                  color: Colors.grey.shade600,
+                  color: Color.fromARGB(255, 0, 0, 0),
                 )),
             appBarTheme: AppBarTheme(
                 backgroundColor: Colors.transparent,
