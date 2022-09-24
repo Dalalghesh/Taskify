@@ -126,17 +126,20 @@ class _AddList extends State<AddList> {
                     height: 3,
                   ),
                   TextFormField(
+                      maxLength: 15,
                       keyboardType: TextInputType.text,
                       controller: CAtegoryNameController,
                       decoration: InputDecoration(
-                        hintText: 'Ex: SWE444',
+                        hintText: 'Assignments',
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10,
                           horizontal: 10,
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty || value == null || value.trim() == '')
+                        if (value!.isEmpty ||
+                            value == null ||
+                            value.trim() == '')
                           return "Please enter a name";
                         else
                           return null;
@@ -166,14 +169,14 @@ class _AddList extends State<AddList> {
                   ),
 
                   DropdownButtonFormField2<String>(
+                      buttonHeight: 18,
                       scrollbarAlwaysShow: true,
                       itemHeight: 35,
                       style: TextStyle(
                           color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
-                      items: provider.categories
-                          .map((value) {
+                      items: provider.categories.map((value) {
                         return DropdownMenuItem(
-                          value:  value.toString(),
+                          value: value.toString(),
                           child: Text(
                             value,
                           ),
@@ -215,7 +218,7 @@ class _AddList extends State<AddList> {
                     children: [
                       Expanded(
                           child: ElevatedButton(
-                        onPressed: ()async {
+                        onPressed: () async {
                           //navigate to check email view
                           if (formKey.currentState!.validate()) {
                             final snackBar =
@@ -223,13 +226,14 @@ class _AddList extends State<AddList> {
                             print(listt);
                             print(selectCategory);
 
-                           await  FirebaseFirestore.instance.collection('List').add(
-                                {
-                                  'CategoryName': selectCategory ,
-                                  'List': listt,
-                                  'UID': FirebaseAuth.instance.currentUser!.email,
-                                  'isPrivate': isChecked,
-                                });
+                            await FirebaseFirestore.instance
+                                .collection('List')
+                                .add({
+                              'CategoryName': selectCategory,
+                              'List': listt,
+                              'UID': FirebaseAuth.instance.currentUser!.email,
+                              'isPrivate': isChecked,
+                            });
 
                             CoolAlert.show(
                               context: context,
@@ -241,7 +245,7 @@ class _AddList extends State<AddList> {
                           }
                         },
                         child: Text(
-                          'Add',
+                          'ADD',
                           style: TextStyle(fontSize: 20),
                         ),
                       )),
@@ -256,10 +260,14 @@ class _AddList extends State<AddList> {
 
   void route(bool? isChecked) {
     if (isChecked == true)
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SendInvitation()));
-      //Util.routeToWidget(context, SendInvitation()); ///////////
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SendInvitation()));
+    //Util.routeToWidget(context, SendInvitation()); ///////////
     else
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddTask()));
+      Util.routeToWidget(context, NavBar(tabs: 0));
+
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => AddTask()));
 
     // Util.routeToWidget(context, AddTask());
     //print(text);

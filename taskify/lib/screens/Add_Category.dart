@@ -118,6 +118,7 @@ class _Add_Category extends State<Add_Category> {
                     height: 5,
                   ),
                   TextFormField(
+                      maxLength: 15,
                       textCapitalization: TextCapitalization.words,
                       controller: categoryController,
                       onChanged: (value) {
@@ -166,7 +167,7 @@ class _Add_Category extends State<Add_Category> {
                           }
                         },
                         child: Text(
-                          'Create',
+                          'ADD',
                           style: TextStyle(fontSize: 20),
                         ),
                       )),
