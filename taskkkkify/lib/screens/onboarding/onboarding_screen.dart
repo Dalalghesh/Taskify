@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskify/homePage.dart';
+import 'package:taskify/screens/homescreen.dart';
 
 import '../auth/login_screen.dart';
 import '../ProfileScreen/profileScreen.dart';
@@ -107,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           final screenToOpen =
                               FirebaseAuth.instance.currentUser == null
                                   ? const LoginScreen()
-                                  : const HomeScreen();
+                                  :  NavBar(tabs: 0,);
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

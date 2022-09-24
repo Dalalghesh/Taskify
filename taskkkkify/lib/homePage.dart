@@ -3,6 +3,7 @@ import 'package:curved_nav_bar/fab_bar/fab_bottom_app_bar_item.dart';
 import 'package:curved_nav_bar/flutter_curved_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskify/invitation/screens/received_invitations.dart';
 
 import 'package:taskify/screens/AddList.dart';
 import 'package:taskify/screens/AddTask.dart';
@@ -27,9 +28,9 @@ Widget GetTab(int index) {
   if (index == 0) {
     return Home_Screen();
   } else if (index == 1) {
-    return TodoList();
+    return TodoList(category: '',);
   } else {
-    return TasksScreen();
+    return TaskScreen(category: '', list: '',);
   }
 }
 
@@ -38,11 +39,12 @@ class NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     List<Widget> tabs = [
       Home_Screen(),
+      RecievedInvitations(),
       //notifications()
-      Container(
-        height: Get.height,
-        color: Colors.blue,
-      ),
+      // Container(
+      //   height: Get.height,
+      //   color: Colors.blue,
+      // ),
       Container(
         height: Get.height,
         color: Colors.pinkAccent,

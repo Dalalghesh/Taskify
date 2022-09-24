@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
+import 'package:taskify/models/task_list.dart';
 import 'package:taskify/utils/validators.dart';
 import 'AddList.dart';
 // import 'package:taskify/Screens/InviteFriend.dart';
@@ -45,15 +48,19 @@ Future<void> getUserData() async {
 }
 
 class _AddTask extends State<AddTask> {
+  var selectCategory1;
   var selectCategory;
 
+
   String Category = '';
-  List<dynamic> lList = [];
+  List<TaskListModel> lList = [];
+  String? c;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getlists();
+
     });
     super.initState();
   }
@@ -61,11 +68,9 @@ class _AddTask extends State<AddTask> {
   // TextEditingController categoryController = TextEditingController();
   void getlists() async {
     print('hi');
-    final res = await _firestore
-        .collection('users1')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    lList = res['lists'];
+    lList=  await Provider.of<AppState>(context, listen: false).getListForTask();
+   // lList = Provider.of<AppState>(context, listen: false).taskList;
+   // lList = res['lists'];
     if (lList.isEmpty) {
       print('GG');
       CoolAlert.show(
@@ -73,7 +78,7 @@ class _AddTask extends State<AddTask> {
         type: CoolAlertType.error,
         text: "You don't have lists, create list first!",
         confirmBtnColor: const Color(0xff7b39ed),
-        onConfirmBtnTap: () => AddTask(),
+        onConfirmBtnTap: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddList())),
       );
     }
 
@@ -85,6 +90,7 @@ class _AddTask extends State<AddTask> {
   final _firestore = FirebaseFirestore.instance;
   late String taskk;
   var priority;
+  String? docid;
   var description;
   DateTime dateTime = new DateTime.now();
   void _showDialog(Widget child) {
@@ -114,7 +120,10 @@ class _AddTask extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
+    AppState provider = Provider.of<AppState>(context, listen: true);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -132,7 +141,9 @@ class _AddTask extends State<AddTask> {
             )
           ],
         ),
-        body: SingleChildScrollView(
+        body: provider.taskListLoading ?
+            Center(child: CircularProgressIndicator(),):
+        SingleChildScrollView(
             child: Container(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -180,17 +191,15 @@ class _AddTask extends State<AddTask> {
                     validator: (value) {
                       if (value!.isEmpty || value == null || value.trim() == '')
                         return "Please enter Category name";
-                      else if (lList.contains(value)) {
-                        return "This category already exist";
-                      } else if (value.length <= 2) {
+                       else if (value.length <= 2) {
                         return "Please enter at least 2 characters";
                       }
                       return null;
                     },
                     onChanged: (value) {
-                      setState(() async {
+                    //  setState(() async {
                         taskk = value;
-                      });
+                    //  });
                       print(taskk);
                     },
                     style: Theme.of(context).textTheme.subtitle1),
@@ -217,19 +226,22 @@ class _AddTask extends State<AddTask> {
                     itemHeight: 35,
                     style: TextStyle(
                         color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
-                    items: <String>['', '', '', '']
-                        .map<DropdownMenuItem<String>>((String value) {
+                    items:  provider.categories
+                    .map((value) {
                       return DropdownMenuItem<String>(
-                        value: value,
+                        value: value.toString(),
                         child: Text(
                           value,
                         ),
                       );
                     }).toList(),
                     onChanged: (categoreyValue) {
+
                       setState(() {
-                        selectCategory = categoreyValue;
+                        selectCategory1 = categoreyValue;
                       });
+                      print(selectCategory1);
+                      provider.filterList(selectCategory1);
                     },
                     validator: (value) {
                       if (value == null)
@@ -237,7 +249,7 @@ class _AddTask extends State<AddTask> {
                       else
                         return null;
                     },
-                    value: selectCategory,
+                    value: selectCategory1,
                     isExpanded: true,
                     hint: new Text("Choose category",
                         style: TextStyle(fontSize: 15))),
@@ -258,22 +270,28 @@ class _AddTask extends State<AddTask> {
                 DropdownButtonFormField2<String>(
                     scrollbarAlwaysShow: true,
                     itemHeight: 35,
+
                     style: TextStyle(
                         color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
-                    items: <String>['', '', '', '']
-                        .map<DropdownMenuItem<String>>((String value) {
+                    items: provider.taskList
+                        .map(( value) {
                       return DropdownMenuItem<String>(
-                        value: value,
+                        value: value.list.toString(),
                         child: Text(
-                          value,
+                          value.list,
                         ),
                       );
                     }).toList(),
-                    onChanged: (value) {
+                    onChanged: provider.disableDropDown ? null:
+                        (value) {
+                    //  print('doc12343'+value.());
                       setState(() {
-                        selectedList = value;
+                        docid = value;
+                        selectCategory = value;
+
+
                       });
-                    },
+                   },
                     validator: (value) {
                       if (value == null)
                         return "Please choose list";
@@ -300,7 +318,7 @@ class _AddTask extends State<AddTask> {
                 Container(
                   child: AnimatedRadioButtons(
                     backgroundColor: Color.fromARGB(0, 255, 238, 88),
-                    value: myVar ?? 0,
+                    value: myVar,
                     layoutAxis: Axis.horizontal,
                     buttonRadius: 16.0,
                     items: [
@@ -324,6 +342,7 @@ class _AddTask extends State<AddTask> {
                           fillInColor: Color.fromARGB(255, 213, 241, 228))
                     ],
                     onChanged: (value) {
+                      print(value);
                       setState(() {
                         myVar = value;
                       });
@@ -416,8 +435,20 @@ class _AddTask extends State<AddTask> {
                   children: [
                     Expanded(
                         child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: ()async {
                         if (formKey.currentState!.validate()) {
+                          await FirebaseFirestore.instance.collection('tasks').add({
+                            'CategoryName': selectCategory1,
+                            'UID': FirebaseAuth.instance.currentUser!.email,
+                            'Task': taskk,
+                            'ListName': docid,
+                            'Priority': myVar == 0 ? 'High' : myVar == 1 ? 'Medium': 'Low',
+                            'Deadline': dateTime,
+                            'description': description,
+
+                          });
+
+
                           final snackBar =
                               SnackBar(content: Text("Created successfully"));
 

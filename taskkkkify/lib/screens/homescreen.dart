@@ -23,9 +23,9 @@ class Home_Screen extends StatelessWidget {
             controller: sx.pageController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              const CategoriesScreen(),
-              TodoList(),
-              TasksScreen(),
+               CategoriesScreen(),
+              TodoList(category: ''),
+              TaskScreen( category: '', list: '',),
             ],
           ),
         ),
