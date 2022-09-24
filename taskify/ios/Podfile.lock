@@ -602,7 +602,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - cloud_firestore (3.4.8):
+  - cloud_firestore (3.4.7):
     - Firebase/Firestore (= 9.5.0)
     - firebase_core
     - Flutter
@@ -617,7 +617,7 @@ PODS:
   - Firebase/Messaging (9.5.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 9.5.0)
-  - firebase_auth (3.9.0):
+  - firebase_auth (3.8.0):
     - Firebase/Auth (= 9.5.0)
     - firebase_core
     - Flutter
@@ -673,8 +673,6 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
-  - flutter_keyboard_visibility (0.0.1):
-    - Flutter
   - GoogleDataTransport (9.2.0):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
@@ -768,7 +766,6 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
-  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
 
 SPEC REPOS:
   trunk:
@@ -803,15 +800,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
-  flutter_keyboard_visibility:
-    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  cloud_firestore: 7e123d5034b068e9a1fb32b2ad98a814c7f3e45d
+  cloud_firestore: 3ad8404fab1f789de8bfbb856bab238986cdfcef
   Firebase: 800f16f07af493d98d017446a315c27af0552f41
-  firebase_auth: c070c7e5b66037cddb73a68ca4bf4728b063680b
+  firebase_auth: 1d54a31ac7ff6585fe50fd26f679e934e1a471a1
   firebase_core: 31872a49ffe0bf6f834e7044c7334e433536735a
   firebase_messaging: 0950bacaf29e1f50e3f0502aa1c29a3a5814925e
   FirebaseAuth: 741918f1fa62ed23246a509279f91d42d79a713f
@@ -822,7 +817,6 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 0a115432c4e223c5ab20b0dbbe4cbefa793a0e8e
   FirebaseMessaging: 732623518591384f61c287e3d8f65294beb7ffb3
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
