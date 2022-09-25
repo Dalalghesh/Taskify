@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taskify/appstate.dart';
 
 import '../models/invitation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart';
 
 class SingleInvitaionItem extends StatelessWidget {
   const SingleInvitaionItem({
@@ -14,6 +16,7 @@ class SingleInvitaionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    AppState provider = Provider.of<AppState>(context, listen: false);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       padding: const EdgeInsets.all(10),
@@ -56,10 +59,36 @@ class SingleInvitaionItem extends StatelessWidget {
               SizedBox(
                 width: mediaQuery.size.width * 0.25,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async{
+                    print(invitationModel.category);
+                    await FirebaseFirestore.instance.collection('invitations').doc(invitationModel.id).update(
+                        {'status' : 'accepted'});
+
+
+provider.categories.contains(invitationModel.category)?   '' : await FirebaseFirestore.instance.collection('users1')
+    .doc(FirebaseAuth.instance.currentUser!.uid)
+    .set({
+  'categories': FieldValue.arrayUnion([invitationModel.category])
+}, SetOptions(merge: true));
+
+                   await FirebaseFirestore.instance.collection('List').add(
+                       {
+                         'CategoryName': invitationModel.category,
+                         'List': invitationModel.list,
+                         'UID': FirebaseAuth.instance.currentUser!.email,
+                         'isPrivate': false,
+                       });
+
+
+
+
+
+
+
+                  },
                   child: const Text(
                     "Accept",
-                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                   ),
                   style:
                       ElevatedButton.styleFrom(primary: Color.fromARGB(255, 115, 184, 118)),
@@ -71,7 +100,12 @@ class SingleInvitaionItem extends StatelessWidget {
               SizedBox(
                 width: mediaQuery.size.width * 0.25,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    print(invitationModel.senderEmail);
+                    await FirebaseFirestore.instance.collection('invitations').doc(invitationModel.id).update(
+                        {'status' : 'rejected'});
+
+                  },
                   child: const Text(
                     "Reject",
                     style: TextStyle(color: Colors.white),

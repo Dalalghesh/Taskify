@@ -2,11 +2,15 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/controller/UserController.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:taskify/screens/todo_list_screen.dart';
 import 'package:taskify/utils/app_colors.dart';
+import "package:googleapis_auth/auth_io.dart";
+
+import 'dart:io' show Platform;
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
@@ -31,7 +35,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     super.initState();
     getCategories();
   }
+  //static const _scopes =  [CalendarApi.CalendarScope];
 
+  var _credentials;
   @override
   Widget build(BuildContext context) {
     AppState provider =     Provider.of<AppState>(context, listen: true);
@@ -70,14 +76,18 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   children: [
                     SizedBox(height: 20,),
                     //const Text('Single Date Picker (With default value)'),
-                    CalendarDatePicker2(
-                      config: config,
-                      initialValue: _singleDatePickerValueWithDefaultValue,
-                      onValueChanged: (values) =>
-                          setState(() => _singleDatePickerValueWithDefaultValue = values),
-                      selectableDayPredicate: (day) => !day
-                          .difference(DateTime.now().subtract(const Duration(days: 3)))
-                          .isNegative,
+                    // CalendarDatePicker2(
+                    //   config: config,
+                    //   initialValue: _singleDatePickerValueWithDefaultValue,
+                    //   onValueChanged: (values) =>
+                    //       setState(() => _singleDatePickerValueWithDefaultValue = values),
+                    //   selectableDayPredicate: (day) => !day
+                    //       .difference(DateTime.now().subtract(const Duration(days: 3)))
+                    //       .isNegative,
+                    // ),\
+                    SfCalendar(
+                      view: CalendarView.month,
+                      dataSource: MeetingDataSource(getTasks()),
                     ),
                     const SizedBox(height: 10),
 
@@ -144,3 +154,23 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 }
+List<Appointment> getTasks(){
+List<Appointment> tasks = [];
+final DateTime today = DateTime.now();
+final DateTime startTime = DateTime(today.year, today.month, today.day, 9,0,0);
+final DateTime endTime = startTime.add(const Duration(hours: 2));
+
+tasks.add(Appointment(startTime: startTime, endTime: endTime,
+    color: Colors.blue));
+
+return tasks;
+}
+
+class MeetingDataSource extends CalendarDataSource{
+  MeetingDataSource(List<Appointment> source){
+    appointments = source;
+  }
+}
+
+
+

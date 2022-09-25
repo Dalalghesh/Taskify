@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 import '../widget/send_invitation_form.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart';
 
 class SendInvitation extends StatefulWidget {
+  final String category;
+  final String list;
   static const routeName = "/Send-notfication";
-  const SendInvitation({Key? key}) : super(key: key);
+  const SendInvitation({Key? key, required this.list, required this.category}) : super(key: key);
 
   @override
   State<SendInvitation> createState() => _SendInvitationState();
@@ -78,7 +78,9 @@ class _SendInvitationState extends State<SendInvitation> {
             const SizedBox(
               height: 8,
             ),
-            const SendInvitationForm()
+             SendInvitationForm(
+              category: widget.category, list: widget.list
+            )
           ],
         ),
       ),

@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/homePage.dart';
-import 'package:timezone/timezone.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:taskify/screens/AddList.dart';
 
 
@@ -17,8 +16,12 @@ import '../provider/invitation.dart';
 import '../screens/received_invitations.dart';
 import 'package:cool_alert/cool_alert.dart';
 class SendInvitationForm extends StatefulWidget {
-  const SendInvitationForm({
+  String category;
+  String list;
+   SendInvitationForm({
     Key? key,
+    required this.category,
+    required this.list
   }) : super(key: key);
 
   @override
@@ -37,8 +40,8 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       if (validate ?? false) {
         _formKey.currentState?.save();
         print(email.toString());
-        
-        await context.read<InvitaitonProvider>().sendInvitation(email!);
+        await context.read<InvitaitonProvider>().sendInvitation(email!, widget.category, widget.list);
+       // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
          CoolAlert.show(
                             context: context,
                             type: CoolAlertType.success,

@@ -5,9 +5,6 @@ import 'package:taskify/invitation/models/invitation.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 
 import '../widget/single_invitation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart';
-import 'package:rxdart/rxdart.dart';
 
 class RecievedInvitations extends StatelessWidget {
   static const routeName = "/recieve-invitaiton";
@@ -63,8 +60,12 @@ class RecievedInvitations extends StatelessWidget {
                         return ListView.builder(
                           itemBuilder: (context, index) => SingleInvitaionItem(
                             invitationModel: InvitationModel(
+                              id: invitation[index].id,
                               recivereEmail: invitation[index].recivereEmail,
                               senderEmail: invitation[index].senderEmail,
+                              status: invitation[index].status,
+                              category: invitation[index].category,
+                              list: invitation[index].list,
                             ),
                           ),
                           itemCount: invitation.length,
