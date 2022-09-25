@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,55 +54,64 @@ Future<bool?> showPlatformDialogue({
 
 void showExceptionDialog(BuildContext context, dynamic e) {
   if (e is SocketException) {
-    showPlatformDialogue(
+    CoolAlert.show(
       context: context,
-      title: 'Network Error',
-      content: const Text("Seems like, you're not connected to internet"),
+      type: CoolAlertType.error,
+      text: "Seems like, you're not connected to internet",
+      confirmBtnColor: const Color(0xff7b39ed),
     );
+
     return;
   }
   if (e is FirebaseAuthException) {
     if (e.code == 'user-not-found') {
-      showPlatformDialogue(
+      CoolAlert.show(
         context: context,
-        title: 'User Not Found',
-        content: const Text('No user correspond to this email. Try signing up.'),
+        type: CoolAlertType.error,
+        text: "No user correspond to this email. Try signing up.",
+        confirmBtnColor: const Color(0xff7b39ed),
       );
     } else if (e.code == 'operation-not-allowed') {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "Sign in method not enabled in firebase console.'",
+        confirmBtnColor: const Color(0xff7b39ed),
+      );
       showPlatformDialogue(
         context: context,
         title: 'Provider not enabled',
         content: const Text('Sign in method not enabled in firebase console.'),
       );
     } else if (e.code == 'internal-error') {
-      showPlatformDialogue(
+      CoolAlert.show(
         context: context,
-        title: 'Internal Error',
-        content: const Text(
-          'Firebase Authentication not enabled in firebase console.',
-        ),
+        type: CoolAlertType.error,
+        text: "Firebase Authentication not enabled in firebase console.",
+        confirmBtnColor: const Color(0xff7b39ed),
       );
     } else if (e.code == 'wrong-password') {
-      showPlatformDialogue(
+      CoolAlert.show(
         context: context,
-        title: 'Wrong Password',
-        content: const Text(
-          'The entered password is incorrect. Please try with correct password or try resetting password.',
-        ),
+        type: CoolAlertType.error,
+        text:
+            "The entered password is incorrect. Please try with correct password or try resetting password.",
+        confirmBtnColor: const Color(0xff7b39ed),
       );
     } else if (e.code == 'email-already-in-use') {
-      showPlatformDialogue(
+      CoolAlert.show(
         context: context,
-        title: 'Email already in use',
-        content: const Text(
-          'This email is already in use by another provider. Please sign in with correct provider.',
-        ),
+        type: CoolAlertType.error,
+        text:
+            "This email is already in use by another user. Please sign in with correct user.",
+        confirmBtnColor: const Color(0xff7b39ed),
       );
     } else {
-      showPlatformDialogue(
+      CoolAlert.show(
         context: context,
-        title: 'Error',
-        content: Text(e.message?.toString() ?? 'Unknown Error'),
+        type: CoolAlertType.error,
+        text: e.message?.toString() ?? 'Unknown Error',
+        confirmBtnColor: const Color(0xff7b39ed),
       );
     }
 
@@ -110,9 +119,10 @@ void showExceptionDialog(BuildContext context, dynamic e) {
   }
 
   log(e.runtimeType.toString(), name: 'showExceptionDialog');
-  showPlatformDialogue(
+  CoolAlert.show(
     context: context,
-    title: 'Error',
-    content: Text(e.toString()),
+    type: CoolAlertType.error,
+    text: e.toString(),
+    confirmBtnColor: const Color(0xff7b39ed),
   );
 }

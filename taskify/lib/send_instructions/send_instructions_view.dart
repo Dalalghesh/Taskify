@@ -32,6 +32,7 @@ class _SendInstructionsView extends State<SendInstructionsView> {
         title: 'Oops...',
         text: e.message.toString(),
         loopAnimation: false,
+        confirmBtnColor: const Color(0xff7b39ed),
       );
     }
     if (n) {

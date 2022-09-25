@@ -16,9 +16,10 @@ import '../screens/received_invitations.dart';
 import 'package:cool_alert/cool_alert.dart';
 
 class SendInvitationForm extends StatefulWidget {
-  const SendInvitationForm({
-    Key? key,
-  }) : super(key: key);
+  String category;
+  String list;
+  SendInvitationForm({Key? key, required this.category, required this.list})
+      : super(key: key);
 
   @override
   State<SendInvitationForm> createState() => _SendInvitationFormState();
@@ -35,13 +36,16 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       if (validate ?? false) {
         _formKey.currentState?.save();
         print(email.toString());
-        await context.read<InvitaitonProvider>().sendInvitation(email!);
+        await context
+            .read<InvitaitonProvider>()
+            .sendInvitation(email!, widget.category, widget.list);
+        // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
         CoolAlert.show(
           context: context,
           type: CoolAlertType.success,
           text: "Invitation sent successfully",
           confirmBtnColor: const Color(0xff7b39ed),
-          onConfirmBtnTap: () => Util.routeToWidget(context, NavBar(tabs: 0)),
+          // onConfirmBtnTap: () => route(isChecked),
         );
         // showPlatformDialogue(
         //     context: context, title: "Invitation sent successfully");
@@ -81,6 +85,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                     provider.filterEmail(query);
                   }),
               suggestionsCallback: (pattern) {
+                print('changing');
                 return provider.filteredEmails;
               },
 
