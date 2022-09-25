@@ -1,3 +1,4 @@
+
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:taskify/invitation/models/invitation.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:taskify/models/users.dart';
 
 class InvitaitonProvider with ChangeNotifier {
   
@@ -14,6 +16,7 @@ class InvitaitonProvider with ChangeNotifier {
   List<InvitationModel> invitations = [];
   List<String> emails = [];
   List<String> filteredEmails = [];
+  List<UserModel> modelEmails = [];
 
 
   Future<void> getUsersEmail()async{
@@ -21,6 +24,12 @@ class InvitaitonProvider with ChangeNotifier {
     final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
     if(res.docs.isNotEmpty){
       for(int i =0; i< res.docs.length;i++){
+        UserModel userModel = UserModel(
+          email: res.docs[i]['email'],
+          categories: res.docs[i]['categories'],
+          docId: res.docs[i].id
+        );
+        modelEmails.add(userModel);
         emails.add(res.docs[i]['email']);
       }
       filteredEmails = emails;
@@ -33,13 +42,18 @@ class InvitaitonProvider with ChangeNotifier {
     filteredEmails = emails.where((element) => element.contains(query)).toList();
     notifyListeners();
   }
+
+
+  selectedUser(email){
+    SelectedUser.user = modelEmails.where((element) => element.email == email) as UserModel;
+    notifyListeners();
+  }
   
   
   
   
   
-  
-  Future<void> sendInvitation(String email) async {
+  Future<void> sendInvitation(String email, String category, String list) async {
     //Getting current user email
     final currentUserEmail = _firebaseAuth.currentUser?.email;
     if (currentUserEmail == null || currentUserEmail.isEmpty) {
@@ -53,7 +67,7 @@ class InvitaitonProvider with ChangeNotifier {
       throw "A user with that email does not exists";
     }
     final InvitationModel invitationModel =
-        InvitationModel(recivereEmail: email, senderEmail: currentUserEmail);
+        InvitationModel(recivereEmail: email, senderEmail: currentUserEmail, status: 'pending', category: category, list: list);
     _firebaseFirestore
         .collection(InvitationModel.collectionName)
         .add(invitationModel.getMap());
@@ -78,7 +92,7 @@ class InvitaitonProvider with ChangeNotifier {
     try {
       yield* _firebaseFirestore
           .collection(InvitationModel.collectionName)
-          .where("recieverEmail", isEqualTo: email)
+          .where("recieverEmail", isEqualTo: email).where("status", isEqualTo: 'pending')
           .snapshots();
     } catch (e) {
       rethrow;

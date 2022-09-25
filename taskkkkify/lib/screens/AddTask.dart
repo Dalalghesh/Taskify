@@ -469,8 +469,26 @@ class _AddTask extends State<AddTask> {
                   ],
                 ),
                 SizedBox(
-                  height: 0,
+                  height: 20,
                 ),
+                Center(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.grey.shade600,
+                      textStyle: const TextStyle(fontSize: 18),
+                    ),
+                    onPressed: () {
+                      Util.routeToWidget(context, NavBar(tabs: 0));
+                    },
+                    child: const Text('Later'),
+
+                  ),
+
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
                 // Row(
                 //   children: [
                 //     Expanded(
@@ -507,7 +525,7 @@ class _AddTask extends State<AddTask> {
 
   void route() {
     //route it to home page
-    Util.routeToWidget(context, AddList());
+    Util.routeToWidget(context, NavBar(tabs: 0));
   }
 
   Widget _buildButton(

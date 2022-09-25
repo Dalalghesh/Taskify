@@ -17,16 +17,24 @@ class AppState extends ChangeNotifier{
     categoriesLoading = false;
     notifyListeners();
   }
-  List<dynamic> list = [];
+  List<TaskListModel> list = [];
   bool listLoading = true;
   getList(cat)async{
-    list.clear();
-    print(cat);
     listLoading = true;
     notifyListeners();
+    list.clear();
+    print(cat);
+
     final res = await FirebaseFirestore.instance.collection('List').where('CategoryName', isEqualTo: cat).where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
     for(int i = 0; i< res.docs.length; i++){
-      list.add(res.docs[i]['List']);
+      TaskListModel task = TaskListModel(
+          docId: res.docs[i].id,
+          email: res.docs[i]['UID'],
+          category: res.docs[i]['CategoryName'],
+          list: res.docs[i]['List'],
+          private: res.docs[i]['isPrivate']
+      );
+      list.add(task);
     }
     print(list.length);
     listLoading = false;
@@ -37,10 +45,11 @@ class AppState extends ChangeNotifier{
   List<dynamic> tasks = [];
   bool tasksLoading = true;
   getTasks(cat, list)async{
-    tasks.clear();
-    print(cat);
     tasksLoading = true;
     notifyListeners();
+    tasks.clear();
+    print(cat);
+
     final res = await FirebaseFirestore.instance.collection('tasks').where('CategoryName', isEqualTo: cat).where('ListName', isEqualTo: list).where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
     for(int i = 0; i< res.docs.length; i++){
       tasks.add(res.docs[i]['Task']);
@@ -67,6 +76,7 @@ getListForTask()async{
       email: res.docs[i]['UID'],
       category: res.docs[i]['CategoryName'],
       list: res.docs[i]['List'],
+      private: res.docs[i]['isPrivate']
     );
 
 
