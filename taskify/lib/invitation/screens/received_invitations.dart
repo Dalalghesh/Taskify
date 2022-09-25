@@ -60,8 +60,12 @@ class RecievedInvitations extends StatelessWidget {
                         return ListView.builder(
                           itemBuilder: (context, index) => SingleInvitaionItem(
                             invitationModel: InvitationModel(
+                              id: invitation[index].id,
                               recivereEmail: invitation[index].recivereEmail,
                               senderEmail: invitation[index].senderEmail,
+                              status: invitation[index].status,
+                              category: invitation[index].category,
+                              list: invitation[index].list,
                             ),
                           ),
                           itemCount: invitation.length,

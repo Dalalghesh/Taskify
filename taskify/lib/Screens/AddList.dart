@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
+
 import '../homePage.dart';
 import 'AddTask.dart';
 import 'package:taskify/util.dart';
@@ -261,7 +262,12 @@ class _AddList extends State<AddList> {
   void route(bool? isChecked) {
     if (isChecked == true)
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => SendInvitation()));
+          context,
+          MaterialPageRoute(
+              builder: (context) => SendInvitation(
+                    category: selectCategory,
+                    list: listt,
+                  )));
     //Util.routeToWidget(context, SendInvitation()); ///////////
     else
       Util.routeToWidget(context, NavBar(tabs: 0));

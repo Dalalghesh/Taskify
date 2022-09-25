@@ -1,3 +1,7 @@
+class SelectedUser {
+  static UserModel? user;
+}
+
 class UserModel {
   String docId;
   String email;
@@ -7,5 +11,5 @@ class UserModel {
     required this.email,
     required this.docId,
     required this.categories,
-});
+  });
 }
