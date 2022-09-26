@@ -88,7 +88,7 @@ provider.categories.contains(invitationModel.category)?   '' : await FirebaseFir
                   },
                   child: const Text(
                     "Accept",
-                    style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   style:
                       ElevatedButton.styleFrom(primary: Color.fromARGB(255, 115, 184, 118)),
