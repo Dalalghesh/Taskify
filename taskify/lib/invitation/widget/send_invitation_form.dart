@@ -272,6 +272,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     if(res.docs.isNotEmpty){
       for(int i =0; i< res.docs.length;i++){
         if ( res.docs[i]['email'] == receiver ){
+            print(res.docs[i]['token']);
              sendNotification('New Invitation', res.docs[i]['token']);
         }
       }
