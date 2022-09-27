@@ -169,34 +169,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   },
                //   onSaved: (value) => this._selectedCity = value,
                 ),
-
-                // TextFormField(
-                //     decoration: InputDecoration(
-                //       hintText: 'Ex: John@gmail.com',
-                //       contentPadding: EdgeInsets.symmetric(
-                //         vertical: 10,
-                //         horizontal: 10,
-                //       ),
-                //     ),
-                //     validator: (value) => Validators.emailValidator(value),
-                //     onSaved: (value) {
-                //       email = value;
-                //     },
-                //      onChanged: (val) {
-                //   setState(() {
-                //     name = val;
-                //     print(name);
-                //   });
-                //
-                // },
-                //     keyboardType: TextInputType.emailAddress,
-                //     textInputAction: TextInputAction.done,
-                //     style: Theme.of(context)
-                //         .textTheme
-                //         .subtitle1
-                //         ?.copyWith(color: Colors.black)),
-                //
-              ),
+                ),
 
               const SizedBox(
                 height: 0,
@@ -220,19 +193,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               const SizedBox(
                 height: 5,
               ),
-             /* GestureDetector(
-                onTap: () {
-                  try {
-                    FirebaseAuth.instance.signOut();
-                    Navigator.of(context)
-                        .pushReplacementNamed(LoginScreen.routeName);
-                  } catch (e) {
-                    Navigator.of(context)
-                        .pushReplacementNamed(LoginScreen.routeName);
-                  }
-                },
-                child: const Text("Logout"),
-              ),*/
+          
               Row(
                   children: [
                     Expanded(
