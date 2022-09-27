@@ -23,13 +23,6 @@ class SingleInvitaionItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        // boxShadow: const [
-        //   BoxShadow(
-        //     color: Colors.black12,
-        //     // spreadRadius: 1,
-        //     //  blurRadius: 1,
-        //   )
-        // ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,7 +31,7 @@ class SingleInvitaionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Received invitation from",
+                "Received invitation",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -46,8 +39,9 @@ class SingleInvitaionItem extends StatelessWidget {
                 ),
               ),
               Text(
-                invitationModel.senderEmail +
-                    ' to list ' +
+                'From: ' +
+                    invitationModel.senderEmail +
+                    '\nTo list: ' +
                     invitationModel.list,
                 style: const TextStyle(
                   color: Colors.black,
@@ -93,18 +87,18 @@ class SingleInvitaionItem extends StatelessWidget {
                     ),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 144, 197, 139)),
+                            Color.fromARGB(179, 121, 231, 111)),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(22),
                                     side: BorderSide(
-                                      color: Color.fromARGB(255, 144, 197, 139),
-                                      width: 1,
+                                      color: Color.fromARGB(179, 121, 231, 111),
+                                      //  width: 1,
                                     ))))),
               ),
               const SizedBox(
-                height: 4,
+                height: 2,
               ),
               SizedBox(
                 width: mediaQuery.size.width * 0.25,
@@ -124,27 +118,16 @@ class SingleInvitaionItem extends StatelessWidget {
                     ),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 228, 111, 103)),
+                            Color.fromARGB(184, 235, 76, 65)),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(22),
                                     side: BorderSide(
-                                      color: Color.fromARGB(255, 228, 111, 103),
-                                      width: 2,
-                                    ))))
-                    // style: ButtonStyle(
-                    //   backgroundColor: Colors.white,
-                    //     shape:
-                    //         MaterialStateProperty.all<RoundedRectangleBorder>(
-                    //             RoundedRectangleBorder(
-                    //                 borderRadius: BorderRadius.circular(18.0),
-                    //                 side: BorderSide(color: Colors.red))))
+                                      color: Color.fromARGB(184, 235, 76, 65),
 
-                    // style: ElevatedButton.styleFrom(
-                    //     backgroundColor: Colors.white,
-                    //     primary: Color.fromARGB(255, 232, 107, 98)),
-                    ),
+                                      // width: 2,
+                                    ))))),
               ),
             ],
           )

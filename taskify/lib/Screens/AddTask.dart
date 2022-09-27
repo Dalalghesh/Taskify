@@ -18,7 +18,6 @@ import 'package:animated_radio_buttons/animated_radio_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
-  //Initializing Database when starting the application.
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -37,16 +36,15 @@ late var userData;
 Future<void> getUserData() async {
   var user = FirebaseAuth.instance.currentUser;
   userData = user!.uid;
-  //print(userData);
 }
 
 class _AddTask extends State<AddTask> {
   var selectCategory1;
   var selectCategory;
 
-  String Category = '';
+  // String Category = '';
   List<TaskListModel> lList = [];
-  String? c;
+  // String? c;
 
   @override
   void initState() {
@@ -71,36 +69,17 @@ class _AddTask extends State<AddTask> {
       );
     }
 
-    print(lList);
+    // print(lList);
   }
 
   int myVar = 1;
-  var selectedList;
-  final _firestore = FirebaseFirestore.instance;
+  // var selectedList;
+  // final _firestore = FirebaseFirestore.instance;
   late String taskk;
-  var priority;
+  // var priority;
   String? docid;
   var description;
   DateTime dateTime = new DateTime.now();
-  void _showDialog(Widget child) {
-    showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context) => Container(
-              height: 250,
-              padding: const EdgeInsets.only(top: 6.0),
-              // The Bottom margin is provided to align the popup above the system navigation bar.
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              // Provide a background color for the popup.
-              color: CupertinoColors.systemBackground.resolveFrom(context),
-              // Use a SafeArea widget to avoid system overlaps.
-              child: SafeArea(
-                top: false,
-                child: child,
-              ),
-            ));
-  }
 
   final formKey = GlobalKey<FormState>(); //key for form
   late DateTime selectedDateTime;
@@ -113,8 +92,7 @@ class _AddTask extends State<AddTask> {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leadingWidth: 40,
           leading: IconButton(
@@ -137,7 +115,7 @@ class _AddTask extends State<AddTask> {
                 child: Container(
                 padding: const EdgeInsets.all(16.0),
                 child: Form(
-                  key: formKey, //key for form
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -159,7 +137,6 @@ class _AddTask extends State<AddTask> {
                         height: 10,
                       ),
 
-                      //-----------------------List name-----------------------
                       Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -184,26 +161,20 @@ class _AddTask extends State<AddTask> {
                             if (value!.isEmpty ||
                                 value == null ||
                                 value.trim() == '')
-                              return "Please enter Category name";
+                              return "Please enter task name";
                             else if (value.length <= 2) {
                               return "Please enter at least 3 characters";
                             }
                             return null;
                           },
                           onChanged: (value) {
-                            //  setState(() async {
                             taskk = value;
-                            //  });
-                            print(taskk);
                           },
                           style: Theme.of(context).textTheme.subtitle1),
-
-                      //-----------------------End of list name-----------------------
 
                       SizedBox(
                         height: 8,
                       ),
-                      //-----------------------list-----------------------
 
                       Padding(
                         padding:
@@ -279,7 +250,6 @@ class _AddTask extends State<AddTask> {
                           onChanged: provider.disableDropDown
                               ? null
                               : (value) {
-                                  //  print('doc12343'+value.());
                                   setState(() {
                                     docid = value;
                                     selectCategory = value;
@@ -338,7 +308,6 @@ class _AddTask extends State<AddTask> {
                                 fillInColor: Color.fromARGB(255, 213, 241, 228))
                           ],
                           onChanged: (value) {
-                            print(value);
                             setState(() {
                               myVar = value;
                             });
@@ -367,22 +336,9 @@ class _AddTask extends State<AddTask> {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8.0)),
                             disabledColor: CupertinoColors.quaternarySystemFill,
-
-                            // Display a CupertinoDatePicker in dateTime picker mode.
-                            onPressed: () => _showDialog(
-                              CupertinoDatePicker(
-                                minimumDate: dateTime,
-                                initialDateTime: dateTime,
-                                use24hFormat: false,
-                                // This is called when the user changes the dateTime.
-                                onDateTimeChanged: (DateTime newDateTime) {
-                                  setState(() => dateTime = newDateTime);
-                                },
-                              ),
-                            ),
-
+                            onPressed: () => _selectDate(),
                             child: Text(
-                              '            ${dateTime.month}/${dateTime.day}/${dateTime.year}   -   ${dateTime.hour}:${dateTime.minute}',
+                              '            ${dateTime.day}/${dateTime.month}/${dateTime.year}   -   ${dateTime.hour}:${dateTime.minute}',
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -391,6 +347,7 @@ class _AddTask extends State<AddTask> {
                       SizedBox(
                         height: 8,
                       ),
+
                       Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -414,8 +371,12 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            if (value!.isEmpty)
+                            if (value!.isEmpty ||
+                                value == null ||
+                                value.trim() == '')
                               return "Please enter a description";
+                            else if (value.length <= 2)
+                              return "Please enter at least 3 characters";
                             else
                               return null;
                           },
@@ -475,42 +436,10 @@ class _AddTask extends State<AddTask> {
                       SizedBox(
                         height: 2,
                       ),
-                      // Center(
-                      //   child: TextButton(
-                      //     style: TextButton.styleFrom(
-                      //       primary: Colors.grey.shade600,
-                      //       textStyle: const TextStyle(fontSize: 18),
-                      //     ),
-                      //     onPressed: () {
-                      //       Util.routeToWidget(context, NavBar(tabs: 0));
-                      //     },
-                      //     child: const Text('Later'),
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: 20,
-                      ),
 
-                      // Row(
-                      //   children: [
-                      //     Expanded(
-                      //       child: TextButton(
-                      //         style: TextButton.styleFrom(
-                      //           minimumSize: Size(50, 40),
-                      //           padding: EdgeInsets.zero,
-                      //           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      //           primary: Colors.grey.shade600,
-                      //           textStyle: const TextStyle(fontSize: 18),
-                      //         ),
-                      //         onPressed: () {
-                      //           //home pagee
-                      //           Util.routeToWidget(context, AddList());
-                      //         },
-                      //         child: const Text('Later'),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      SizedBox(
+                        height: 200,
+                      ),
                     ],
                   ),
                 ),
@@ -522,11 +451,9 @@ class _AddTask extends State<AddTask> {
         initialDate: dateTime,
         firstDate: DateTime(1900),
         lastDate: DateTime(1900),
-        //helpText: 'Choose deadline',
       );
 
   void route() {
-    //route it to home page
     Util.routeToWidget(context, NavBar(tabs: 0));
   }
 
@@ -553,9 +480,72 @@ class _AddTask extends State<AddTask> {
       ),
     );
   }
+
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => Container(
+              height: 250,
+              padding: const EdgeInsets.only(top: 6.0),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              child: SafeArea(
+                top: false,
+                child: child,
+              ),
+            ));
+  }
+
+  _selectDate() async {
+    DateTime? pickedDate = await showModalBottomSheet<DateTime>(
+      context: context,
+      builder: (context) {
+        DateTime tempPickedDate = dateTime;
+        return Container(
+          height: 300,
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CupertinoButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Text('Done'),
+                      onPressed: () {
+                        Navigator.of(context).pop(tempPickedDate);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: CupertinoDatePicker(
+                    minimumDate: dateTime,
+                    initialDateTime: dateTime,
+                    use24hFormat: true,
+                    onDateTimeChanged: (DateTime newDateTime) {
+                      setState(() => dateTime = newDateTime);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
-// This class simply decorates a row of widgets.
 class _DatePickerItem extends StatelessWidget {
   const _DatePickerItem({required this.children});
 
@@ -597,11 +587,4 @@ class _DatePickerItem extends StatelessWidget {
       ),
     );
   }
-
-  // validate(value) {
-  //   if (value == null)
-  //     return "Please choose priority";
-  //   else
-  //     return null;
-  // }
 }

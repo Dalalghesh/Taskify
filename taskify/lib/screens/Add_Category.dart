@@ -132,12 +132,14 @@ class _Add_Category extends State<Add_Category> {
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty)
-                          return "Please enter Category name";
-                        else if (categoriesList.contains(value)) {
+                        if (value!.isEmpty ||
+                            value == null ||
+                            value.trim() == '')
+                          return "Please enter category name";
+                        else if (categoriesList.contains(value))
                           return "This category already exist";
-                        }
-                        return null;
+                        else
+                          return null;
                       },
                       style: Theme.of(context).textTheme.subtitle1),
                   SizedBox(
