@@ -1,29 +1,35 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis_auth/auth.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:provider/provider.dart';
+
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:taskify/service/local_push_notification.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'firebase_options.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
-
-
 import 'package:taskify/onboarding/onboarding_screen.dart';
+
 // #7b39ed - primary color
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  LocalNotificationService.initialize();
   var _clientID = new ClientId(Secret.getId(), "");
   const _scopes = const [cal.CalendarApi.calendarScope];
  // await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
  //    CalendarClient.calendar = cal.CalendarApi(client);
  //  });
+   
   runApp(MyApp());
 }
 void prompt(String url) async {
@@ -47,6 +53,24 @@ class MyApp extends StatelessWidget {
     800: Color(0xff7b39ed),
     900: Color(0xff7b39ed),
   });
+
+/*
+void inisState(){
+  FirebaseMessaging.onMessage.listen((event) {
+    LocalNotificationService.display(event);
+  });
+  storenotificationToken();
+}
+   //change place later 
+  storenotificationToken()async{
+    //get notifiaction token for ourself
+    String? token =await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance.collection('users1').doc(FirebaseAuth.instance.currentUser!.uid).set(
+      {
+        'token':token
+      },SetOptions(merge: true));
+  }
+*/
 
   @override
   Widget build(BuildContext context) {

@@ -194,7 +194,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'uid': userCredential.user!.uid,
         'timestamp': FieldValue.serverTimestamp(),
       };
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+      final docRef = FirebaseFirestore.instance.collection('users1').doc(uid);
       await docRef.set(userData, SetOptions(merge: true));
       isLoading = false;
       setState(() {});

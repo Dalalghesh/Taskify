@@ -1,20 +1,19 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/homePage.dart';
-
 import 'package:taskify/screens/AddList.dart';
-
-
 import '../../util.dart';
 import '../../utils/validators.dart';
 import '../provider/invitation.dart';
 import '../screens/received_invitations.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:http/http.dart' as http;
+
 class SendInvitationForm extends StatefulWidget {
   String category;
   String list;
@@ -34,6 +33,9 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   String query ='';
   String? email;
   Future<void> sendInviation() async {
+
+    //calling to create token 
+    storenotificationToken();
 
     try {
       final validate = _formKey.currentState?.validate();
@@ -224,4 +226,15 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       ),
     );
   }
+
+  //change place later 
+  storenotificationToken()async{
+    //get notifiaction token for ourself
+    String? token =await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance.collection('users1').doc(FirebaseAuth.instance.currentUser!.uid).set(
+      {
+        'token':token
+      },SetOptions(merge: true));
+  }
+
 }

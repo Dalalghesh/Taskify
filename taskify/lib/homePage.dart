@@ -4,14 +4,12 @@ import 'package:curved_nav_bar/flutter_curved_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskify/invitation/screens/received_invitations.dart';
-
 import 'package:taskify/screens/AddList.dart';
 import 'package:taskify/screens/AddTask.dart';
 import 'package:taskify/screens/Add_Category.dart';
 import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
 import 'package:taskify/screens/homescreen.dart';
 import 'package:taskify/screens/tasks_screen.dart';
-
 import 'screens/todo_list_screen.dart';
 
 class NavBar extends StatefulWidget {
