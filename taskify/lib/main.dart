@@ -56,6 +56,7 @@ class MyApp extends StatelessWidget {
 
 /*
 void inisState(){
+  FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onMessage.listen((event) {
     LocalNotificationService.display(event);
   });
