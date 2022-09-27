@@ -9,8 +9,6 @@ import 'package:taskify/homePage.dart';
 import 'package:taskify/screens/AddList.dart';
 import 'package:taskify/service/local_push_notification.dart';
 import '../../util.dart';
-import 'package:taskify/models/users.dart';
-
 import '../../utils/validators.dart';
 import '../provider/invitation.dart';
 import '../screens/received_invitations.dart';
@@ -35,11 +33,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   final TextEditingController _typeAheadController = TextEditingController();
   String query ='';
   String? email;
- final _firebaseFirestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-  List<String> tokens = [];
-  List<String> filteredEmails = [];
-  List<UserModel> modelTokens = [];
 
    void initState() {
     // TODO: implement initState
@@ -48,10 +41,9 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     FirebaseMessaging.onMessage.listen((event) {
       LocalNotificationService.display(event);
     });
-    
-  
+    storenotificationToken();
+
     FirebaseMessaging.instance.subscribeToTopic('subscription');
-    //  Future<String> invitedToken = getUsersToken();
    sendNotification('New Invitation', 'd6XLoEIsSqSkQpDK6FQsC8:APA91bHHHi5qZNEz8hsmpweko4MhuEYqKndjSRQsZs06W91T5Zy9MwZDpNJmNkVLhBJguHTp1vV4B6C1ttJ25i8ONGbVM7v_0jTRB19Xs9GI_Gl4MxXfoZ-Z3rR2qQbS3QwxqEBo0RCz');
     }
     
@@ -90,6 +82,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     }
 
   }
+
     
   Future<void> sendInviation() async {
 
@@ -153,7 +146,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   ),
                   suggestionsCallback: (pattern) {
                     print('changing');
-
                     return provider.filteredEmails;
                   },
 
@@ -175,18 +167,42 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                       return 'Please enter email';
                     }
                   },
+               //   onSaved: (value) => this._selectedCity = value,
                 ),
 
+                // TextFormField(
+                //     decoration: InputDecoration(
+                //       hintText: 'Ex: John@gmail.com',
+                //       contentPadding: EdgeInsets.symmetric(
+                //         vertical: 10,
+                //         horizontal: 10,
+                //       ),
+                //     ),
+                //     validator: (value) => Validators.emailValidator(value),
+                //     onSaved: (value) {
+                //       email = value;
+                //     },
+                //      onChanged: (val) {
+                //   setState(() {
+                //     name = val;
+                //     print(name);
+                //   });
+                //
+                // },
+                //     keyboardType: TextInputType.emailAddress,
+                //     textInputAction: TextInputAction.done,
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .subtitle1
+                //         ?.copyWith(color: Colors.black)),
+                //
               ),
 
               const SizedBox(
                 height: 0,
               ),
               ElevatedButton(
-                onPressed: () async { 
-                 await sendInviation();
-                  getUsersToken(query);
-                },
+                onPressed: () async => await sendInviation(),
                 child: const Text(
                   'Invite',
                   style: TextStyle(fontSize: 20),
@@ -263,19 +279,14 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     );
   }
 
-  Future getUsersToken( String receiver ) async {
-    
-    final currentUserEmail = _firebaseAuth.currentUser?.email;
-    final sendEmail = '';
-    
-    final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
-    if(res.docs.isNotEmpty){
-      for(int i =0; i< res.docs.length;i++){
-        if ( res.docs[i]['email'] == receiver ){
-             sendNotification('New Invitation', res.docs[i]['token']);
-        }
-      }
-    }
+  //change place later 
+  storenotificationToken()async{
+    //get notifiaction token for ourself
+    String? token =await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance.collection('users1').doc(FirebaseAuth.instance.currentUser!.uid).set(
+      {
+        'token':token
+      },SetOptions(merge: true));
   }
 
 }
