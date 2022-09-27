@@ -1,6 +1,4 @@
-
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -15,8 +13,11 @@ class InvitaitonProvider with ChangeNotifier {
   final _firebaseAuth = FirebaseAuth.instance;
   List<InvitationModel> invitations = [];
   List<String> emails = [];
+  List<String> tokens = [];
   List<String> filteredEmails = [];
-  List<UserModel> modelEmails = [];
+  List<UserModel> modelEmails = []; List<String> 
+  filteredTokens= [];
+  List<UserModel> modelTokens = [];
 
 
   Future<void> getUsersEmail()async{
@@ -36,6 +37,30 @@ class InvitaitonProvider with ChangeNotifier {
     }
     notifyListeners();
     
+  }
+  Future <String> getUsersToken() async {
+    
+    final currentUserEmail = _firebaseAuth.currentUser?.email;
+    final sendEmail = '';
+
+    final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
+    
+    if(res.docs.isNotEmpty){
+
+      for(int i =0; i< res.docs.length;i++){
+        UserModel userModel = UserModel(
+          email: res.docs[i]['email'],
+          categories: res.docs[i]['categories'],
+          docId: res.docs[i].id
+        );
+        modelTokens.add(userModel);
+
+        tokens.add(res.docs[i]['token']);
+      }
+      filteredTokens = tokens;
+    }
+    notifyListeners();
+    return '';
   }
   
   filterEmail(query){
