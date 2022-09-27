@@ -5,7 +5,6 @@ import 'package:taskify/invitation/provider/invitation.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
 import 'package:taskify/onboarding/onboarding_screen.dart';
 // #7b39ed - primary color
 

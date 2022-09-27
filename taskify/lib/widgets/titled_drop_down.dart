@@ -39,7 +39,7 @@ class TitledDropDown<T> extends StatelessWidget {
         const SizedBox(height: 6),
         DropdownButtonFormField<T>(
           value: value,
-          dropdownColor: AppColors.grayshade,
+          dropdownColor: Color.fromARGB(255, 255, 255, 255),
           menuMaxHeight: MediaQuery.of(context).size.height * 0.6,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),

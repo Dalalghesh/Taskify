@@ -56,13 +56,10 @@ class _AddTask extends State<AddTask> {
     super.initState();
   }
 
-  // TextEditingController categoryController = TextEditingController();
   void getlists() async {
-    print('hi');
     lList =
         await Provider.of<AppState>(context, listen: false).getListForTask();
-    // lList = Provider.of<AppState>(context, listen: false).taskList;
-    // lList = res['lists'];
+
     if (lList.isEmpty) {
       CoolAlert.show(
         context: context,
@@ -116,7 +113,8 @@ class _AddTask extends State<AddTask> {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leadingWidth: 40,
           leading: IconButton(
