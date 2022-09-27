@@ -58,6 +58,7 @@ class _AddList extends State<AddList> {
   String Category = '';
   List<dynamic> categoriesList = [];
   TextEditingController categoryController = TextEditingController();
+  TextEditingController ListController = TextEditingController();
 
   var selectCategory;
   bool buttonenabled = false;
@@ -129,7 +130,7 @@ class _AddList extends State<AddList> {
                   TextFormField(
                       maxLength: 15,
                       keyboardType: TextInputType.text,
-                      controller: CAtegoryNameController,
+                      controller: ListController,
                       decoration: InputDecoration(
                         hintText: 'Assignments',
                         contentPadding: EdgeInsets.symmetric(
@@ -235,6 +236,7 @@ class _AddList extends State<AddList> {
                               'UID': FirebaseAuth.instance.currentUser!.email,
                               'isPrivate': isChecked,
                             });
+                            ListController.clear();
 
                             CoolAlert.show(
                               context: context,

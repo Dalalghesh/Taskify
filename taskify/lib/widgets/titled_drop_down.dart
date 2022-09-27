@@ -38,18 +38,19 @@ class TitledDropDown<T> extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<T>(
+          // elevation: 100,
+          isDense: true,
           value: value,
           dropdownColor: Color.fromARGB(255, 255, 255, 255),
           menuMaxHeight: MediaQuery.of(context).size.height * 0.6,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-            fillColor: AppColors.grayshade,
-            filled: true,
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.grey.shade400),
+              )),
           hint: Text(
             hint ?? 'Select $title',
             style: const TextStyle(color: Colors.black54),

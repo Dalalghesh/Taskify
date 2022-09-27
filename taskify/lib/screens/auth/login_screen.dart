@@ -74,21 +74,45 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 16,
                   ),
                   //  const SizedBox(height: 24),
-                  PrimaryTextField(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Email:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
                     controller: _emailController,
-                    title: "Email",
-                    hintText: "Enter Email",
+                    decoration: InputDecoration(
+                      hintText: "John@gmail.com",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     validator: Validators.emailValidator,
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 16),
-                  PrimaryTextField(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Password:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
                     validator: Validators.passwordValidator,
-                    title: "Password",
                     maxLines: 1,
                     obscureText: true,
                     textInputAction: TextInputAction.done,
-                    hintText: "At least 8 Character",
+                    decoration: InputDecoration(
+                      hintText: "At least 8 Character",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     controller: _passwordController,
                   ),
                   const SizedBox(height: 4),

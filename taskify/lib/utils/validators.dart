@@ -1,8 +1,7 @@
 class Validators {
   static String? emptyValidator(String? text) {
-    if (text!.isEmpty) {
+    if (text!.isEmpty || text == null || text.trim() == '')
       return 'Please Fill in the field';
-    }
     return null;
   }
 

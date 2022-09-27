@@ -79,25 +79,66 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 16,
                   ),
                   //  const SizedBox(height: 24),
-                  PrimaryTextField(
-                    title: "First Name",
-                    hintText: "First Name",
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'First Name:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
+                    maxLength: 15,
+                    // title: "First Name",
+                    decoration: InputDecoration(
+                      hintText: "John",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     textInputAction: TextInputAction.next,
                     controller: _firstnameController,
                     validator: Validators.emptyValidator,
                   ),
-                  const SizedBox(height: 16),
-                  PrimaryTextField(
-                    title: "Last Name",
-                    hintText: "Last Name",
+                  // const SizedBox(height: 16),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Last Name:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
+                    maxLength: 15,
+                    decoration: InputDecoration(
+                      hintText: "Adam",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     textInputAction: TextInputAction.next,
                     validator: Validators.emptyValidator,
                     controller: _lastnameController,
                   ),
-                  const SizedBox(height: 16),
-                  PrimaryTextField(
-                    title: "Email",
-                    hintText: "Must be gmail address",
+                  //  const SizedBox(height: 16),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Email:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
+                    //    title: "Email",
+                    decoration: InputDecoration(
+                      hintText: "Must be gmail address",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     textInputAction: TextInputAction.next,
                     // validator: Validators.emptyValidator,
                     validator: Validators.emailValidator,
@@ -105,12 +146,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: _emailController,
                   ),
                   const SizedBox(height: 16),
-                  PrimaryTextField(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Password:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
                     maxLines: 1,
                     textInputAction: TextInputAction.done,
                     controller: _passwordController,
-                    title: "Password",
-                    hintText: "At least 8 Character",
+                    // title: "Password",
+                    decoration: InputDecoration(
+                      hintText: "At least 8 Character",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     obscureText: true,
                     validator: Validators.passwordValidator,
                   ),

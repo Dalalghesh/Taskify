@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 
+import '../../Util.dart';
+import '../../homePage.dart';
+import '../../utils/app_colors.dart';
 import '../models/invitation.dart';
 
 class SingleInvitaionItem extends StatelessWidget {
@@ -42,7 +46,9 @@ class SingleInvitaionItem extends StatelessWidget {
                 'From: ' +
                     invitationModel.senderEmail +
                     '\nTo list: ' +
-                    invitationModel.list,
+                    invitationModel.list +
+                    '\nTo category: ' +
+                    invitationModel.category,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -57,6 +63,7 @@ class SingleInvitaionItem extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () async {
                       print(invitationModel.category);
+
                       await FirebaseFirestore.instance
                           .collection('invitations')
                           .doc(invitationModel.id)
@@ -78,6 +85,13 @@ class SingleInvitaionItem extends StatelessWidget {
                         'UID': FirebaseAuth.instance.currentUser!.email,
                         'isPrivate': false,
                       });
+                      CoolAlert.show(
+                        context: context,
+                        type: CoolAlertType.success,
+                        text: 'Invitation accepted successfully!',
+                        confirmBtnColor: AppColors.deepPurple,
+                        //   autoCloseDuration: Duration(seconds: 2),
+                      );
                     },
                     child: const Text(
                       "Accept",
@@ -87,13 +101,13 @@ class SingleInvitaionItem extends StatelessWidget {
                     ),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(179, 121, 231, 111)),
+                            Color.fromARGB(151, 138, 238, 129)),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(22),
                                     side: BorderSide(
-                                      color: Color.fromARGB(179, 121, 231, 111),
+                                      color: Color.fromARGB(151, 138, 238, 129),
                                       //  width: 1,
                                     ))))),
               ),
@@ -105,10 +119,23 @@ class SingleInvitaionItem extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () async {
                       print(invitationModel.senderEmail);
-                      await FirebaseFirestore.instance
-                          .collection('invitations')
-                          .doc(invitationModel.id)
-                          .update({'status': 'rejected'});
+
+                      CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.confirm,
+                          text:
+                              'Are you sure you want to reject the invitation?',
+                          confirmBtnText: 'Yes',
+                          cancelBtnText: 'No',
+                          confirmBtnColor: Colors.green,
+                          onConfirmBtnTap: () async {
+                            await FirebaseFirestore.instance
+                                .collection('invitations')
+                                .doc(invitationModel.id)
+                                .update({'status': 'rejected'});
+
+                            Util.routeToWidget(context, NavBar(tabs: 0));
+                          });
                     },
                     child: const Text(
                       "Reject",
@@ -118,15 +145,13 @@ class SingleInvitaionItem extends StatelessWidget {
                     ),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(184, 235, 76, 65)),
+                            Color.fromARGB(151, 241, 89, 78)),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(22),
                                     side: BorderSide(
-                                      color: Color.fromARGB(184, 235, 76, 65),
-
-                                      // width: 2,
+                                      color: Color.fromARGB(151, 241, 89, 78),
                                     ))))),
               ),
             ],
