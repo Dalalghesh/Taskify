@@ -267,11 +267,12 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     
     final currentUserEmail = _firebaseAuth.currentUser?.email;
     final sendEmail = '';
-    
+
     final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
     if(res.docs.isNotEmpty){
       for(int i =0; i< res.docs.length;i++){
         if ( res.docs[i]['email'] == receiver ){
+          print(res.docs[i]['token']);
              sendNotification('New Invitation', res.docs[i]['token']);
         }
       }
