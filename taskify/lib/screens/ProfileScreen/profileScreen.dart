@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
                   text: 'Do you want to logout?',
                   confirmBtnText: 'Yes',
                   cancelBtnText: 'No',
-                  confirmBtnColor: Colors.green,
+                  confirmBtnColor: Color(0xff7b39ed),
                   onConfirmBtnTap: () async {
                     await FirebaseAuth.instance.signOut();
 
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                height: 550,
+                height: 530,
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

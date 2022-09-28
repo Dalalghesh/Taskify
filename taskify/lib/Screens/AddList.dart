@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
+import 'package:taskify/screens/Add_Category.dart';
 
 import '../homePage.dart';
 import 'AddTask.dart';
@@ -43,6 +44,24 @@ Future<void> getUserData() async {
 class _AddList extends State<AddList> {
   bool isPrivate = false;
   final CAtegoryNameController = TextEditingController();
+  void getCategoryy() async {
+    final res = await _firestore
+        .collection('users1')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    categoriesList = res['categories'];
+    if (categoriesList.length == 0)
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "You don't have categories, create category first!",
+        confirmBtnColor: const Color(0xff7b39ed),
+        onConfirmBtnTap: () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Add_Category())),
+      );
+
+    print(categoriesList);
+  }
 
   @override
   void dispose() {
@@ -73,7 +92,7 @@ class _AddList extends State<AddList> {
     AppState provider = Provider.of<AppState>(context, listen: false);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     getUserData();
-
+    getCategoryy();
     return Scaffold(
         appBar: AppBar(
           leadingWidth: 50,
