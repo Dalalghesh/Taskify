@@ -445,6 +445,7 @@ class _AddTask extends State<AddTask> {
                             'Priority': myVar == 0 ? 'High' : myVar == 1 ? 'Medium': 'Low',
                             'Deadline': dateTime,
                             'description': description,
+                            'status': 'pending',
 
                           });
 

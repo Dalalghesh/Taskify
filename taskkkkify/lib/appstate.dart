@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/models/task_list.dart';
 
+import 'models/tasks.dart';
+
 
 class AppState extends ChangeNotifier{
   List<dynamic> categories = [];
@@ -42,23 +44,67 @@ class AppState extends ChangeNotifier{
   }
 
 
-  List<dynamic> tasks = [];
+ // List<dynamic> tasks = [];
+  List< Tasksss> tasksList = [];
+
   bool tasksLoading = true;
   getTasks(cat, list)async{
     tasksLoading = true;
     notifyListeners();
-    tasks.clear();
+ //   tasks.clear();
+    taskList.clear();
     print(cat);
 
-    final res = await FirebaseFirestore.instance.collection('tasks').where('CategoryName', isEqualTo: cat).where('ListName', isEqualTo: list).where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
+    final res = await FirebaseFirestore.instance.collection('tasks').where('CategoryName', isEqualTo: cat).where('ListName', isEqualTo: list).where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).where('status', isEqualTo: 'pending').get();
     for(int i = 0; i< res.docs.length; i++){
-      tasks.add(res.docs[i]['Task']);
+      Tasksss taskss = Tasksss(id: res.docs[i].id,
+          task: res.docs[i]['Task'],
+          priority: res.docs[i]['Priority'],
+          category: res.docs[i]['CategoryName'],
+          list: res.docs[i]['ListName'],
+          description: res.docs[i]['description'],
+          value: false,
+          deadline: res.docs[i]['Deadline'].toString());
+
+      tasksList.add(taskss);
+
+     // tasks.add(res.docs[i]['Task']);
     }
-    print(tasks.length);
+   // print(tasks.length);
     tasksLoading = false;
     notifyListeners();
   }
 
+
+  List< Tasksss> completedtasksList = [];
+
+  bool completedtasksLoading = true;
+  getCompletedTasks(cat, list)async{
+    completedtasksLoading = true;
+    notifyListeners();
+    //   tasks.clear();
+    taskList.clear();
+    print(cat);
+
+    final res = await FirebaseFirestore.instance.collection('tasks').where('CategoryName', isEqualTo: cat).where('ListName', isEqualTo: list).where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).where('status', isEqualTo: 'completed').get();
+    for(int i = 0; i< res.docs.length; i++){
+      Tasksss taskss = Tasksss(id: res.docs[i].id,
+          task: res.docs[i]['Task'],
+          priority: res.docs[i]['Priority'],
+          category: res.docs[i]['CategoryName'],
+          list: res.docs[i]['ListName'],
+          description: res.docs[i]['description'],
+          value: false,
+          deadline: res.docs[i]['Deadline'].toString());
+
+      completedtasksList.add(taskss);
+
+      // tasks.add(res.docs[i]['Task']);
+    }
+    // print(tasks.length);
+    completedtasksLoading = false;
+    notifyListeners();
+  }
 
   /*==========================================================================================*/
 
@@ -106,6 +152,24 @@ bool disableDropDown = true;
 
     notifyListeners();
 
+  }
+
+
+
+  updateCheckboxValue(bool v, int index)async{
+    tasksList[index].value = v;
+
+    notifyListeners();
+    completedtasksList.add(tasksList[index]);
+    tasksList.removeAt(index);
+
+    notifyListeners();
+
+    await FirebaseFirestore.instance.collection('tasks').doc(tasksList[index].id).update(
+        {
+          'status': 'completed'
+
+        });
   }
 
 
