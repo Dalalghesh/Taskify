@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/homePage.dart';
 import 'package:taskify/screens/AddList.dart';
+import '../../service/local_push_notification.dart';
 import '../../util.dart';
 import '../../utils/validators.dart';
 import '../provider/invitation.dart';
 import '../screens/received_invitations.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 class SendInvitationForm extends StatefulWidget {
   String category;
@@ -22,11 +26,25 @@ class SendInvitationForm extends StatefulWidget {
   State<SendInvitationForm> createState() => _SendInvitationFormState();
 }
 
+
 class _SendInvitationFormState extends State<SendInvitationForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _typeAheadController = TextEditingController();
   String query = '';
   String? email;
+
+   void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+    
+    FirebaseMessaging.instance.subscribeToTopic('subscription');
+
+  }
+  
   Future<void> sendInviation() async {
     try {
       final validate = _formKey.currentState?.validate();
@@ -105,7 +123,10 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
             height: 0,
           ),
           ElevatedButton(
-            onPressed: () async => await sendInviation(),
+           onPressed: () async { 
+                 await sendInviation();
+                   sendNotification('New Invitation', 'cJt964VuQXCP2SdkKGeMBP:APA91bF0t8wtgylAXoaxsw_VIfcGsCA-uMPHqiGATtUn6yrvl3H5l6cI9nx_CUztj-pLDnOjdUpjno-0JwgZE0bwirV4xyq88KPOmXGcJ9NYsEvRgSstlXYu5r7lMR6r_-CZZAz17RpD');
+                },
             child: const Text(
               'Invite',
               style: TextStyle(fontSize: 20),
@@ -162,5 +183,41 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
         ),
       ),
     );
+  }
+
+  sendNotification(String title, String token)async{
+    print('dalal');
+
+    final data = {
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+      'id': '1',
+      'status': 'done',
+      'message': title,
+    };
+
+    try{
+     http.Response response = await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),headers: <String,String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=AAAArqJFQfk:APA91bFyFdlX-dk-72NHyaoN0hb4xsp8wuDUhr63ZgI7vroxRSBX1mXbd2pASgdzoYKA_8A0ZYRw61GzRaIH_6eakiVtyr_X8FJrlax-HwJdSUzbk022EGjfVjkDo7dlgYZNXaMfJS4T'
+      },
+      body: jsonEncode(<String,dynamic>{
+        'notification': <String,dynamic> {'title': title,'body': 'New invitation!'},
+        'priority': 'high',
+        'data': data,
+        'to': '$token'
+      })
+      );
+
+
+     if(response.statusCode == 200){
+       print("Yeh notificatin is sended");
+     }else{
+       print("Error");
+     }
+
+    }catch(e){
+
+    }
+
   }
 }

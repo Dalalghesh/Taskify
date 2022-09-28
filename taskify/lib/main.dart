@@ -1,16 +1,20 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:taskify/service/local_push_notification.dart';
 import 'firebase_options.dart';
 import 'package:taskify/onboarding/onboarding_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // #7b39ed - primary color
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  LocalNotificationService.initialize();
   runApp(MyApp());
 }
 
@@ -27,6 +31,19 @@ class MyApp extends StatelessWidget {
     800: Color(0xff7b39ed),
     900: Color(0xff7b39ed),
   });
+
+   void initState() {
+    // TODO: implement initState
+    
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+    
+
+    FirebaseMessaging.instance.subscribeToTopic('subscription');
+
+  }
 
   @override
   Widget build(BuildContext context) {
