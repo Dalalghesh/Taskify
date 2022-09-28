@@ -76,28 +76,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    //const Text('Single Date Picker (With default value)'),
-                    // CalendarDatePicker2(
-                    //   config: config,
-                    //   initialValue: _singleDatePickerValueWithDefaultValue,
-                    //   onValueChanged: (values) =>
-                    //       setState(() => _singleDatePickerValueWithDefaultValue = values),
-                    //   selectableDayPredicate: (day) => !day
-                    //       .difference(DateTime.now().subtract(const Duration(days: 3)))
-                    //       .isNegative,
-                    // ),\
                     SfCalendar(
                       view: CalendarView.month,
                       dataSource: MeetingDataSource(getTasks()),
                     ),
-                    const SizedBox(height: 10),
-
-                    // TableCalendar(
-                    //   focusedDay: DateTime.now(),
-                    //   firstDay: DateTime.now(),
-                    //   daysOfWeekHeight: 12,
-                    //   lastDay: DateTime.now(),
-                    // ),
                     const SizedBox(height: 10),
                     const Text(
                       'Categories',
@@ -106,7 +88,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         fontSize: 30,
                       ),
                     ),
-
                     Container(
                         height: MediaQuery.of(context).size.height / 2.3,
                         child: provider.categoriesLoading
