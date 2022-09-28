@@ -2,6 +2,12 @@ class Validators {
   static String? emptyValidator(String? text) {
     if (text!.isEmpty || text == null || text.trim() == '')
       return 'Please Fill in the field';
+
+    final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+
+    if (!regExp.hasMatch(text.trim())) {
+      return 'You cannot enter special characters !@#\%^&*()';
+    }
     return null;
   }
 

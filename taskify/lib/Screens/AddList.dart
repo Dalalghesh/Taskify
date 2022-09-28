@@ -52,7 +52,6 @@ class _AddList extends State<AddList> {
     super.dispose();
   }
 
-  //const SendInstructionsView({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>(); //key for form
   final _firestore = FirebaseFirestore.instance;
   String Category = '';
@@ -139,11 +138,15 @@ class _AddList extends State<AddList> {
                         ),
                       ),
                       validator: (value) {
+                        final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+
                         if (value!.isEmpty ||
                             value == null ||
                             value.trim() == '')
                           return "Please enter a name";
-                        else
+                        else if (!regExp.hasMatch(value.trim())) {
+                          return 'You cannot enter special characters !@#\%^&*()';
+                        } else
                           return null;
                       },
                       onChanged: (value) async {

@@ -80,6 +80,7 @@ class _AddTask extends State<AddTask> {
   String? docid;
   var description;
   DateTime dateTime = new DateTime.now();
+  DateTime FdateTime = new DateTime.utc(2024, 1, 1);
 
   final formKey = GlobalKey<FormState>(); //key for form
   late DateTime selectedDateTime;
@@ -158,13 +159,18 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
+                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+
                             if (value!.isEmpty ||
                                 value == null ||
                                 value.trim() == '')
                               return "Please enter task name";
-                            else if (value.length <= 2) {
+                            else if (!regExp.hasMatch(value.trim())) {
+                              return 'You cannot enter special characters !@#\%^&*()=+';
+                            } else if (value.length <= 2) {
                               return "Please enter at least 3 characters";
                             }
+
                             return null;
                           },
                           onChanged: (value) {
@@ -371,14 +377,18 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
+                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+
                             if (value!.isEmpty ||
                                 value == null ||
                                 value.trim() == '')
                               return "Please enter a description";
-                            else if (value.length <= 2)
+                            else if (!regExp.hasMatch(value.trim())) {
+                              return 'You cannot enter special characters !@#\%^&*()';
+                            } else if (value.length <= 2)
                               return "Please enter at least 3 characters";
-                            else
-                              return null;
+
+                            return null;
                           },
                           onChanged: (value) {
                             setState(() {
@@ -531,6 +541,7 @@ class _AddTask extends State<AddTask> {
                   child: CupertinoDatePicker(
                     minimumDate: dateTime,
                     initialDateTime: dateTime,
+                    maximumDate: FdateTime,
                     use24hFormat: true,
                     onDateTimeChanged: (DateTime newDateTime) {
                       setState(() => dateTime = newDateTime);

@@ -132,11 +132,15 @@ class _Add_Category extends State<Add_Category> {
                         ),
                       ),
                       validator: (value) {
+                        final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+
                         if (value!.isEmpty ||
                             value == null ||
                             value.trim() == '')
                           return "Please enter category name";
-                        else if (categoriesList.contains(value))
+                        else if (!regExp.hasMatch(value.trim())) {
+                          return 'You cannot enter special characters !@#\%^&*()';
+                        } else if (categoriesList.contains(value))
                           return "This category already exist";
                         else
                           return null;
