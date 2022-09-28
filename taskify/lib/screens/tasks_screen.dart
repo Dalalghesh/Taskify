@@ -29,6 +29,8 @@ class _TaskScreenState extends State<TaskScreen> {
     print(widget.category);
     await Future.delayed(Duration(milliseconds: 100));
     Provider.of<AppState>(context, listen: false).getTasks(widget.category, widget.list);
+    Provider.of<AppState>(context, listen: false).getCompletedTasks(widget.category, widget.list);
+
 
   }
   @override
@@ -43,35 +45,136 @@ class _TaskScreenState extends State<TaskScreen> {
         title: Text(widget.list, style: TextStyle(color: Colors.black, fontSize: 18),),
       ),
 
-      body: provider.tasksLoading ? Center(child: CircularProgressIndicator(),):
-      provider.tasks.isEmpty ? Center(child: Text('List is empty', style: TextStyle(color: Colors.black, fontSize: 18),)):
+      body:Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height/2.5,
+            child:   provider.tasksLoading ? Center(child: CircularProgressIndicator(),):
+            provider.tasksList.isEmpty ? Center(child: Text('List is empty', style: TextStyle(color: Colors.black, fontSize: 18),)):
 
-      ListView.builder(
-          itemCount: provider.tasks.length,
-          shrinkWrap: true,
+            ListView.builder(
+                itemCount: provider.tasksList.length,
+                shrinkWrap: true,
 
-          itemBuilder: (context, index){
-            return
+                itemBuilder: (context, index){
+                  return
 
-              Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 3,
+                    Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 3,
 
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(8)
-                ),
-                alignment: Alignment.center,
-                child: Text(provider.tasks[index]),
-              );
-          }),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(8)
+                      ),
+                      //alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 20,
+                            margin: EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              color: provider.tasksList[index].priority == 'High' ?Color.fromARGB(255, 223, 123, 123):  provider.tasksList[index].priority == 'Medium'
+                                  ? Color.fromARGB(255, 223, 180, 123):
+                              Color.fromARGB(255, 152, 224, 154)
+                              ,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Text(provider.tasksList[index].task,
+
+                            textAlign: TextAlign.left,
+                          ),
+
+                          Checkbox(value: provider.tasksList[index].value, onChanged: (v){
+                            provider.updateCheckboxValue(v!, index);
+                          })
+
+                        ],
+                      ),
+                    );
+                }),
+          ),
+
+          SizedBox(height: 10,),
+          Text('Completed', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+          SizedBox(height: 10,),
+
+          Container(
+            height: MediaQuery.of(context).size.height/2.5,
+            child:   provider.completedtasksLoading ? Center(child: CircularProgressIndicator(),):
+            provider.completedtasksList.isEmpty ? Center(child: Text('List is empty', style: TextStyle(color: Colors.black, fontSize: 18),)):
+
+            ListView.builder(
+                itemCount: provider.completedtasksList.length,
+                shrinkWrap: true,
+
+                itemBuilder: (context, index){
+                  return
+
+                    Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 3,
+
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(8)
+                      ),
+                      //alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 20,
+                            margin: EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              color: provider.completedtasksList[index].priority == 'High' ?Color.fromARGB(255, 223, 123, 123):  provider.completedtasksList[index].priority == 'Medium'
+                                  ? Color.fromARGB(255, 223, 180, 123):
+                              Color.fromARGB(255, 152, 224, 154)
+                              ,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Text(provider.completedtasksList[index].task,
+
+                            textAlign: TextAlign.left,
+                          ),
+                          Container(),
+
+                          // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
+                          //   provider.updateCheckboxValue(v!, index);
+                          // })
+
+                        ],
+                      ),
+                    );
+                }),
+          ),
+
+
+        ],
+      )
+
+
+
+
     );
     // throw UnimplementedError();
   }
