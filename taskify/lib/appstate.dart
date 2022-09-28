@@ -5,41 +5,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/models/task_list.dart';
 
-class AppState extends ChangeNotifier {
+
+class AppState extends ChangeNotifier{
   List<dynamic> categories = [];
   bool categoriesLoading = true;
 
-  getCategories() async {
+  getCategories()async{
     categoriesLoading = true;
-    final res = await FirebaseFirestore.instance
-        .collection('users1')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    final res = await FirebaseFirestore.instance.collection('users1').doc(FirebaseAuth.instance.currentUser!.uid).get();
     categories = res['categories'];
     categoriesLoading = false;
     notifyListeners();
   }
-
   List<TaskListModel> list = [];
   bool listLoading = true;
-  getList(cat) async {
+  getList(cat)async{
     listLoading = true;
     notifyListeners();
     list.clear();
     print(cat);
 
-    final res = await FirebaseFirestore.instance
-        .collection('List')
-        .where('CategoryName', isEqualTo: cat)
-        .where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email)
-        .get();
-    for (int i = 0; i < res.docs.length; i++) {
+    final res = await FirebaseFirestore.instance.collection('List').where('CategoryName', isEqualTo: cat).where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
+    for(int i = 0; i< res.docs.length; i++){
       TaskListModel task = TaskListModel(
           docId: res.docs[i].id,
           email: res.docs[i]['UID'],
           category: res.docs[i]['CategoryName'],
           list: res.docs[i]['List'],
-          private: res.docs[i]['isPrivate']);
+          private: res.docs[i]['isPrivate']
+      );
       list.add(task);
     }
     print(list.length);
@@ -47,21 +41,17 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+
   List<dynamic> tasks = [];
   bool tasksLoading = true;
-  getTasks(cat, list) async {
+  getTasks(cat, list)async{
     tasksLoading = true;
     notifyListeners();
     tasks.clear();
     print(cat);
 
-    final res = await FirebaseFirestore.instance
-        .collection('tasks')
-        .where('CategoryName', isEqualTo: cat)
-        .where('ListName', isEqualTo: list)
-        .where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email)
-        .get();
-    for (int i = 0; i < res.docs.length; i++) {
+    final res = await FirebaseFirestore.instance.collection('tasks').where('CategoryName', isEqualTo: cat).where('ListName', isEqualTo: list).where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
+    for(int i = 0; i< res.docs.length; i++){
       tasks.add(res.docs[i]['Task']);
     }
     print(tasks.length);
@@ -69,50 +59,54 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+
   /*==========================================================================================*/
 
-  bool taskListLoading = false;
-  List<TaskListModel> taskList = [];
+bool taskListLoading = false;
+List<TaskListModel> taskList = [];
 
-  getListForTask() async {
-    taskList.clear();
-    taskListLoading = true;
-    notifyListeners();
-    final res = await FirebaseFirestore.instance
-        .collection('List')
-        .where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email)
-        .get();
-    for (int i = 0; i < res.docs.length; i++) {
-      TaskListModel task = TaskListModel(
-          docId: res.docs[i].id,
-          email: res.docs[i]['UID'],
-          category: res.docs[i]['CategoryName'],
-          list: res.docs[i]['List'],
-          private: res.docs[i]['isPrivate']);
+getListForTask()async{
+  taskList.clear();
+  taskListLoading = true;
+  notifyListeners();
+  final res = await FirebaseFirestore.instance.collection('List').where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
+  for(int i =0; i< res.docs.length; i++){
+    TaskListModel task = TaskListModel(
+      docId: res.docs[i].id,
+      email: res.docs[i]['UID'],
+      category: res.docs[i]['CategoryName'],
+      list: res.docs[i]['List'],
+      private: res.docs[i]['isPrivate']
+    );
 
-      taskList.add(task);
-    }
-    taskListLoading = false;
-    notifyListeners();
 
-    return taskList;
+
+    taskList.add(task);
   }
+  taskListLoading = false;
+  notifyListeners();
+
+  return taskList;
+}
+
 
 /*==========================================================================================*/
-  bool disableDropDown = true;
+bool disableDropDown = true;
   List<TaskListModel> filteredtaskList = [];
 
-  filterList(category) {
+  filterList(category){
     print(taskList.length);
     disableDropDown = true;
     notifyListeners();
-    filteredtaskList =
-        taskList.where((element) => element.category == category).toList();
-    if (filteredtaskList.isNotEmpty) {
+    filteredtaskList =  taskList.where((element) => element.category == category).toList();
+    if(filteredtaskList.isNotEmpty){
       disableDropDown = false;
     }
     print(filteredtaskList.length);
 
     notifyListeners();
+
   }
+
+
 }

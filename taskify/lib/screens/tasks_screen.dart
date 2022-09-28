@@ -10,27 +10,28 @@ class TaskScreen extends StatefulWidget {
   final String category;
   final String list;
 
-  TaskScreen({Key? key, required this.category, required this.list}) : super(key: key);
+  TaskScreen({Key? key, required this.category, required this.list})
+      : super(key: key);
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getTask();
   }
-  getTask()async{
+
+  getTask() async {
     print(widget.category);
     await Future.delayed(Duration(milliseconds: 100));
-    Provider.of<AppState>(context, listen: false).getTasks(widget.category, widget.list);
-
+    Provider.of<AppState>(context, listen: false)
+        .getTasks(widget.category, widget.list);
   }
+
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context);
@@ -40,38 +41,43 @@ class _TaskScreenState extends State<TaskScreen> {
         // elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text(widget.list, style: TextStyle(color: Colors.black, fontSize: 18),),
+        title: Text(
+          widget.list,
+          style: TextStyle(color: Colors.black, fontSize: 18),
+        ),
       ),
-
-      body: provider.tasksLoading ? Center(child: CircularProgressIndicator(),):
-      provider.tasks.isEmpty ? Center(child: Text('List is empty', style: TextStyle(color: Colors.black, fontSize: 18),)):
-
-      ListView.builder(
-          itemCount: provider.tasks.length,
-          shrinkWrap: true,
-
-          itemBuilder: (context, index){
-            return
-
-              Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 3,
-
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(8)
-                ),
-                alignment: Alignment.center,
-                child: Text(provider.tasks[index]),
-              );
-          }),
+      body: provider.tasksLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : provider.tasks.isEmpty
+              ? Center(
+                  child: Text(
+                  'List is empty',
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ))
+              : ListView.builder(
+                  itemCount: provider.tasks.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 3,
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(8)),
+                      alignment: Alignment.center,
+                      child: Text(provider.tasks[index]),
+                    );
+                  }),
     );
     // throw UnimplementedError();
   }
