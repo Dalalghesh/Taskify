@@ -36,8 +36,9 @@ class InvitaitonProvider with ChangeNotifier {
   }
 
   filterEmail(query) {
-    filteredEmails =
-        emails.where((element) => element.contains(query)).toList();
+    filteredEmails = emails
+        .where((element) => element.toLowerCase().contains(query))
+        .toList();
     notifyListeners();
   }
 

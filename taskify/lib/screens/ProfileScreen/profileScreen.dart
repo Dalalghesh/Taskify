@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:taskify/screens/auth/login_screen.dart';
 import 'package:taskify/widgets/primary_button.dart';
@@ -20,10 +21,21 @@ class HomeScreen extends StatelessWidget {
               right: 15,
             ),
             onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
+              CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.confirm,
+                  text: 'Do you want to logout?',
+                  confirmBtnText: 'Yes',
+                  cancelBtnText: 'No',
+                  confirmBtnColor: Color(0xff7b39ed),
+                  onConfirmBtnTap: () async {
+                    await FirebaseAuth.instance.signOut();
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                    );
+                  });
             },
             icon: Icon(
               Icons.logout_outlined,
@@ -40,7 +52,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                height: 550,
+                height: 530,
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

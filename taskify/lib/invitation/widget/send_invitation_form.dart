@@ -1,14 +1,11 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/homePage.dart';
-
 import 'package:taskify/screens/AddList.dart';
-
 import '../../util.dart';
 import '../../utils/validators.dart';
 import '../provider/invitation.dart';
@@ -53,18 +50,15 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       }
     } catch (e) {
       _formKey.currentState?.reset();
-      //showPlatformDialogue(context: context, title: e.toString());
       CoolAlert.show(
         context: context,
         type: CoolAlertType.error,
         text: "A user with that email does not exists",
         confirmBtnColor: const Color(0xff7b39ed),
-        // onConfirmBtnTap: () => route(isChecked),
       );
     }
     _typeAheadController.clear();
   }
-  // List<String> emails = [];
 
   @override
   Widget build(BuildContext context) {
@@ -81,14 +75,13 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   controller: this._typeAheadController,
                   decoration: InputDecoration(labelText: 'Email'),
                   onChanged: (val) {
-                    query = val;
+                    query = val.toLowerCase();
                     provider.filterEmail(query);
                   }),
               suggestionsCallback: (pattern) {
                 print('changing');
                 return provider.filteredEmails;
               },
-
               itemBuilder: (context, suggestion) {
                 return ListTile(
                   title: Text(suggestion.toString()),
@@ -106,35 +99,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   return 'Please enter email';
                 }
               },
-              //   onSaved: (value) => this._selectedCity = value,
             ),
-
-            // TextFormField(
-            //     decoration: InputDecoration(
-            //       hintText: 'Ex: John@gmail.com',
-            //       contentPadding: EdgeInsets.symmetric(
-            //         vertical: 10,
-            //         horizontal: 10,
-            //       ),
-            //     ),
-            //     validator: (value) => Validators.emailValidator(value),
-            //     onSaved: (value) {
-            //       email = value;
-            //     },
-            //      onChanged: (val) {
-            //   setState(() {
-            //     name = val;
-            //     print(name);
-            //   });
-            //
-            // },
-            //     keyboardType: TextInputType.emailAddress,
-            //     textInputAction: TextInputAction.done,
-            //     style: Theme.of(context)
-            //         .textTheme
-            //         .subtitle1
-            //         ?.copyWith(color: Colors.black)),
-            //
           ),
           const SizedBox(
             height: 0,
@@ -146,31 +111,9 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               style: TextStyle(fontSize: 20),
             ),
           ),
-          // const SizedBox(
-          //   height: 16,
-          // ),
-          // GestureDetector(
-          //   onTap: () {
-          //     Navigator.of(context).pushNamed(RecievedInvitations.routeName);
-          //   },
-          //   child: const Text("Check your invitations"),
-          // ),
           const SizedBox(
-            height: 5,
+            height: 1,
           ),
-          /* GestureDetector(
-                onTap: () {
-                  try {
-                    FirebaseAuth.instance.signOut();
-                    Navigator.of(context)
-                        .pushReplacementNamed(LoginScreen.routeName);
-                  } catch (e) {
-                    Navigator.of(context)
-                        .pushReplacementNamed(LoginScreen.routeName);
-                  }
-                },
-                child: const Text("Logout"),
-              ),*/
           Row(
             children: [
               Expanded(
@@ -182,7 +125,12 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   onPressed: () {
                     Util.routeToWidget(context, NavBar(tabs: 0));
                   },
-                  child: const Text('Later'),
+                  child: const Text(
+                    'Later',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
               ),
             ],

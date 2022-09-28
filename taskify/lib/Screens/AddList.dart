@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
+import 'package:taskify/screens/Add_Category.dart';
 
 import '../homePage.dart';
 import 'AddTask.dart';
@@ -43,6 +44,24 @@ Future<void> getUserData() async {
 class _AddList extends State<AddList> {
   bool isPrivate = false;
   final CAtegoryNameController = TextEditingController();
+  void getCategoryy() async {
+    final res = await _firestore
+        .collection('users1')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    categoriesList = res['categories'];
+    if (categoriesList.length == 0)
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "You don't have categories, create category first!",
+        confirmBtnColor: const Color(0xff7b39ed),
+        onConfirmBtnTap: () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Add_Category())),
+      );
+
+    print(categoriesList);
+  }
 
   @override
   void dispose() {
@@ -52,12 +71,12 @@ class _AddList extends State<AddList> {
     super.dispose();
   }
 
-  //const SendInstructionsView({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>(); //key for form
   final _firestore = FirebaseFirestore.instance;
   String Category = '';
   List<dynamic> categoriesList = [];
   TextEditingController categoryController = TextEditingController();
+  TextEditingController ListController = TextEditingController();
 
   var selectCategory;
   bool buttonenabled = false;
@@ -73,7 +92,7 @@ class _AddList extends State<AddList> {
     AppState provider = Provider.of<AppState>(context, listen: false);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     getUserData();
-
+    getCategoryy();
     return Scaffold(
         appBar: AppBar(
           leadingWidth: 50,
@@ -129,7 +148,7 @@ class _AddList extends State<AddList> {
                   TextFormField(
                       maxLength: 15,
                       keyboardType: TextInputType.text,
-                      controller: CAtegoryNameController,
+                      controller: ListController,
                       decoration: InputDecoration(
                         hintText: 'Assignments',
                         contentPadding: EdgeInsets.symmetric(
@@ -138,11 +157,15 @@ class _AddList extends State<AddList> {
                         ),
                       ),
                       validator: (value) {
+                        final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+
                         if (value!.isEmpty ||
                             value == null ||
                             value.trim() == '')
                           return "Please enter a name";
-                        else
+                        else if (!regExp.hasMatch(value.trim())) {
+                          return 'You cannot enter special characters !@#\%^&*()';
+                        } else
                           return null;
                       },
                       onChanged: (value) async {
@@ -235,6 +258,7 @@ class _AddList extends State<AddList> {
                               'UID': FirebaseAuth.instance.currentUser!.email,
                               'isPrivate': isChecked,
                             });
+                            ListController.clear();
 
                             CoolAlert.show(
                               context: context,
