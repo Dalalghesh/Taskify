@@ -238,6 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   ) async {
     isLoading = true;
     setState(() {});
+
     try {
       final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(

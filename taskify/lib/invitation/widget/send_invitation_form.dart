@@ -75,7 +75,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   controller: this._typeAheadController,
                   decoration: InputDecoration(labelText: 'Email'),
                   onChanged: (val) {
-                    query = val;
+                    query = val.toLowerCase();
                     provider.filterEmail(query);
                   }),
               suggestionsCallback: (pattern) {

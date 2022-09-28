@@ -19,10 +19,10 @@ class Validators {
     const p =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(gmail.com)$';
 
-    final regExp = RegExp(p);
+    final regExp = RegExp(p, caseSensitive: false);
 
     if (!regExp.hasMatch(email.trim())) {
-      return 'Please Enter Gamil Email Address';
+      return 'Please Enter Gmail Email Address';
     }
     return null;
   }
