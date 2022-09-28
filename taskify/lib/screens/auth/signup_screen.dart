@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskify/screens/auth/login_screen.dart';
 import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
 import 'package:taskify/utils/validators.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:taskify/widgets/primary_text_field.dart';
 import 'package:taskify/widgets/titled_drop_down.dart';
@@ -201,6 +202,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
+               storenotificationToken();
         return const LoginScreen();
       }));
     } catch (e) {
@@ -208,5 +210,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       setState(() {});
       showExceptionDialog(context, e);
     }
+  }
+  storenotificationToken()async{
+    //get notifiaction token for ourself
+    String? token =await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance.collection('users1').doc(FirebaseAuth.instance.currentUser!.uid).set(
+      {
+        'token':token
+      },SetOptions(merge: true));
   }
 }

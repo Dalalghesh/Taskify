@@ -41,10 +41,10 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     FirebaseMessaging.onMessage.listen((event) {
       LocalNotificationService.display(event);
     });
-    storenotificationToken();
+    //storenotificationToken();
 
     FirebaseMessaging.instance.subscribeToTopic('subscription');
-   sendNotification('New Invitation', 'd6XLoEIsSqSkQpDK6FQsC8:APA91bHHHi5qZNEz8hsmpweko4MhuEYqKndjSRQsZs06W91T5Zy9MwZDpNJmNkVLhBJguHTp1vV4B6C1ttJ25i8ONGbVM7v_0jTRB19Xs9GI_Gl4MxXfoZ-Z3rR2qQbS3QwxqEBo0RCz');
+   sendNotification('New Invitation', 'cJt964VuQXCP2SdkKGeMBP:APA91bF0t8wtgylAXoaxsw_VIfcGsCA-uMPHqiGATtUn6yrvl3H5l6cI9nx_CUztj-pLDnOjdUpjno-0JwgZE0bwirV4xyq88KPOmXGcJ9NYsEvRgSstlXYu5r7lMR6r_-CZZAz17RpD');
     }
     
       sendNotification(String title, String token)async{
