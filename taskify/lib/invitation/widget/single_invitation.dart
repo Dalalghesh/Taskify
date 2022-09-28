@@ -79,12 +79,6 @@ provider.categories.contains(invitationModel.category)?   '' : await FirebaseFir
                          'isPrivate': false,
                        });
 
-
-
-
-
-
-
                   },
                   child: const Text(
                     "Accept",
