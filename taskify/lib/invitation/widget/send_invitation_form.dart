@@ -15,6 +15,7 @@ import '../screens/received_invitations.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:taskify/models/users.dart';
 
 class SendInvitationForm extends StatefulWidget {
   String category;
@@ -32,6 +33,11 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   final TextEditingController _typeAheadController = TextEditingController();
   String query = '';
   String? email;
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+  List<String> tokens = [];
+  List<String> filteredEmails = [];
+  List<UserModel> modelTokens = [];
 
    void initState() {
     // TODO: implement initState
@@ -44,7 +50,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     FirebaseMessaging.instance.subscribeToTopic('subscription');
 
   }
-  
+
   Future<void> sendInviation() async {
     try {
       final validate = _formKey.currentState?.validate();
@@ -123,9 +129,13 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
             height: 0,
           ),
           ElevatedButton(
-           onPressed: () async { 
+          onPressed: () async { 
                  await sendInviation();
-                   sendNotification('New Invitation', 'cJt964VuQXCP2SdkKGeMBP:APA91bF0t8wtgylAXoaxsw_VIfcGsCA-uMPHqiGATtUn6yrvl3H5l6cI9nx_CUztj-pLDnOjdUpjno-0JwgZE0bwirV4xyq88KPOmXGcJ9NYsEvRgSstlXYu5r7lMR6r_-CZZAz17RpD');
+                 print('h2');
+                 print(query);
+                 print(email.toString());
+                  getUsersToken(email.toString());
+                  print('dalal');
                 },
             child: const Text(
               'Invite',
@@ -187,6 +197,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
 
   sendNotification(String title, String token)async{
     print('dalal');
+    print('raghad');
 
     final data = {
       'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -208,7 +219,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       })
       );
 
-
      if(response.statusCode == 200){
        print("Yeh notificatin is sended");
      }else{
@@ -216,8 +226,27 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
      }
 
     }catch(e){
-
     }
-
+    
   }
+
+  Future getUsersToken( String receiver ) async {
+    print('hello');
+    final currentUserEmail = _firebaseAuth.currentUser?.email;
+    final sendEmail = '';
+    
+    final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
+    if(res.docs.isNotEmpty){
+      for(int i =0; i< res.docs.length;i++){
+        if ( res.docs[i]['email'] == receiver ){
+          print('raghad');
+          print(res.docs[i]['token']);
+          print('raghad');
+         final String receivertoken  = res.docs[i]['token'];
+             sendNotification('New Invitation', receivertoken);
+        }
+      }
+    }
+}
+
 }
