@@ -216,7 +216,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               body: jsonEncode(<String, dynamic>{
                 'notification': <String, dynamic>{
                   'title': title,
-                  'body': 'New invitation!'
+                  'body': 'You got invitations from your friend to his list!!'
                 },
                 'priority': 'high',
                 'data': data,
