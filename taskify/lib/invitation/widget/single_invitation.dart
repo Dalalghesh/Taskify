@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
-
 import '../../Util.dart';
 import '../../homePage.dart';
 import '../../utils/app_colors.dart';
@@ -34,14 +33,14 @@ class SingleInvitaionItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Received invitation",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              // const Text(
+              //   "Received invitation",
+              //   style: TextStyle(
+              //     color: Colors.black,
+              //     fontSize: 15,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               Text(
                 'From: ' +
                     invitationModel.senderEmail +

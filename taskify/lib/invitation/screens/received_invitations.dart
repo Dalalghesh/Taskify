@@ -24,14 +24,16 @@ class RecievedInvitations extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          // leading: GestureDetector(
-          //   onTap: () => Navigator.of(context).pop(),
-          //   child: IconButton(
-          //     icon: const Icon(Icons.arrow_back),
-          //     onPressed: () {},
-          //   ),
-          // ),
-          leadingWidth: 50,
+          //leadingWidth: 32,
+          title: Text(
+            'Received Invitation',
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.transparent),
+            onPressed: () {},
+          ),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -39,13 +41,6 @@ class RecievedInvitations extends StatelessWidget {
               width: mediaQuery.size.width,
               child: Column(
                 children: [
-                  Text(
-                    'Received Invitation',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
                   StreamBuilder(
                     stream: context.read<InvitaitonProvider>().getInvitations(),
                     builder: (context, snapshot) {

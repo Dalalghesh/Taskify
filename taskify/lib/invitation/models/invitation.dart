@@ -7,6 +7,7 @@ class InvitationModel {
   String category;
   String list;
   String status;
+
   InvitationModel(
       {required this.recivereEmail,
       required this.senderEmail,
