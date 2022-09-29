@@ -57,6 +57,7 @@ dependencies:
   url_launcher: ^6.1.5
   flutter_local_notifications: ^10.0.0
   http:
+  rxdart: ^0.27.5
 
 dev_dependencies:
   flutter_test:

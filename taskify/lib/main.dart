@@ -32,17 +32,15 @@ class MyApp extends StatelessWidget {
     900: Color(0xff7b39ed),
   });
 
-   void initState() {
+  void initState() {
     // TODO: implement initState
-    
+
     FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((event) {
       LocalNotificationService.display(event);
     });
-    
 
     FirebaseMessaging.instance.subscribeToTopic('subscription');
-
   }
 
   @override

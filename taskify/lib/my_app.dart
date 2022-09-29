@@ -2,6 +2,7 @@ import 'package:taskify/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
+import 'onboarding/onboarding_screen.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
