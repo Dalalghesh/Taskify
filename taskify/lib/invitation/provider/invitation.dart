@@ -13,7 +13,10 @@ class InvitaitonProvider with ChangeNotifier {
   List<InvitationModel> invitations = [];
   List<String> emails = [];
   List<String> filteredEmails = [];
-  List<UserModel> modelEmails = [];
+  List<String> tokens = [];
+   List<UserModel> modelEmails = []; List<String> 
+  filteredTokens= [];
+  List<UserModel> modelTokens = [];
 
   Future<void> getUsersEmail() async {
     final currentUserEmail = _firebaseAuth.currentUser?.email;
@@ -40,6 +43,30 @@ class InvitaitonProvider with ChangeNotifier {
         .where((element) => element.toLowerCase().contains(query))
         .toList();
     notifyListeners();
+  }
+  Future <String> getUsersToken() async {
+    
+    final currentUserEmail = _firebaseAuth.currentUser?.email;
+    final sendEmail = '';
+
+    final res = await _firebaseFirestore.collection('users1').where("email",isNotEqualTo:currentUserEmail).get();
+    
+    if(res.docs.isNotEmpty){
+
+      for(int i =0; i< res.docs.length;i++){
+        UserModel userModel = UserModel(
+          email: res.docs[i]['email'],
+          categories: res.docs[i]['categories'],
+          docId: res.docs[i].id
+        );
+        modelTokens.add(userModel);
+
+        tokens.add(res.docs[i]['token']);
+      }
+      filteredTokens = tokens;
+    }
+    notifyListeners();
+    return '';
   }
 
   selectedUser(email) {
