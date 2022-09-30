@@ -1,6 +1,6 @@
 class TaskListModel {
   String docId;
-  String email;
+  List<dynamic> email;
   String category;
   String list;
   bool private;
@@ -10,5 +10,5 @@ class TaskListModel {
     required this.list,
     required this.category,
     required this.private,
-});
+  });
 }

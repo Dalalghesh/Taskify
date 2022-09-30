@@ -94,8 +94,7 @@ class _SendInstructionsView extends State<SendInstructionsView> {
               height: 50,
               child: TextFormField(
                 controller: emailController,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
             SizedBox(

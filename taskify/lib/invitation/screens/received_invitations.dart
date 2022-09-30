@@ -26,7 +26,7 @@ class RecievedInvitations extends StatelessWidget {
         appBar: AppBar(
           //leadingWidth: 32,
           title: Text(
-            'Received Invitation',
+            'Invitation',
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
           ),
@@ -56,6 +56,7 @@ class RecievedInvitations extends StatelessWidget {
                           itemBuilder: (context, index) => SingleInvitaionItem(
                             invitationModel: InvitationModel(
                               id: invitation[index].id,
+                              listId: invitation[index].listId,
                               recivereEmail: invitation[index].recivereEmail,
                               senderEmail: invitation[index].senderEmail,
                               status: invitation[index].status,

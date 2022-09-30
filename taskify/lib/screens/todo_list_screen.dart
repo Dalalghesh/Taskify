@@ -19,7 +19,6 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getList();
   }
@@ -109,6 +108,8 @@ class _TodoListState extends State<TodoList> {
                                                             .list[index].list),
                                                         category:
                                                             widget.category,
+                                                        listId: provider
+                                                            .list[index].docId,
                                                       )));
                                         },
                                         icon: Icon(Icons.share,

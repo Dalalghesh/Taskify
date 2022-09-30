@@ -44,6 +44,7 @@ Future<void> getUserData() async {
 class _AddList extends State<AddList> {
   bool isPrivate = false;
   final CAtegoryNameController = TextEditingController();
+
   void getCategoryy() async {
     final res = await _firestore
         .collection('users1')
@@ -249,6 +250,7 @@ class _AddList extends State<AddList> {
                                 SnackBar(content: Text("Added successfully"));
                             print(listt);
                             print(selectCategory);
+                            var listId;
 
                             await FirebaseFirestore.instance
                                 .collection('List')
@@ -257,7 +259,7 @@ class _AddList extends State<AddList> {
                               'List': listt,
                               'UID': FirebaseAuth.instance.currentUser!.email,
                               'isPrivate': isChecked,
-                            });
+                            }).then((value) => listId = value.id);
                             ListController.clear();
 
                             CoolAlert.show(
@@ -265,7 +267,7 @@ class _AddList extends State<AddList> {
                               type: CoolAlertType.success,
                               text: "List Added successfuly!",
                               confirmBtnColor: const Color(0xff7b39ed),
-                              onConfirmBtnTap: () => route(isChecked),
+                              onConfirmBtnTap: () => route(isChecked, listId),
                             );
                           }
                         },
@@ -283,15 +285,13 @@ class _AddList extends State<AddList> {
         ));
   }
 
-  void route(bool? isChecked) {
+  void route(bool? isChecked, id) {
     if (isChecked == true)
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => SendInvitation(
-                    category: selectCategory,
-                    list: listt,
-                  )));
+                  category: selectCategory, list: listt, listId: id)));
     //Util.routeToWidget(context, SendInvitation()); ///////////
     else
       Util.routeToWidget(context, NavBar(tabs: 0));

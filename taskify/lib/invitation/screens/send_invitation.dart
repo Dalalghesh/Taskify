@@ -6,8 +6,14 @@ import '../widget/send_invitation_form.dart';
 class SendInvitation extends StatefulWidget {
   final String category;
   final String list;
+  final String listId;
+
   static const routeName = "/Send-notfication";
-  const SendInvitation({Key? key, required this.list, required this.category})
+  const SendInvitation(
+      {Key? key,
+      required this.list,
+      required this.category,
+      required this.listId})
       : super(key: key);
 
   @override
@@ -79,7 +85,10 @@ class _SendInvitationState extends State<SendInvitation> {
             // const SizedBox(
             //   height: 8,
             // ),
-            SendInvitationForm(category: widget.category, list: widget.list)
+            SendInvitationForm(
+                category: widget.category,
+                list: widget.list,
+                listId: widget.listId)
           ],
         ),
       ),
