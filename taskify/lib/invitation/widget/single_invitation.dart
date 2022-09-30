@@ -21,8 +21,8 @@ class SingleInvitaionItem extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     AppState provider = Provider.of<AppState>(context, listen: false);
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -41,12 +41,15 @@ class SingleInvitaionItem extends StatelessWidget {
               //     fontWeight: FontWeight.bold,
               //   ),
               // ),
+              
               Text(
-                'From: ' +
+               // 'From: ' +
                     invitationModel.senderEmail +
-                    '\nTo list: ' +
+                    ' Invite you'
+                    '\nTo ' +
                     invitationModel.list +
-                    '\nTo category: ' +
+                    ' list'+
+                    '\n category:' +
                     invitationModel.category,
                 style: const TextStyle(
                   color: Colors.black,
@@ -59,7 +62,7 @@ class SingleInvitaionItem extends StatelessWidget {
             children: [
               SizedBox(
                 width: mediaQuery.size.width * 0.25,
-                child: ElevatedButton(
+                child: IconButton(
                     onPressed: () async {
                       print(invitationModel.category);
 
@@ -92,13 +95,16 @@ class SingleInvitaionItem extends StatelessWidget {
                         //   autoCloseDuration: Duration(seconds: 2),
                       );
                     },
-                    child: const Text(
+                    icon: Icon(Icons.done_rounded),
+                    color: Colors.green,
+                    iconSize: 30,
+                    /*child: const Text(
                       "Accept",
                       style: TextStyle(
                         color: Colors.black,
                       ),
-                    ),
-                    style: ButtonStyle(
+                    ),*/
+                   /* style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             Color.fromARGB(151, 138, 238, 129)),
                         shape:
@@ -108,14 +114,15 @@ class SingleInvitaionItem extends StatelessWidget {
                                     side: BorderSide(
                                       color: Color.fromARGB(151, 138, 238, 129),
                                       //  width: 1,
-                                    ))))),
+                                    ))))*/
+                                    ),
               ),
               const SizedBox(
                 height: 2,
               ),
               SizedBox(
                 width: mediaQuery.size.width * 0.25,
-                child: ElevatedButton(
+                child: IconButton(
                     onPressed: () async {
                       print(invitationModel.senderEmail);
 
@@ -136,7 +143,10 @@ class SingleInvitaionItem extends StatelessWidget {
                             Util.routeToWidget(context, NavBar(tabs: 0));
                           });
                     },
-                    child: const Text(
+                     icon: Icon(Icons.cancel_outlined),
+                     color: Color.fromARGB(255, 240, 96, 86),
+                     iconSize: 30,
+                    /*child: const Text(
                       "Reject",
                       style: TextStyle(
                         color: Colors.black,
@@ -151,7 +161,8 @@ class SingleInvitaionItem extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(22),
                                     side: BorderSide(
                                       color: Color.fromARGB(151, 241, 89, 78),
-                                    ))))),
+                                    ))))*/
+                                    ),
               ),
             ],
           )
