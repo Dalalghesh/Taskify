@@ -89,6 +89,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  clearTask() {
+    tasksList.clear();
+    notifyListeners();
+  }
+
   List<Tasksss> completedtasksList = [];
 
   bool completedtasksLoading = true;
