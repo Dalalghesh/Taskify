@@ -294,7 +294,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                                 index]
                                                             .task,
                                                         textAlign:
-                                                            TextAlign.left,
+                                                            TextAlign.right,
                                                       ),
                                                       Container(),
 

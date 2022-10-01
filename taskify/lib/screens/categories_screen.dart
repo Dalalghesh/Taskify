@@ -427,7 +427,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                                 index]
                                                             .task,
                                                         textAlign:
-                                                            TextAlign.left,
+                                                            TextAlign.right,
                                                       ),
                                                       Container(),
 
