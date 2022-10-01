@@ -59,7 +59,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       print('$d $type');
 
                       return Container(
-                        padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 12),
                         height: 40,
                         width: 34,
                         decoration: BoxDecoration(
@@ -93,7 +93,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   format = _format;
                 });
               },
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: StartingDayOfWeek.sunday,
               daysOfWeekVisible: true,
 
               //Day Changed on select
@@ -174,12 +174,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             color: context.theme.canvasColor,
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //       color: Colors.black,
-                            //       blurRadius: 2,
-                            //       spreadRadius: .1)
-                            // ]
                           ),
                           margin: EdgeInsets.only(
                               top: 10, left: 10, right: 10, bottom: 20),
