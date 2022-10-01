@@ -8,6 +8,7 @@ import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:taskify/service/local_push_notification.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'firebase_options.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
@@ -20,6 +21,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   var _clientID = new ClientId(Secret.getId(), "");
   const _scopes = const [cal.CalendarApi.calendarScope];
+    LocalNotificationService.initialize();
   // await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
   //    CalendarClient.calendar = cal.CalendarApi(client);
   //  });
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
     800: Color(0xff7b39ed),
     900: Color(0xff7b39ed),
   });
+
+  
 
   @override
   Widget build(BuildContext context) {
