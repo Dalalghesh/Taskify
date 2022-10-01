@@ -84,7 +84,7 @@ class _AddList extends State<AddList> {
   late String u;
   late final String documentId;
   String selectedValue = '';
-  bool? isChecked = false;
+  bool isChecked = false;
   late String listt;
   late String category;
 
@@ -231,9 +231,9 @@ class _AddList extends State<AddList> {
                       controlAffinity: ListTileControlAffinity.leading,
                       title: Text("Do you want it to be shared?"),
                       value: isChecked,
-                      onChanged: (bool? value) {
+                      onChanged: (value) {
                         setState(() {
-                          isChecked = value;
+                          isChecked = value!;
                         });
                         print(isChecked);
                         // How did value change to true at this point?
@@ -257,8 +257,8 @@ class _AddList extends State<AddList> {
                                 .add({
                               'CategoryName': selectCategory,
                               'List': listt,
-                              'UID': FirebaseAuth.instance.currentUser!.email,
-                              'isPrivate': isChecked,
+                              'UID': [FirebaseAuth.instance.currentUser!.email],
+                              'isPrivate': isChecked ? false : true,
                             }).then((value) => listId = value.id);
                             ListController.clear();
 
