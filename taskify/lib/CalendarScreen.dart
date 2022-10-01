@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/controller/UserController.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:taskify/screens/Task_Detail.dart';
+import 'package:taskify/Screens/Task_Detail.dart';
 import 'package:taskify/screens/todo_list_screen.dart';
 import 'package:taskify/utils/app_colors.dart';
 import "package:googleapis_auth/auth_io.dart";

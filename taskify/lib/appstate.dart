@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/androidpublisher/v3.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/models/task_list.dart';
@@ -12,8 +13,9 @@ import 'models/tasks.dart';
 class AppState extends ChangeNotifier {
   List<dynamic> categories = [];
   bool categoriesLoading = true;
+
   clearTask() {
-    tasksList.clear();
+    taskList.clear();
     notifyListeners();
   }
 
@@ -204,9 +206,9 @@ class AppState extends ChangeNotifier {
         .get();
     for (int i = 0; i < res.docs.length; i++) {
       DateTime date = res.docs[i]['Deadline'].toDate();
-      // var date1 =  DateFormat("yyyy-MM-dd").format(date);
+      var date1 = DateFormat("yyyy-MM-dd").format(date);
       toHighlight.add(date);
-      // print(date1);
+      //print(date1);
 
       Tasksss tasks = Tasksss(
           id: res.docs[i].id,
@@ -216,7 +218,7 @@ class AppState extends ChangeNotifier {
           list: res.docs[i]['ListName'],
           description: res.docs[i]['description'],
           value: false,
-          deadline: Timestamp.fromDate(date));
+          deadline: date1);
 
       allTasks.add(tasks);
 
