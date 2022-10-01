@@ -20,8 +20,14 @@ import 'package:taskify/models/users.dart';
 class SendInvitationForm extends StatefulWidget {
   String category;
   String list;
-  SendInvitationForm({Key? key, required this.category, required this.list})
-      : super(key: key);
+  String listId;
+
+  SendInvitationForm({
+    Key? key,
+    required this.category,
+    required this.list,
+    required this.listId,
+  }) : super(key: key);
 
   @override
   State<SendInvitationForm> createState() => _SendInvitationFormState();
@@ -55,9 +61,8 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       if (validate ?? false) {
         _formKey.currentState?.save();
         print(email.toString());
-        await context
-            .read<InvitaitonProvider>()
-            .sendInvitation(email!, widget.category, widget.list);
+        await context.read<InvitaitonProvider>().sendInvitation(
+            email!, widget.category, widget.list, widget.listId);
         // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
         CoolAlert.show(
           context: context,

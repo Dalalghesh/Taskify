@@ -78,12 +78,37 @@ class SingleInvitaionItem extends StatelessWidget {
                                   [invitationModel.category])
                             }, SetOptions(merge: true));
 
-                      await FirebaseFirestore.instance.collection('List').add({
-                        'CategoryName': invitationModel.category,
-                        'List': invitationModel.list,
-                        'UID': FirebaseAuth.instance.currentUser!.email,
-                        'isPrivate': false,
-                      });
+                      // await FirebaseFirestore.instance.collection('List').add({
+                      //   'CategoryName': invitationModel.category,
+                      //   'List': invitationModel.list,
+                      //   'UID': FirebaseAuth.instance.currentUser!.email,
+                      //   'isPrivate': false,
+                      // });
+
+                      ///////////////////////////////////
+                      await FirebaseFirestore.instance
+                          .collection('List')
+                          .doc(invitationModel.listId)
+                          .set({
+                        'UID': FieldValue.arrayUnion(
+                            [FirebaseAuth.instance.currentUser!.email])
+                      }, SetOptions(merge: true));
+
+                      var res = await FirebaseFirestore.instance
+                          .collection('tasks')
+                          .where('ListName', isEqualTo: invitationModel.list)
+                          .get();
+                      for (int i = 0; i < res.docs.length; i++) {
+                        await FirebaseFirestore.instance
+                            .collection('tasks')
+                            .doc(res.docs[i].id)
+                            .set({
+                          'UID': FieldValue.arrayUnion(
+                              [FirebaseAuth.instance.currentUser!.email])
+                        }, SetOptions(merge: true));
+                      }
+                      /////////////////////////////
+                      ///
                       CoolAlert.show(
                         context: context,
                         type: CoolAlertType.success,

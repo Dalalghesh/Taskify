@@ -6,15 +6,16 @@ class InvitationModel {
   String recivereEmail;
   String category;
   String list;
+  String listId;
   String status;
-
   InvitationModel(
       {required this.recivereEmail,
       required this.senderEmail,
       this.id,
       required this.status,
       required this.category,
-      required this.list});
+      required this.list,
+      required this.listId});
   static const collectionName = "invitations";
 
   Map<String, dynamic> getMap() => {
@@ -22,7 +23,8 @@ class InvitationModel {
         "recieverEmail": recivereEmail,
         "status": 'pending',
         "category": category,
-        "list": list
+        "list": list,
+        "listId": listId
       };
   static List<InvitationModel> firebaseToObject(
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
@@ -37,6 +39,7 @@ class InvitationModel {
           status: doc.data()["status"],
           category: doc.data()["category"],
           list: doc.data()["list"],
+          listId: doc.data()["listId"],
         ),
       );
     }

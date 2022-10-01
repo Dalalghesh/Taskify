@@ -19,7 +19,6 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getList();
   }
@@ -99,6 +98,12 @@ class _TodoListState extends State<TodoList> {
                                 ),
                                 provider.list[index].private
                                     ? IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.share,
+                                            color: Color.fromARGB(
+                                                0, 117, 117, 117)),
+                                      )
+                                    : IconButton(
                                         onPressed: () {
                                           Navigator.push(
                                               context,
@@ -109,17 +114,13 @@ class _TodoListState extends State<TodoList> {
                                                             .list[index].list),
                                                         category:
                                                             widget.category,
+                                                        listId: provider
+                                                            .list[index].docId,
                                                       )));
                                         },
                                         icon: Icon(Icons.share,
                                             color: Colors.grey.shade600),
                                       )
-                                    : IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.share,
-                                            color: Color.fromARGB(
-                                                0, 117, 117, 117)),
-                                      ),
                               ],
                             ),
                           ),

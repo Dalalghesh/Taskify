@@ -247,7 +247,7 @@ class _AddTask extends State<AddTask> {
                               color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
                           items: provider.taskList.map((value) {
                             return DropdownMenuItem<String>(
-                              value: value.list.toString(),
+                              value: value.docId,
                               child: Text(
                                 value.list,
                               ),
@@ -297,21 +297,19 @@ class _AddTask extends State<AddTask> {
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 223, 123, 123),
-                                fillInColor:
-                                    Color.fromARGB(255, 243, 207, 207)),
+                                fillInColor: Color.fromARGB(255, 243, 89, 89)),
                             AnimatedRadioButtonItem(
                                 label: "Medium",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 223, 180, 123),
-                                fillInColor:
-                                    Color.fromARGB(255, 238, 211, 153)),
+                                fillInColor: Color.fromARGB(255, 241, 194, 92)),
                             AnimatedRadioButtonItem(
                                 label: "Low",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 152, 224, 154),
-                                fillInColor: Color.fromARGB(255, 213, 241, 228))
+                                fillInColor: Color.fromARGB(255, 54, 252, 159))
                           ],
                           onChanged: (value) {
                             setState(() {
@@ -407,14 +405,22 @@ class _AddTask extends State<AddTask> {
                               child: ElevatedButton(
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
+                                final ress = await FirebaseFirestore.instance
+                                    .collection('List')
+                                    .doc(docid)
+                                    .get();
+                                List<dynamic> emails = [];
+                                String listName;
+                                emails = ress['UID'];
+                                listName = ress['List'];
+
                                 await FirebaseFirestore.instance
                                     .collection('tasks')
                                     .add({
                                   'CategoryName': selectCategory1,
-                                  'UID':
-                                      FirebaseAuth.instance.currentUser!.email,
+                                  'UID': emails,
                                   'Task': taskk,
-                                  'ListName': docid,
+                                  'ListName': listName,
                                   'Priority': myVar == 0
                                       ? 'High'
                                       : myVar == 1
@@ -422,6 +428,7 @@ class _AddTask extends State<AddTask> {
                                           : 'Low',
                                   'Deadline': dateTime,
                                   'description': description,
+                                  'status': 'pending',
                                 });
 
                                 final snackBar = SnackBar(
