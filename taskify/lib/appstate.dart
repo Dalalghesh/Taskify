@@ -12,10 +12,6 @@ import 'models/tasks.dart';
 class AppState extends ChangeNotifier {
   List<dynamic> categories = [];
   bool categoriesLoading = true;
-  clearTask() {
-    tasksList.clear();
-    notifyListeners();
-  }
 
   getCategories() async {
     categoriesLoading = true;
@@ -82,7 +78,7 @@ class AppState extends ChangeNotifier {
           list: res.docs[i]['ListName'],
           description: res.docs[i]['description'],
           value: false,
-          deadline: res.docs[i]['Deadline']);
+          deadline: res.docs[i]['Deadline'].toString());
 
       tasksList.add(taskss);
 
@@ -90,6 +86,11 @@ class AppState extends ChangeNotifier {
     }
     // print(tasks.length);
     tasksLoading = false;
+    notifyListeners();
+  }
+
+  clearTask() {
+    tasksList.clear();
     notifyListeners();
   }
 
@@ -119,7 +120,7 @@ class AppState extends ChangeNotifier {
           list: res.docs[i]['ListName'],
           description: res.docs[i]['description'],
           value: false,
-          deadline: res.docs[i]['Deadline']);
+          deadline: res.docs[i]['Deadline'].toString());
 
       completedtasksList.add(taskss);
 
@@ -204,9 +205,9 @@ class AppState extends ChangeNotifier {
         .get();
     for (int i = 0; i < res.docs.length; i++) {
       DateTime date = res.docs[i]['Deadline'].toDate();
-      // var date1 =  DateFormat("yyyy-MM-dd").format(date);
+      var date1 = DateFormat("yyyy-MM-dd").format(date);
       toHighlight.add(date);
-      // print(date1);
+      print(date1);
 
       Tasksss tasks = Tasksss(
           id: res.docs[i].id,
@@ -216,7 +217,7 @@ class AppState extends ChangeNotifier {
           list: res.docs[i]['ListName'],
           description: res.docs[i]['description'],
           value: false,
-          deadline: Timestamp.fromDate(date));
+          deadline: date1);
 
       allTasks.add(tasks);
 
