@@ -431,23 +431,6 @@ class _AddTask extends State<AddTask> {
                                   'status': 'pending',
                                 });
 
-                                // await FirebaseFirestore.instance
-                                //     .collection('tasks')
-                                //     .add({
-                                //   'CategoryName': selectCategory1,
-                                //   'UID':
-                                //       FirebaseAuth.instance.currentUser!.email,
-                                //   'Task': taskk,
-                                //   'ListName': docid,
-                                //   'Priority': myVar == 0
-                                //       ? 'High'
-                                //       : myVar == 1
-                                //           ? 'Medium'
-                                //           : 'Low',
-                                //   'Deadline': dateTime,
-                                //   'description': description,
-                                // });
-
                                 final snackBar = SnackBar(
                                     content: Text("Created successfully"));
 
