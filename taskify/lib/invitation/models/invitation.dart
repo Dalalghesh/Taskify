@@ -34,8 +34,8 @@ class InvitationModel {
       invitations.add(
         InvitationModel(
           id: doc.id,
-          senderEmail: doc.data()["senderEmail"],
-          recivereEmail: doc.data()["recieverEmail"],
+          senderEmail: doc.data()["senderEmail"].toLowerCase(),
+          recivereEmail: doc.data()["recieverEmail"].toLowerCase(),
           status: doc.data()["status"],
           category: doc.data()["category"],
           list: doc.data()["list"],

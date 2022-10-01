@@ -155,7 +155,7 @@ class SingleInvitaionItem extends StatelessWidget {
                               .doc(invitationModel.id)
                               .update({'status': 'rejected'});
 
-//Util.routeToWidget(context, RecievedInvitations());
+                          Util.routeToWidget(context, NavBar(tabs: 0));
                         });
                   },
                   icon: Icon(
