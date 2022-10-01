@@ -80,7 +80,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       CoolAlert.show(
         context: context,
         type: CoolAlertType.error,
-        text: "A user with that email does not exists",
+        text:  "You can't invite yourself!",
         confirmBtnColor: const Color(0xff7b39ed),
       );
     }
