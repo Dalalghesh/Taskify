@@ -1,9 +1,15 @@
-class Tasksss{
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class TasksModel {
+  static List<Tasksss> tasks = [];
+}
+
+class Tasksss {
   String id;
   String category;
   String list;
   String priority;
-  String deadline;
+  var deadline;
   String description;
   String task;
   bool value;
@@ -17,6 +23,5 @@ class Tasksss{
     required this.deadline,
     required this.task,
     required this.value,
-});
-
+  });
 }

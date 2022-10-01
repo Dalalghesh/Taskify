@@ -12,7 +12,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'firebase_options.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 
-
 import 'package:taskify/onboarding/onboarding_screen.dart';
 // #7b39ed - primary color
 
@@ -21,11 +20,12 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   var _clientID = new ClientId(Secret.getId(), "");
   const _scopes = const [cal.CalendarApi.calendarScope];
- // await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
- //    CalendarClient.calendar = cal.CalendarApi(client);
- //  });
+  // await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
+  //    CalendarClient.calendar = cal.CalendarApi(client);
+  //  });
   runApp(MyApp());
 }
+
 void prompt(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
                 headline4:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 subtitle1: TextStyle(
-                  color: Colors.grey.shade600,
+                  color: Color.fromARGB(255, 0, 0, 0),
                 )),
             appBarTheme: AppBarTheme(
                 backgroundColor: Colors.transparent,
@@ -97,9 +97,12 @@ class MyApp extends StatelessWidget {
 }
 
 class Secret {
-  static const ANDROID_CLIENT_ID = "750046757369-80s1uahk2ljsin59u7rbctgvt2vi9q0f.apps.googleusercontent.com";
-  static const IOS_CLIENT_ID = "750046757369-igku66q499v27k16qnjr1p7vrvppgi85.apps.googleusercontent.com";
-  static String getId() => Platform.isAndroid ? Secret.ANDROID_CLIENT_ID : Secret.IOS_CLIENT_ID;
+  static const ANDROID_CLIENT_ID =
+      "750046757369-80s1uahk2ljsin59u7rbctgvt2vi9q0f.apps.googleusercontent.com";
+  static const IOS_CLIENT_ID =
+      "750046757369-igku66q499v27k16qnjr1p7vrvppgi85.apps.googleusercontent.com";
+  static String getId() =>
+      Platform.isAndroid ? Secret.ANDROID_CLIENT_ID : Secret.IOS_CLIENT_ID;
 }
 
 class CalendarClient {
@@ -108,25 +111,7 @@ class CalendarClient {
   static var calendar;
 
   // For creating a new calendar event
-   insert({
-    required String title,
-    required String description,
-    required String location,
-    required List<cal.EventAttendee> attendeeEmailList,
-    required bool shouldNotifyAttendees,
-    required bool hasConferenceSupport,
-    required DateTime startTime,
-    required DateTime endTime,
-
-  }) async {
-
-
-  }
-  }
-
-  // For patching an already-created calendar event
-   modify({
-    required String id,
+  insert({
     required String title,
     required String description,
     required String location,
@@ -136,6 +121,20 @@ class CalendarClient {
     required DateTime startTime,
     required DateTime endTime,
   }) async {}
+}
 
-  // For deleting a calendar event
-  Future<void> delete(String eventId, bool shouldNotify) async {}
+// For patching an already-created calendar event
+modify({
+  required String id,
+  required String title,
+  required String description,
+  required String location,
+  required List<cal.EventAttendee> attendeeEmailList,
+  required bool shouldNotifyAttendees,
+  required bool hasConferenceSupport,
+  required DateTime startTime,
+  required DateTime endTime,
+}) async {}
+
+// For deleting a calendar event
+Future<void> delete(String eventId, bool shouldNotify) async {}

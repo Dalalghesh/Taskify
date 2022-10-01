@@ -53,13 +53,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           const SizedBox(height: 10.0),
                           Text(
                             contents[index].title ?? "",
-
-                            style: Theme.of(context).textTheme.headline4,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 27,
+                            ),
+                            //  Theme.of(context).textTheme.headline4,
+                            textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 10.0),
                           Text(
                             contents[index].description ?? "",
-                            style: Theme.of(context).textTheme.headline6,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
+                            //    style: Theme.of(context).textTheme.headline6,
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -109,7 +118,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           final screenToOpen =
                               FirebaseAuth.instance.currentUser == null
                                   ? const LoginScreen()
-                                  :  NavBar(tabs: 0,);
+                                  : NavBar(
+                                      tabs: 0,
+                                    );
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -124,8 +135,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         );
                       },
                       child: Text(
+                        style: TextStyle(fontSize: 18),
                         index == contents.length - 1 ? "Continue" : "Next",
-                      //  style: Theme.of(context).textTheme.headline3,
+                        //  style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
                   );
@@ -142,19 +154,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 List<IntroContent> contents = [
   IntroContent(
       imageName: "assets/images/taking-notes-amico.png",
-      title: "Create Your Task",
+      title: "\nCreate Your Task",
       description:
-          "Create your task to make sure every task you have can completed on time"),
+          "Add your task to ensure that every task you have is completed on time"),
   IntroContent(
       imageName: "assets/images/to-do-list-cuate.png",
-      title: "Manage your Daily Task",
+      title: "\nManage your Daily Task",
       description:
           "By using this application you will be able to manage your daily tasks"),
   IntroContent(
     imageName: "assets/images/writing-a-letter-rafiki.png",
-    title: "Checklist Finished Task",
+    title: "\nChecklist Finished Task",
     description:
-        "If you completed your task, so you can view the result you work for each day",
+        "If you complete your task, you can view your work result every day",
   )
 ];
 

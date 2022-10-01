@@ -6,28 +6,34 @@ import '../widget/send_invitation_form.dart';
 class SendInvitation extends StatefulWidget {
   final String category;
   final String list;
+  final String listId;
+
   static const routeName = "/Send-notfication";
-  const SendInvitation({Key? key, required this.list, required this.category}) : super(key: key);
+  const SendInvitation(
+      {Key? key,
+      required this.list,
+      required this.category,
+      required this.listId})
+      : super(key: key);
 
   @override
   State<SendInvitation> createState() => _SendInvitationState();
 }
 
-
 class _SendInvitationState extends State<SendInvitation> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchEmails(context);
   }
-  fetchEmails(context)async{
+
+  fetchEmails(context) async {
     await Future.delayed(Duration(milliseconds: 200));
     Provider.of<InvitaitonProvider>(context, listen: false).getUsersEmail();
   }
-  @override
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +57,8 @@ class _SendInvitationState extends State<SendInvitation> {
             Text(
               'Invite Friend ',
               style: Theme.of(context).textTheme.headline4,
-            ),SizedBox(
+            ),
+            SizedBox(
               height: 10,
             ),
             Align(
@@ -71,16 +78,17 @@ class _SendInvitationState extends State<SendInvitation> {
             const SizedBox(
               height: 10,
             ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-             SendInvitationForm(
-              category: widget.category, list: widget.list
-            )
+            // Text(
+            //   '',
+            //   style: Theme.of(context).textTheme.subtitle1,
+            // ),
+            // const SizedBox(
+            //   height: 8,
+            // ),
+            SendInvitationForm(
+                category: widget.category,
+                list: widget.list,
+                listId: widget.listId)
           ],
         ),
       ),
