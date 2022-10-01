@@ -27,7 +27,6 @@ class Add_Category extends StatefulWidget {
 }
 
 class _Add_Category extends State<Add_Category> {
-  //const SendInstructionsView({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>(); //key for form
   final _firestore = FirebaseFirestore.instance;
   String Category = '';
@@ -52,7 +51,6 @@ class _Add_Category extends State<Add_Category> {
     }, SetOptions(merge: true));
   }
 
-// puch notifications
   void initState() {
     super.initState();
     getCategory();
@@ -60,18 +58,7 @@ class _Add_Category extends State<Add_Category> {
     FirebaseMessaging.onMessage.listen((event) {
       print('FCM ,Message received');
     });
-    //storeNotificationToken();
   }
-
-  /*bool isLoding = false;
- 
- storeNotificationToken()async{
-  String? token = await FirebaseMessaging.instance.getToken();
-  FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set(
-    {
-      'token':token
-    },SetOptions(merge: true));
- }*/
 
   @override
   Widget build(BuildContext context) {
@@ -131,25 +118,32 @@ class _Add_Category extends State<Add_Category> {
                     height: 5,
                   ),
                   TextFormField(
+                      maxLength: 15,
                       textCapitalization: TextCapitalization.words,
                       controller: categoryController,
                       onChanged: (value) {
                         Category = value;
                       },
                       decoration: InputDecoration(
-                        hintText: 'Ex: Work',
+                        hintText: 'Work',
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10,
                           horizontal: 10,
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty)
-                          return "Please enter Category name";
-                        else if (categoriesList.contains(value)) {
+                        final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+
+                        if (value!.isEmpty ||
+                            value == null ||
+                            value.trim() == '')
+                          return "Please enter category name";
+                        else if (!regExp.hasMatch(value.trim())) {
+                          return 'You cannot enter special characters !@#\%^&*()';
+                        } else if (categoriesList.contains(value))
                           return "This category already exist";
-                        }
-                        return null;
+                        else
+                          return null;
                       },
                       style: Theme.of(context).textTheme.subtitle1),
                   SizedBox(
@@ -160,8 +154,6 @@ class _Add_Category extends State<Add_Category> {
                       Expanded(
                           child: ElevatedButton(
                         onPressed: () {
-                          print(Category);
-
                           //navigate to check email view
                           if (formKey.currentState!.validate()) {
                             CoolAlert.show(
@@ -174,19 +166,14 @@ class _Add_Category extends State<Add_Category> {
                             createCategory();
                             categoriesList.add(Category);
                             categoryController.clear();
+                            ///////////////////////////////////
+                            Util.routeToWidget(context, NavBar(tabs: 0));
+                            ///////////////////////////////////
 
-                            //           _firestore.collection('Category').add({
-                            //           'Name': Category!,
-                            // }
-                            // );
-
-                            //Util.routeToWidget(context, InviteFriend());
-                            //_scaffoldKey.currentState!.showSnackBar(snackBar);
                           }
-                          //getCategory();
                         },
                         child: Text(
-                          'Create',
+                          'ADD',
                           style: TextStyle(fontSize: 20),
                         ),
                       )),
@@ -197,5 +184,10 @@ class _Add_Category extends State<Add_Category> {
             ),
           ),
         ));
+  }
+
+  void route() {
+    //route it to home page
+    Util.routeToWidget(context, NavBar(tabs: 0));
   }
 }

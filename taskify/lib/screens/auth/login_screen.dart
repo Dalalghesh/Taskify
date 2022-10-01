@@ -1,5 +1,6 @@
 import 'package:taskify/homePage.dart';
-import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
+import 'package:taskify/onboarding/onboarding_screen.dart';
+import 'package:taskify/util.dart';
 import 'package:taskify/utils/validators.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:taskify/widgets/primary_text_field.dart';
@@ -32,52 +33,86 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leadingWidth: 50,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Util.routeToWidget(context, OnboardingScreen());
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+          )
+        ],
+      ),
       body: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: AppColors.deepPurple,
-          ),
-          const SafeArea(child: CustomHeader(text: 'Log In.')),
-          Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.135),
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: AppColors.whiteshade,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
-            ),
+            padding: const EdgeInsets.all(16.0),
             child: Form(
               key: formKey,
               child: ListView(
-                padding: const EdgeInsets.all(16),
+                //padding: const EdgeInsets.all(16),
                 children: [
-                  SizedBox(
-                    height: 200,
-                    width: double.infinity,
-                    child:
-                        Center(child: Image.asset("assets/images/login.jpeg")),
+                  Text(
+                    'Sign In',
+                    style: Theme.of(context).textTheme.headline4,
                   ),
-                  const SizedBox(height: 24),
-                  PrimaryTextField(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        "assets/images/login.jpeg",
+                        height: 250,
+                        width: 250,
+                      )),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  //  const SizedBox(height: 24),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Email:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
                     controller: _emailController,
-                    title: "Email",
-                    hintText: "Enter Email",
+                    decoration: InputDecoration(
+                      hintText: "John@gmail.com",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     validator: Validators.emailValidator,
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 16),
-                  PrimaryTextField(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Text(
+                      'Password:',
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  TextFormField(
                     validator: Validators.passwordValidator,
-                    title: "Password",
                     maxLines: 1,
                     obscureText: true,
                     textInputAction: TextInputAction.done,
-                    hintText: "At least 8 Character",
+                    decoration: InputDecoration(
+                      hintText: "At least 8 Character",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
                     controller: _passwordController,
                   ),
                   const SizedBox(height: 4),
@@ -97,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             "Forgot Password?",
                             style: TextStyle(
-                              color: AppColors.deepPurple.withOpacity(0.7),
+                              color: AppColors.deepPurple,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -129,7 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: TextSpan(
                             text: "Don't have an account? ",
                             style: TextStyle(
-                              color: AppColors.deepPurple.withOpacity(0.7),
+                              color:
+                                  Color.fromARGB(255, 0, 0, 0).withOpacity(0.7),
                               fontWeight: FontWeight.w500,
                             ),
                             children: const [
