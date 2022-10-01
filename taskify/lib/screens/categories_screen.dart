@@ -102,17 +102,25 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               print('$d $type');
 
                               return Container(
+                                padding: EdgeInsets.fromLTRB(5, 0, 5, 12),
+                                height: 40,
+                                width: 34,
                                 decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(5.0),
+
                                   color: type == 'High'
                                       ? Color.fromARGB(255, 223, 123, 123)
                                       : type == 'Medium'
                                           ? Color.fromARGB(255, 241, 207, 65)
                                           : Color.fromARGB(255, 152, 224, 154),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8.0),
-                                  ),
+                                  // borderRadius: BorderRadius.all(
+                                  //   Radius.circular(8.0),
+                                  // ),
                                 ),
                                 child: Center(
+                                  widthFactor: 10,
+                                  heightFactor: 10,
                                   child: Text(
                                     '${day.day}',
                                     style: const TextStyle(color: Colors.white),
@@ -132,7 +140,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           format = _format;
                         });
                       },
-                      startingDayOfWeek: StartingDayOfWeek.monday,
+                      startingDayOfWeek: StartingDayOfWeek.sunday,
                       daysOfWeekVisible: true,
 
                       //Day Changed on select
