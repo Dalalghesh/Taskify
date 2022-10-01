@@ -242,7 +242,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
+        email: email.toLowerCase(),
         password: password,
       );
       final name = "$firstname $lastname";
@@ -253,7 +253,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       await userCredential.user!.updateDisplayName(name);
       final uid = userCredential.user!.uid;
       final userData = {
-        'email': email,
+        'email': email.toLowerCase(),
         'firstName': firstname,
         'lastName': lastName,
         'gender': gender,

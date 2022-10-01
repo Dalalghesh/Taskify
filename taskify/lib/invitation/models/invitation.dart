@@ -19,8 +19,8 @@ class InvitationModel {
   static const collectionName = "invitations";
 
   Map<String, dynamic> getMap() => {
-        "senderEmail": senderEmail,
-        "recieverEmail": recivereEmail,
+        "senderEmail": senderEmail.toLowerCase(),
+        "recieverEmail": recivereEmail.toLowerCase(),
         "status": 'pending',
         "category": category,
         "list": list,

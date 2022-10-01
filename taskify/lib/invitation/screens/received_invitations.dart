@@ -60,8 +60,10 @@ class RecievedInvitations extends StatelessWidget {
                             invitationModel: InvitationModel(
                               id: invitation[index].id,
                               listId: invitation[index].listId,
-                              recivereEmail: invitation[index].recivereEmail,
-                              senderEmail: invitation[index].senderEmail,
+                              recivereEmail:
+                                  invitation[index].recivereEmail.toLowerCase(),
+                              senderEmail:
+                                  invitation[index].senderEmail.toLowerCase(),
                               status: invitation[index].status,
                               category: invitation[index].category,
                               list: invitation[index].list,
