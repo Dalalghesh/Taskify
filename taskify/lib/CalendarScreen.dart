@@ -59,24 +59,27 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       print('$d $type');
 
                       return Container(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 12),
-                        height: 40,
-                        width: 34,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: type == 'High'
-                              ? Color.fromARGB(255, 223, 123, 123)
-                              : type == 'Medium'
-                                  ? Color.fromARGB(255, 241, 207, 65)
-                                  : Color.fromARGB(255, 152, 224, 154),
-                        ),
-                        child: Center(
-                          widthFactor: 10,
-                          heightFactor: 10,
-                          child: Text(
-                            '${day.day}',
-                            style: const TextStyle(color: Colors.white),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        height: 46,
+                        width: 33,
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: type == 'High'
+                                ? Color.fromARGB(255, 223, 123, 123)
+                                : type == 'Medium'
+                                    ? Color.fromARGB(255, 241, 207, 65)
+                                    : Color.fromARGB(255, 152, 224, 154),
+                          ),
+                          child: Center(
+                            widthFactor: 10,
+                            heightFactor: 10,
+                            child: Text(
+                              '${day.day}',
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       );
@@ -225,9 +228,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                                         .filteredTasks[
                                                                     index],
                                                               )));
-                                                  //    DateTime date = provider.completedtasksList[index].deadline.toDate();
-                                                  // var date1 =   DateFormat("yyyy-MM-dd").format(date);
-                                                  //   print(date1);
                                                 },
                                                 child: Container(
                                                   height: 50,
@@ -241,12 +241,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                       bottom: 5),
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
-                                                      // boxShadow: [
-                                                      //   BoxShadow(
-                                                      //     color: Colors.grey,
-                                                      //     blurRadius: 3,
-                                                      //   )
-                                                      // ],
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8)),

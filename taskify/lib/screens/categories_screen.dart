@@ -105,7 +105,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               return Container(
                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                 height: 36,
-                                width: 34,
+                                width: 33,
                                 child: Container(
                                   padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
                                   decoration: BoxDecoration(
