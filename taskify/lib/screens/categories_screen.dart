@@ -86,12 +86,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     TableCalendar(
                       focusedDay: focusedDay,
                       firstDay: DateTime(1990),
-                      lastDay: DateTime(2050),
+                      lastDay: DateTime(2024),
                       calendarBuilders: CalendarBuilders(
                         defaultBuilder: (context, day, focusedDay) {
                           for (DateTime d in provider.toHighlight) {
@@ -99,7 +99,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 day.month == d.month &&
                                 day.year == d.year) {
                               String type = provider.getColorofDate(d);
-                              print('$d $type');
 
                               return Container(
                                 decoration: BoxDecoration(
@@ -107,7 +106,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                       ? Color.fromARGB(255, 223, 123, 123)
                                       : type == 'Medium'
                                           ? Color.fromARGB(255, 241, 207, 65)
-                                          : Color.fromARGB(255, 152, 224, 154),
+                                          : type == 'Low'
+                                              ? Color.fromARGB(
+                                                  255, 152, 224, 154)
+                                              : Color.fromARGB(0, 241, 206, 65),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(8.0),
                                   ),
@@ -239,12 +241,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                             color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(12),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 3,
-                                                color: Colors.grey,
-                                              ),
-                                            ],
+                                            // boxShadow: [
+                                            //   BoxShadow(
+                                            //     blurRadius: 3,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ],
                                           ),
                                           alignment: Alignment.center,
                                           child: Text(
@@ -279,14 +281,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       Center(
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: context.theme.canvasColor,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black,
-                                    blurRadius: 2,
-                                    spreadRadius: .1)
-                              ]),
+                            borderRadius: BorderRadius.circular(4),
+                            color: context.theme.canvasColor,
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //       color: Colors.black,
+                            //       blurRadius: 2,
+                            //       spreadRadius: .1)
+                            // ]
+                          ),
                           margin: EdgeInsets.only(
                               top: 10, left: 10, right: 10, bottom: 20),
                           child: Column(
@@ -353,12 +356,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                       bottom: 5),
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.grey,
-                                                          blurRadius: 3,
-                                                        )
-                                                      ],
+                                                      // boxShadow: [
+                                                      //   BoxShadow(
+                                                      //     color: Colors.grey,
+                                                      //     blurRadius: 3,
+                                                      //   )
+                                                      // ],
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8)),

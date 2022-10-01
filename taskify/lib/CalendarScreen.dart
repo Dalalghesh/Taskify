@@ -48,7 +48,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             TableCalendar(
               focusedDay: focusedDay,
               firstDay: DateTime(1990),
-              lastDay: DateTime(2050),
+              lastDay: DateTime(2024),
               calendarBuilders: CalendarBuilders(
                 defaultBuilder: (context, day, focusedDay) {
                   for (DateTime d in provider.toHighlight) {

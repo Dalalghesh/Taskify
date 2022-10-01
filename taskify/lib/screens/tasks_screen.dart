@@ -44,23 +44,6 @@ class _TaskScreenState extends State<TaskScreen> {
     // TODO: implement build
 
     return buildColumnNew(context, provider);
-
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     // elevation: 0,
-    //     backgroundColor: Colors.white,
-    //     centerTitle: true,
-    //     title: Text(widget.list, style: TextStyle(color: Colors.black, fontSize: 18),),
-    //   ),
-    //
-    //   body:buildColumnNew(context, provider)
-    //   // body:buildColumnOld(context, provider)
-    //
-    //
-    //
-    //
-    // );
-    // throw UnimplementedError();
   }
 
   Column buildColumnOld(BuildContext context, AppState provider) {
@@ -89,12 +72,12 @@ class _TaskScreenState extends State<TaskScreen> {
                               left: 20, right: 20, top: 5, bottom: 5),
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 3,
-                                )
-                              ],
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.grey,
+                              //     blurRadius: 3,
+                              //   )
+                              // ],
                               borderRadius: BorderRadius.circular(8)),
                           //alignment: Alignment.center,
                           child: Row(
@@ -162,12 +145,12 @@ class _TaskScreenState extends State<TaskScreen> {
                               left: 20, right: 20, top: 5, bottom: 5),
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 3,
-                                )
-                              ],
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.grey,
+                              //     blurRadius: 3,
+                              //   )
+                              // ],
                               borderRadius: BorderRadius.circular(8)),
                           //alignment: Alignment.center,
                           child: Row(
@@ -243,7 +226,7 @@ class _TaskScreenState extends State<TaskScreen> {
                             width: MediaQuery.of(context).size.width * 0.45,
                             // height: 100,
                             decoration: BoxDecoration(
-                              border: Border.all(width: 1),
+                              //  border: Border.all(width: 1),
                               shape: BoxShape.rectangle,
                               // You can use like this way or like the below line
                               borderRadius: new BorderRadius.circular(20.0),
@@ -259,7 +242,7 @@ class _TaskScreenState extends State<TaskScreen> {
                             width: MediaQuery.of(context).size.width * 0.45,
                             // height: 100,
                             decoration: BoxDecoration(
-                              border: Border.all(width: 1),
+                              //  border: Border.all(width: 1),
                               shape: BoxShape.rectangle,
                               // You can use like this way or like the below line
                               borderRadius: new BorderRadius.circular(20.0),
@@ -322,12 +305,12 @@ class _TaskScreenState extends State<TaskScreen> {
                                                 bottom: 5),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 3,
-                                                  )
-                                                ],
+                                                // boxShadow: const [
+                                                //   BoxShadow(
+                                                //     color: Colors.grey,
+                                                //     blurRadius: 3,
+                                                //   )
+                                                // ],
                                                 borderRadius:
                                                     BorderRadius.circular(8)),
                                             //alignment: Alignment.center,
@@ -377,7 +360,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                       textAlign: TextAlign.left,
                                                     ),
                                                     Text(
-                                                      '${dateOnly} ${isAfterDeadLine ? " - (late)" : ""}',
+                                                      '${dateOnly} ${isAfterDeadLine ? " - Late" : ""}',
                                                       style: TextStyle(
                                                         color: isAfterDeadLine
                                                             ? Colors.red
@@ -436,7 +419,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   context: context,
                                                   type: CoolAlertType.confirm,
                                                   text:
-                                                      'Do you want to convert selected tasks to Completed?',
+                                                      'Do you want to mark selected tasks as completed?',
                                                   confirmBtnText: 'Yes',
                                                   cancelBtnText: 'No',
                                                   onCancelBtnTap: () {
@@ -448,7 +431,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         type: CoolAlertType
                                                             .success,
                                                         text:
-                                                            "List Added successfully to Completed !",
+                                                            "Task maked as completed successfully!",
                                                         confirmBtnColor:
                                                             const Color(
                                                                 0xff7b39ed),
@@ -483,7 +466,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                           padding: EdgeInsets.symmetric(
                                               vertical: 15.0),
                                           child: Text(
-                                            'Convert to Completed',
+                                            'Mark as completed',
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
@@ -523,12 +506,12 @@ class _TaskScreenState extends State<TaskScreen> {
                                           bottom: 5),
                                       decoration: BoxDecoration(
                                           color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey,
-                                              blurRadius: 3,
-                                            )
-                                          ],
+                                          // boxShadow: [
+                                          //   BoxShadow(
+                                          //     color: Colors.grey,
+                                          //     blurRadius: 3,
+                                          //   )
+                                          // ],
                                           borderRadius:
                                               BorderRadius.circular(8)),
                                       //alignment: Alignment.center,

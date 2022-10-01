@@ -159,7 +159,7 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+                            final regExp = RegExp(r'^[a-zA-Z0-9 ]+$');
 
                             if (value!.isEmpty ||
                                 value == null ||
@@ -297,21 +297,24 @@ class _AddTask extends State<AddTask> {
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 223, 123, 123),
-                                fillInColor: Color.fromARGB(255, 243, 89, 89)),
+                                fillInColor:
+                                    Color.fromARGB(255, 243, 207, 207)),
                             AnimatedRadioButtonItem(
                                 label: "Medium",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 223, 180, 123),
-                                fillInColor: Color.fromARGB(255, 241, 194, 92)),
+                                fillInColor:
+                                    Color.fromARGB(255, 238, 211, 153)),
                             AnimatedRadioButtonItem(
                                 label: "Low",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 152, 224, 154),
-                                fillInColor: Color.fromARGB(255, 54, 252, 159))
+                                fillInColor: Color.fromARGB(255, 213, 241, 228))
                           ],
                           onChanged: (value) {
+                            print(value);
                             setState(() {
                               myVar = value;
                             });
@@ -375,15 +378,16 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+                            // final regExp = RegExp(r'^[a-zA-Z0-9]+$');
 
                             if (value!.isEmpty ||
                                 value == null ||
                                 value.trim() == '')
                               return "Please enter a description";
-                            else if (!regExp.hasMatch(value.trim())) {
-                              return 'You cannot enter special characters !@#\%^&*()';
-                            } else if (value.length <= 2)
+                            // else if (!regExp.hasMatch(value.trim())) {
+                            //   return 'You cannot enter special characters !@#\%^&*()';
+                            //  }
+                            else if (value.length <= 2)
                               return "Please enter at least 3 characters";
 
                             return null;
@@ -455,7 +459,7 @@ class _AddTask extends State<AddTask> {
                       ),
 
                       SizedBox(
-                        height: 200,
+                        height: 300,
                       ),
                     ],
                   ),
