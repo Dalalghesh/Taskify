@@ -296,19 +296,19 @@ class _AddTask extends State<AddTask> {
                                 label: "High",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
-                                color: Color.fromARGB(255, 223, 36, 36),
+                                color: Color.fromARGB(255, 223, 123, 123),
                                 fillInColor: Color.fromARGB(255, 243, 89, 89)),
                             AnimatedRadioButtonItem(
                                 label: "Medium",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
-                                color: Color.fromARGB(255, 241, 152, 35),
+                                color: Color.fromARGB(255, 223, 180, 123),
                                 fillInColor: Color.fromARGB(255, 241, 194, 92)),
                             AnimatedRadioButtonItem(
                                 label: "Low",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
-                                color: Color.fromARGB(255, 59, 236, 65),
+                                color: Color.fromARGB(255, 152, 224, 154),
                                 fillInColor: Color.fromARGB(255, 54, 252, 159))
                           ],
                           onChanged: (value) {

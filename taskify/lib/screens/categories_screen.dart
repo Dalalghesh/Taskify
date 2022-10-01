@@ -88,29 +88,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    //const Text('Single Date Picker (With default value)'),
-                    // CalendarDatePicker2(
-                    //   config: config,
-                    //   initialValue: _singleDatePickerValueWithDefaultValue,
-                    //   onValueChanged: (values) =>
-                    //       setState(() => _singleDatePickerValueWithDefaultValue = values),
-                    //   selectableDayPredicate: (day) => !day
-                    //       .difference(DateTime.now().subtract(const Duration(days: 3)))
-                    //       .isNegative,
-                    // ),\
-                    // SfCalendar(
-                    //   view: CalendarView.month,
-                    //   onSelectionChanged: (date){
-                    //
-                    //     var datee = DateFormat("yyyy-MM-dd").format(date.date!);
-                    //     print(datee);
-                    //     provider.filterTasksByDate(datee);
-                    //     showTasksDialog(context, datee);
-                    //
-                    //
-                    //   },
-                    //   dataSource: MeetingDataSource(getTasks()),
-                    // ),
                     TableCalendar(
                       focusedDay: focusedDay,
                       firstDay: DateTime(1990),
@@ -164,6 +141,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           selectedDay = selectDay;
                           focusedDay = focusDay;
                         });
+///////////////////////////////////////////////////
                         var datee = DateFormat("yyyy-MM-dd").format(selectDay);
                         print(datee);
                         provider.filterTasksByDate(datee);
@@ -180,7 +158,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       calendarStyle: CalendarStyle(
                         isTodayHighlighted: true,
                         selectedDecoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Color(0xff7b39ed),
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -204,7 +182,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         titleCentered: true,
                         formatButtonShowsNext: false,
                         formatButtonDecoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Color(0xff7b39ed),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         formatButtonTextStyle: TextStyle(
@@ -213,14 +191,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-
-                    // TableCalendar(
-                    //   focusedDay: DateTime.now(),
-                    //   firstDay: DateTime.now(),
-                    //   daysOfWeekHeight: 12,
-                    //   lastDay: DateTime.now(),
-                    // ),
-                    const SizedBox(height: 10),
                     const Text(
                       'Categories',
                       style: TextStyle(
@@ -228,16 +198,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         fontSize: 30,
                       ),
                     ),
-
                     Container(
-                        height: MediaQuery.of(context).size.height / 2.3,
+                        height: MediaQuery.of(context).size.height / 2.9,
                         child: provider.categoriesLoading
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )
                             : provider.categories.isEmpty
                                 ? Center(
-                                    child: Text('List is empty'),
+                                    child: Text('Categories is empty'),
                                   )
                                 : GridView.builder(
                                     gridDelegate:
@@ -505,8 +474,8 @@ List<Appointment> getTasks() {
       DateTime(today.year, today.month, today.day, 9, 0, 0);
   final DateTime endTime = startTime.add(const Duration(hours: 2));
 
-  tasks.add(
-      Appointment(startTime: startTime, endTime: endTime, color: Colors.blue));
+  tasks.add(Appointment(
+      startTime: startTime, endTime: endTime, color: Color(0xff7b39ed)));
 
   return tasks;
 }

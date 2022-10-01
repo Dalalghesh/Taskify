@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskify/models/tasks.dart';
 
+import 'package:intl/intl.dart';
+
 class TaskDetail extends StatelessWidget {
   final Tasksss task;
   const TaskDetail({Key? key, required this.task}) : super(key: key);
@@ -60,7 +62,9 @@ class TaskDetail extends StatelessWidget {
                       //  textAlign: TextAlign.left,
                     ),
                     Text(
-                      task.deadline,
+                      DateFormat('dd/MM/yyyy').format(task.deadline.toDate()),
+                      // task.deadline,
+
                       style: TextStyle(
                         color: Colors.grey.shade700,
                       ),
