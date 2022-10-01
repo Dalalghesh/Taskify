@@ -243,7 +243,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
+        email: email.toLowerCase(),
         password: password,
       );
       final name = "$firstname $lastname";
@@ -253,10 +253,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           name.split('').map((e) => e.toLowerCase()).join().replaceAll(" ", "");
       await userCredential.user!.updateDisplayName(name);
       final uid = userCredential.user!.uid;
-     
 
       final userData = {
-        'email': email,
+        'email': email.toLowerCase(),
         'firstName': firstname,
         'lastName': lastName,
         'gender': gender,
@@ -272,23 +271,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-            storenotificationToken();
+        storenotificationToken();
         return const LoginScreen();
-       
       }));
     } catch (e) {
       isLoading = false;
       setState(() {});
       showExceptionDialog(context, e);
     }
-    
   }
-    storenotificationToken()async{
+
+  storenotificationToken() async {
     //get notifiaction token for ourself
-    String? token =await FirebaseMessaging.instance.getToken();
-    FirebaseFirestore.instance.collection('users1').doc(FirebaseAuth.instance.currentUser!.uid).set(
-      {
-        'token':token
-      },SetOptions(merge: true));
+    String? token = await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance
+        .collection('users1')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({'token': token}, SetOptions(merge: true));
   }
 }

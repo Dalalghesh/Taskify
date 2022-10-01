@@ -27,11 +27,11 @@ class InvitaitonProvider with ChangeNotifier {
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         UserModel userModel = UserModel(
-            email: res.docs[i]['email'],
+            email: res.docs[i]['email'].toLowerCase(),
             categories: res.docs[i]['categories'],
             docId: res.docs[i].id);
         modelEmails.add(userModel);
-        emails.add(res.docs[i]['email']);
+        emails.add(res.docs[i]['email'].toLowerCase());
       }
       filteredEmails = emails;
     }
@@ -56,7 +56,7 @@ class InvitaitonProvider with ChangeNotifier {
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         UserModel userModel = UserModel(
-            email: res.docs[i]['email'],
+            email: res.docs[i]['email'].toLowerCase(),
             categories: res.docs[i]['categories'],
             docId: res.docs[i].id);
         modelTokens.add(userModel);
@@ -89,8 +89,8 @@ class InvitaitonProvider with ChangeNotifier {
       throw "A user with that email does not exists";
     }
     final InvitationModel invitationModel = InvitationModel(
-        recivereEmail: email,
-        senderEmail: currentUserEmail,
+        recivereEmail: email.toLowerCase(),
+        senderEmail: currentUserEmail.toLowerCase(),
         status: 'pending',
         category: category,
         list: list,

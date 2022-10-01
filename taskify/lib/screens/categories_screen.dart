@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/controller/UserController.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:taskify/screens/Task_Detail.dart';
+import 'package:taskify/Screens/Task_Detail.dart';
 import 'package:taskify/screens/todo_list_screen.dart';
 import 'package:taskify/utils/app_colors.dart';
 import "package:googleapis_auth/auth_io.dart";
@@ -99,6 +99,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 day.month == d.month &&
                                 day.year == d.year) {
                               String type = provider.getColorofDate(d);
+                              print('$d $type');
 
                               return Container(
                                 decoration: BoxDecoration(
@@ -106,10 +107,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                       ? Color.fromARGB(255, 223, 123, 123)
                                       : type == 'Medium'
                                           ? Color.fromARGB(255, 241, 207, 65)
-                                          : type == 'Low'
-                                              ? Color.fromARGB(
-                                                  255, 152, 224, 154)
-                                              : Color.fromARGB(0, 241, 206, 65),
+                                          : Color.fromARGB(255, 152, 224, 154),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(8.0),
                                   ),

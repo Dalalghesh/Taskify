@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/controller/UserController.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:taskify/screens/Task_Detail.dart';
+import 'package:taskify/Screens/Task_Detail.dart';
 import 'package:taskify/screens/todo_list_screen.dart';
 import 'package:taskify/utils/app_colors.dart';
 import "package:googleapis_auth/auth_io.dart";
@@ -59,17 +59,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       print('$d $type');
 
                       return Container(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 12),
+                        height: 40,
+                        width: 34,
                         decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(5.0),
                           color: type == 'High'
                               ? Color.fromARGB(255, 223, 123, 123)
                               : type == 'Medium'
                                   ? Color.fromARGB(255, 241, 207, 65)
                                   : Color.fromARGB(255, 152, 224, 154),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
                         ),
                         child: Center(
+                          widthFactor: 10,
+                          heightFactor: 10,
                           child: Text(
                             '${day.day}',
                             style: const TextStyle(color: Colors.white),
@@ -89,7 +93,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   format = _format;
                 });
               },
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: StartingDayOfWeek.sunday,
               daysOfWeekVisible: true,
 
               //Day Changed on select
@@ -168,14 +172,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       Center(
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: context.theme.canvasColor,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black,
-                                    blurRadius: 2,
-                                    spreadRadius: .1)
-                              ]),
+                            borderRadius: BorderRadius.circular(4),
+                            color: context.theme.canvasColor,
+                          ),
                           margin: EdgeInsets.only(
                               top: 10, left: 10, right: 10, bottom: 20),
                           child: Column(
@@ -242,16 +241,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                       bottom: 5),
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.grey,
-                                                          blurRadius: 3,
-                                                        )
-                                                      ],
+                                                      // boxShadow: [
+                                                      //   BoxShadow(
+                                                      //     color: Colors.grey,
+                                                      //     blurRadius: 3,
+                                                      //   )
+                                                      // ],
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8)),
-                                                  //alignment: Alignment.center,
+                                                  alignment: Alignment.center,
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
