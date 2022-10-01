@@ -114,7 +114,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               calendarStyle: CalendarStyle(
                 isTodayHighlighted: true,
                 selectedDecoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color(0xff7b39ed),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(5.0),
                 ),
@@ -138,7 +138,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 titleCentered: true,
                 formatButtonShowsNext: false,
                 formatButtonDecoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color(0xff7b39ed),
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 formatButtonTextStyle: TextStyle(

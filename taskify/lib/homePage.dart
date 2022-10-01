@@ -10,8 +10,8 @@ import 'package:taskify/screens/Add_Category.dart';
 import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
 import 'package:taskify/screens/homescreen.dart';
 import 'package:taskify/screens/tasks_screen.dart';
-
 import 'screens/todo_list_screen.dart';
+import 'package:taskify/CalendarScreen.dart';
 
 class NavBar extends StatefulWidget {
   NavBar({Key? key, required this.tabs}) : super(key: key);
@@ -44,15 +44,11 @@ class NavBarState extends State<NavBar> {
     List<Widget> tabs = [
       Home_Screen(),
       RecievedInvitations(),
-      //notifications()
+      CalendarScreen(),
       // Container(
       //   height: Get.height,
-      //   color: Colors.blue,
+      //   color: Color.fromARGB(255, 207, 205, 206),
       // ),
-      Container(
-        height: Get.height,
-        color: Color.fromARGB(255, 207, 205, 206),
-      ),
       HomeScreen()
     ];
     return CurvedNavBar(
