@@ -161,7 +161,18 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
          getUsersToken(email.toString());   
        }
           
-      
+          
+              
+
+             /* await sendInviation(query, widget.listId);
+              print('h2');
+              print(query);
+              print(email.toString());
+              getUsersToken(email.toString());
+              //  print('dalal');
+              sendNotification('New Invitation', "");*/
+              //checkDub(email.toString() , widget.listId);
+              //checkifDuplicate(email.toString());
             },
             child: const Text(
               'Invite',

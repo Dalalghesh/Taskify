@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 60,
+                      height: 115,
                     ),
                     Text(
                       '${FirebaseAuth.instance.currentUser!.displayName}',
