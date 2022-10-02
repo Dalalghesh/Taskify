@@ -23,10 +23,11 @@ import 'homePage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   var _clientID = new ClientId(Secret.getId(), "");
   const _scopes = const [cal.CalendarApi.calendarScope];
-    LocalNotificationService.initialize();
+  LocalNotificationService.initialize();
   // await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
   //    CalendarClient.calendar = cal.CalendarApi(client);
   //  });
@@ -39,6 +40,15 @@ void prompt(String url) async {
   } else {
     throw 'Could not launch $url';
   }
+}
+
+void initState() {
+  FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onMessage.listen((event) {
+    LocalNotificationService.display(event);
+  });
+
+  FirebaseMessaging.instance.subscribeToTopic('subscription');
 }
 
 class MyApp extends StatelessWidget {
@@ -54,22 +64,9 @@ class MyApp extends StatelessWidget {
     800: Color(0xff7b39ed),
     900: Color(0xff7b39ed),
   });
-  
-  var context;
 
-  initNotification(){
-    FirebaseMessaging.onMessage.listen((RemoteMessage message)async {
-      print("onMessage:$message");
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message)async {
-      print("onMessageOpenedApp: $message");
-      Navigator.of(context).pushNamed("ReceivedInvitation");
-       // Util.routeToWidget(context, NavBar(tabs: 0));
-    });
-  }
- void initState() {
+  void initState() {
     // TODO: implement initState
-    initNotification();
     FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((event) {
       LocalNotificationService.display(event);

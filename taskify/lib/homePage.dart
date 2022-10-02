@@ -19,17 +19,18 @@ import 'service/local_push_notification.dart';
 class NavBar extends StatefulWidget {
   NavBar({Key? key, required this.tabs}) : super(key: key);
 
-  initNotification(){
-    FirebaseMessaging.onMessage.listen((RemoteMessage message)async {
+  initNotification() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print("onMessage:$message");
     });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message)async {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print("onMessageOpenedApp: $message");
-     // Navigator.of(context).pushNamed("ReceivedInvitation");
-        //Util.routeToWidget(context, NavBar(tabs: 0));
+      // Navigator.of(context).pushNamed("ReceivedInvitation");
+      //Util.routeToWidget(context, NavBar(tabs: 0));
     });
   }
- void initState() {
+
+  void initState() {
     // TODO: implement initState
     initNotification();
     FirebaseMessaging.instance.getInitialMessage();
@@ -39,6 +40,7 @@ class NavBar extends StatefulWidget {
 
     FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
+
   final int tabs;
 
   @override
