@@ -151,7 +151,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     CoolAlert.show(
          context: context,
          type: CoolAlertType.error,
-         text: "You can't send same invitation twice!",
+         text: "The invitation has already been sent ",
          confirmBtnColor: const Color(0xff7b39ed),
        );
          _typeAheadController.clear();
