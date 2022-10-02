@@ -15,12 +15,15 @@ class SingleInvitaionItem extends StatelessWidget {
     Key? key,
     required this.invitationModel,
   }) : super(key: key);
+  static String id = "ReceivedInvitation";
   final InvitationModel invitationModel;
+  static String FullName ="Dalal";
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     AppState provider = Provider.of<AppState>(context, listen: false);
+    findname(invitationModel.senderEmail);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
       padding: const EdgeInsets.all(8),
@@ -42,9 +45,10 @@ class SingleInvitaionItem extends StatelessWidget {
               //     fontWeight: FontWeight.bold,
               //   ),
               // ),
+              
               Text(
-                ' ' +
-                    invitationModel.senderEmail +
+              " "+
+                   FullName +" invite you"+
                     '\n To ' +
                     invitationModel.list +
                     ' list \n In ' +
@@ -178,5 +182,31 @@ class SingleInvitaionItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  findname (String senderEmail) async {
+      final _firebaseFirestore = FirebaseFirestore.instance;
+    print(senderEmail);
+
+    final res = await _firebaseFirestore
+        .collection('users1')
+        .where("email", isEqualTo: senderEmail)
+        .get();
+        
+    if (res.docs.isNotEmpty) {
+      for (int i = 0; i < res.docs.length; i++) {
+        if (res.docs[i]['email'] == senderEmail) {
+          print('1');
+          print(res.docs[i]['firstName']);
+           print(res.docs[i]['lastName']);
+          print('2');
+          String fullname = res.docs[i]['firstName'] +" "+res.docs[i]['lastName'];
+          print(fullname);
+          FullName = fullname;
+          print(FullName);
+        }
+      }
+    }
+
   }
 }
