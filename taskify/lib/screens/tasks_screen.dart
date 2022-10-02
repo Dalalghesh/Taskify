@@ -23,7 +23,6 @@ class TaskScreen extends StatefulWidget {
 class _TaskScreenState extends State<TaskScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<AppState>(context, listen: false).clearTask();
     getTask();
@@ -73,12 +72,6 @@ class _TaskScreenState extends State<TaskScreen> {
                               left: 20, right: 20, top: 5, bottom: 5),
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              // boxShadow: [
-                              //   BoxShadow(
-                              //     color: Colors.grey,
-                              //     blurRadius: 3,
-                              //   )
-                              // ],
                               borderRadius: BorderRadius.circular(8)),
                           //alignment: Alignment.center,
                           child: Row(
@@ -296,7 +289,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                           /// It will be only return date DD/MM/YYYY format
                                           return GestureDetector(
                                               onTap: () {
-                                                Navigator.pop(context);
+                                                //     Navigator.pop(context);
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -547,66 +540,105 @@ class _TaskScreenState extends State<TaskScreen> {
                                   itemCount: provider.completedtasksList.length,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
-                                    return Container(
-                                      height: 50,
-                                      width: MediaQuery.of(context).size.width,
-                                      margin: EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          top: 5,
-                                          bottom: 5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          // boxShadow: [
-                                          //   BoxShadow(
-                                          //     color: Colors.grey,
-                                          //     blurRadius: 3,
-                                          //   )
-                                          // ],
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      //alignment: Alignment.center,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            height: 20,
-                                            width: 20,
-                                            margin: EdgeInsets.only(left: 16),
-                                            decoration: BoxDecoration(
-                                              color: provider
-                                                          .completedtasksList[
-                                                              index]
-                                                          .priority ==
-                                                      'High'
-                                                  ? Color.fromARGB(
-                                                      255, 223, 123, 123)
-                                                  : provider
+                                    return GestureDetector(
+                                        onTap: () {
+                                          //   Navigator.pop(context);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TaskDetails(
+                                                        category: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .category,
+                                                        value: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .value,
+                                                        priority: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .priority,
+                                                        task: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .task,
+                                                        deadline: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .deadline,
+                                                        description: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .description,
+                                                        id: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .id,
+                                                        list: provider
+                                                            .completedtasksList[
+                                                                index]
+                                                            .list,
+                                                      )));
+                                        },
+                                        child: Container(
+                                          height: 50,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          margin: EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              top: 5,
+                                              bottom: 5),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          //alignment: Alignment.center,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                height: 20,
+                                                width: 20,
+                                                margin:
+                                                    EdgeInsets.only(left: 16),
+                                                decoration: BoxDecoration(
+                                                  color: provider
                                                               .completedtasksList[
                                                                   index]
                                                               .priority ==
-                                                          'Medium'
+                                                          'High'
                                                       ? Color.fromARGB(
-                                                          255, 223, 180, 123)
-                                                      : Color.fromARGB(
-                                                          255, 152, 224, 154),
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                          Text(
-                                            provider
-                                                .completedtasksList[index].task,
-                                            textAlign: TextAlign.left,
-                                          ),
-                                          Container(),
+                                                          255, 223, 123, 123)
+                                                      : provider
+                                                                  .completedtasksList[
+                                                                      index]
+                                                                  .priority ==
+                                                              'Medium'
+                                                          ? Color.fromARGB(255,
+                                                              223, 180, 123)
+                                                          : Color.fromARGB(255,
+                                                              152, 224, 154),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              Text(
+                                                provider
+                                                    .completedtasksList[index]
+                                                    .task,
+                                                textAlign: TextAlign.left,
+                                              ),
+                                              Container(),
 
-                                          // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
-                                          //   provider.updateCheckboxValue(v!, index);
-                                          // })
-                                        ],
-                                      ),
-                                    );
+                                              // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
+                                              //   provider.updateCheckboxValue(v!, index);
+                                              // })
+                                            ],
+                                          ),
+                                        ));
                                   }),
                     ),
                   ],

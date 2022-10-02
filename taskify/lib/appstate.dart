@@ -74,6 +74,7 @@ class AppState extends ChangeNotifier {
         .where('ListName', isEqualTo: list)
         .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
         .where('status', isEqualTo: 'pending')
+        .orderBy('Deadline', descending: false)
         .get();
     for (int i = 0; i < res.docs.length; i++) {
       Tasksss taskss = Tasksss(

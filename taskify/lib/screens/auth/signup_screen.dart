@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   TextFormField(
-                    maxLength: 15,
+                    maxLength: 10,
                     // title: "First Name",
                     decoration: InputDecoration(
                       hintText: "John",
@@ -110,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   TextFormField(
-                    maxLength: 15,
+                    maxLength: 10,
                     decoration: InputDecoration(
                       hintText: "Adam",
                       contentPadding: EdgeInsets.symmetric(
