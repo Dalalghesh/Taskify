@@ -60,7 +60,7 @@ class TaskDetails extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 125,
+                      height: 60,
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
