@@ -3,6 +3,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:taskify/Screens/TaskDetails.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:intl/intl.dart';
@@ -293,110 +294,160 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   .format(dateTime);
 
                                           /// It will be only return date DD/MM/YYYY format
-                                          return Container(
-                                            height: 65,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 5,
-                                                bottom: 5),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                // boxShadow: const [
-                                                //   BoxShadow(
-                                                //     color: Colors.grey,
-                                                //     blurRadius: 3,
-                                                //   )
-                                                // ],
-                                                borderRadius:
-                                                    BorderRadius.circular(8)),
-                                            //alignment: Alignment.center,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  margin:
-                                                      EdgeInsets.only(left: 16),
-                                                  decoration: BoxDecoration(
-                                                    color: provider
-                                                                .tasksList[
-                                                                    index]
-                                                                .priority ==
-                                                            'High'
-                                                        ? Color.fromARGB(
-                                                            255, 223, 123, 123)
-                                                        : provider
+                                          return GestureDetector(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            TaskDetails(
+                                                              category: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .category,
+                                                              value: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .value,
+                                                              priority: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .priority,
+                                                              task: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .task,
+                                                              deadline: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .deadline,
+                                                              description: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .description,
+                                                              id: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .id,
+                                                              list: provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .list,
+                                                            )));
+                                              },
+                                              child: Container(
+                                                height: 65,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                margin: EdgeInsets.only(
+                                                    left: 20,
+                                                    right: 20,
+                                                    top: 5,
+                                                    bottom: 5),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                //alignment: Alignment.center,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      height: 20,
+                                                      width: 20,
+                                                      margin: EdgeInsets.only(
+                                                          left: 16),
+                                                      decoration: BoxDecoration(
+                                                        color: provider
                                                                     .tasksList[
                                                                         index]
                                                                     .priority ==
-                                                                'Medium'
+                                                                'High'
                                                             ? Color.fromARGB(
                                                                 255,
                                                                 223,
-                                                                180,
+                                                                123,
                                                                 123)
-                                                            : Color.fromARGB(
-                                                                255,
-                                                                152,
-                                                                224,
-                                                                154),
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      provider.tasksList[index]
-                                                          .task,
-                                                      textAlign: TextAlign.left,
-                                                    ),
-                                                    Text(
-                                                      '${dateOnly} ${isAfterDeadLine ? " - Late" : ""}',
-                                                      style: TextStyle(
-                                                        color: isAfterDeadLine
-                                                            ? Colors.red
-                                                            : Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                            : provider
+                                                                        .tasksList[
+                                                                            index]
+                                                                        .priority ==
+                                                                    'Medium'
+                                                                ? Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        223,
+                                                                        180,
+                                                                        123)
+                                                                : Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        152,
+                                                                        224,
+                                                                        154),
+                                                        shape: BoxShape.circle,
                                                       ),
-                                                    )
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          provider
+                                                              .tasksList[index]
+                                                              .task,
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        ),
+                                                        Text(
+                                                          '${dateOnly} ${isAfterDeadLine ? " - Late" : ""}',
+                                                          style: TextStyle(
+                                                            color:
+                                                                isAfterDeadLine
+                                                                    ? Colors.red
+                                                                    : Colors
+                                                                        .black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Checkbox(
+                                                        value: provider
+                                                            .tasksList[index]
+                                                            .value,
+                                                        onChanged: (v) {
+                                                          // provider.updateCheckboxValue(v!, index);
+                                                          setState(() {
+                                                            provider
+                                                                .tasksList[
+                                                                    index]
+                                                                .value = v!;
+                                                          });
+                                                          if (v! == true) {
+                                                            tasks.add(TasksCn(
+                                                                index, v));
+                                                          } else {
+                                                            tasks.removeWhere(
+                                                                (element) =>
+                                                                    element
+                                                                        .first ==
+                                                                    index);
+                                                          }
+
+                                                          print(tasks.length);
+                                                          print(v!);
+                                                        })
                                                   ],
                                                 ),
-                                                Checkbox(
-                                                    value: provider
-                                                        .tasksList[index].value,
-                                                    onChanged: (v) {
-                                                      // provider.updateCheckboxValue(v!, index);
-                                                      setState(() {
-                                                        provider
-                                                            .tasksList[index]
-                                                            .value = v!;
-                                                      });
-                                                      if (v! == true) {
-                                                        tasks.add(
-                                                            TasksCn(index, v));
-                                                      } else {
-                                                        tasks.removeWhere(
-                                                            (element) =>
-                                                                element.first ==
-                                                                index);
-                                                      }
-
-                                                      print(tasks.length);
-                                                      print(v!);
-                                                    })
-                                              ],
-                                            ),
-                                          );
+                                              ));
                                         }),
                                     SizedBox(
                                       height: 20,
