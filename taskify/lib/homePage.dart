@@ -1,6 +1,7 @@
 import 'package:curved_nav_bar/curved_bar/curved_action_bar.dart';
 import 'package:curved_nav_bar/fab_bar/fab_bottom_app_bar_item.dart';
 import 'package:curved_nav_bar/flutter_curved_bottom_nav_bar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskify/invitation/screens/received_invitations.dart';
@@ -13,9 +14,31 @@ import 'package:taskify/screens/tasks_screen.dart';
 import 'screens/todo_list_screen.dart';
 import 'package:taskify/CalendarScreen.dart';
 
+import 'service/local_push_notification.dart';
+
 class NavBar extends StatefulWidget {
   NavBar({Key? key, required this.tabs}) : super(key: key);
 
+  initNotification(){
+    FirebaseMessaging.onMessage.listen((RemoteMessage message)async {
+      print("onMessage:$message");
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message)async {
+      print("onMessageOpenedApp: $message");
+     // Navigator.of(context).pushNamed("ReceivedInvitation");
+        //Util.routeToWidget(context, NavBar(tabs: 0));
+    });
+  }
+ void initState() {
+    // TODO: implement initState
+    initNotification();
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+
+    FirebaseMessaging.instance.subscribeToTopic('subscription');
+  }
   final int tabs;
 
   @override

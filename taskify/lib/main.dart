@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:googleapis_auth/auth.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +12,13 @@ import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:taskify/service/local_push_notification.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'Util.dart';
 import 'firebase_options.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 
 import 'package:taskify/onboarding/onboarding_screen.dart';
+
+import 'homePage.dart';
 // #7b39ed - primary color
 
 Future<void> main() async {
@@ -49,8 +54,29 @@ class MyApp extends StatelessWidget {
     800: Color(0xff7b39ed),
     900: Color(0xff7b39ed),
   });
-
   
+  var context;
+
+  initNotification(){
+    FirebaseMessaging.onMessage.listen((RemoteMessage message)async {
+      print("onMessage:$message");
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message)async {
+      print("onMessageOpenedApp: $message");
+      Navigator.of(context).pushNamed("ReceivedInvitation");
+       // Util.routeToWidget(context, NavBar(tabs: 0));
+    });
+  }
+ void initState() {
+    // TODO: implement initState
+    initNotification();
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+
+    FirebaseMessaging.instance.subscribeToTopic('subscription');
+  }
 
   @override
   Widget build(BuildContext context) {
