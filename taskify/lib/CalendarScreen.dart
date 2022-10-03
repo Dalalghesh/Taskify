@@ -28,6 +28,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   void initState() {
+
     // TODO: implement initState
     super.initState();
   }
@@ -190,7 +191,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                         top: 14, left: 10, right: 10),
                                     child: Text(
                                       'Tasks of $date',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -198,17 +199,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               ),
                               Container(
                                 height: 200,
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                   left: 10,
                                   right: 10,
                                   top: 20,
                                 ),
                                 child: provider.allTasksLoading
-                                    ? Center(
+                                    ? const Center(
                                         child: CircularProgressIndicator(),
                                       )
                                     : provider.filteredTasks.isEmpty
-                                        ? Center(
+                                        ? const Center(
                                             child: Text('List is empty'),
                                           )
                                         : ListView.builder(
@@ -218,7 +219,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                             itemBuilder: (context, index) {
                                               return GestureDetector(
                                                 onTap: () {
-                                                  Navigator.pop(context);
+                                                  // Navigator.pop(context);
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
@@ -234,7 +235,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 20,
                                                       right: 20,
                                                       top: 5,
@@ -326,13 +327,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       onTap: () async {
                                         Navigator.pop(context);
                                       },
-                                      child: Container(
-                                        margin: EdgeInsets.only(right: 20),
-                                        child: Text(
-                                          'OK',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: const Text(
+                                            'OK',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16),
+                                          ),
                                         ),
                                       ),
                                     ),
