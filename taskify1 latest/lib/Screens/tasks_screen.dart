@@ -48,150 +48,150 @@ class _TaskScreenState extends State<TaskScreen> {
     return buildColumnNew(context, provider);
   }
 
-  Column buildColumnOld(BuildContext context, AppState provider) {
-    return Column(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height / 2.5,
-          child: provider.tasksLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : provider.tasksList.isEmpty
-                  ? Center(
-                      child: Text(
-                      'List is empty',
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ))
-                  : ListView.builder(
-                      itemCount: provider.tasksList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(
-                              left: 20, right: 20, top: 5, bottom: 5),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              // boxShadow: [
-                              //   BoxShadow(
-                              //     color: Colors.grey,
-                              //     blurRadius: 3,
-                              //   )
-                              // ],
-                              borderRadius: BorderRadius.circular(8)),
-                          //alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 20,
-                                width: 20,
-                                margin: EdgeInsets.only(left: 16),
-                                decoration: BoxDecoration(
-                                  color: provider.tasksList[index].priority ==
-                                          'High'
-                                      ? Color.fromARGB(255, 223, 123, 123)
-                                      : provider.tasksList[index].priority ==
-                                              'Medium'
-                                          ? Color.fromARGB(255, 223, 180, 123)
-                                          : Color.fromARGB(255, 152, 224, 154),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              Text(
-                                provider.tasksList[index].task,
-                                textAlign: TextAlign.left,
-                              ),
-                              Checkbox(
-                                  value: provider.tasksList[index].value,
-                                  onChanged: (v) {
-                                    provider.updateCheckboxValue(v!, index);
-                                  })
-                            ],
-                          ),
-                        );
-                      }),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          'Completed',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height / 2.5,
-          child: provider.completedtasksLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : provider.completedtasksList.isEmpty
-                  ? Center(
-                      child: Text(
-                      'List is empty',
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ))
-                  : ListView.builder(
-                      itemCount: provider.completedtasksList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(
-                              left: 20, right: 20, top: 5, bottom: 5),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              // boxShadow: [
-                              //   BoxShadow(
-                              //     color: Colors.grey,
-                              //     blurRadius: 3,
-                              //   )
-                              // ],
-                              borderRadius: BorderRadius.circular(8)),
-                          //alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 20,
-                                width: 20,
-                                margin: EdgeInsets.only(left: 16),
-                                decoration: BoxDecoration(
-                                  color: provider.completedtasksList[index]
-                                              .priority ==
-                                          'High'
-                                      ? Color.fromARGB(255, 223, 123, 123)
-                                      : provider.completedtasksList[index]
-                                                  .priority ==
-                                              'Medium'
-                                          ? Color.fromARGB(255, 223, 180, 123)
-                                          : Color.fromARGB(255, 152, 224, 154),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              Text(
-                                provider.completedtasksList[index].task,
-                                textAlign: TextAlign.left,
-                              ),
-                              Container(),
-
-                              // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
-                              //   provider.updateCheckboxValue(v!, index);
-                              // })
-                            ],
-                          ),
-                        );
-                      }),
-        ),
-      ],
-    );
-  }
+  // Column buildColumnOld(BuildContext context, AppState provider) {
+  //   return Column(
+  //     children: [
+  //       Container(
+  //         height: MediaQuery.of(context).size.height / 2.5,
+  //         child: provider.tasksLoading
+  //             ? Center(
+  //                 child: CircularProgressIndicator(),
+  //               )
+  //             : provider.tasksList.isEmpty
+  //                 ? Center(
+  //                     child: Text(
+  //                     'List is empty',
+  //                     style: TextStyle(color: Colors.black, fontSize: 18),
+  //                   ))
+  //                 : ListView.builder(
+  //                     itemCount: provider.tasksList.length,
+  //                     shrinkWrap: true,
+  //                     itemBuilder: (context, index) {
+  //                       return Container(
+  //                         height: 50,
+  //                         width: MediaQuery.of(context).size.width,
+  //                         margin: EdgeInsets.only(
+  //                             left: 20, right: 20, top: 5, bottom: 5),
+  //                         decoration: BoxDecoration(
+  //                             color: Colors.white,
+  //                             // boxShadow: [
+  //                             //   BoxShadow(
+  //                             //     color: Colors.grey,
+  //                             //     blurRadius: 3,
+  //                             //   )
+  //                             // ],
+  //                             borderRadius: BorderRadius.circular(8)),
+  //                         //alignment: Alignment.center,
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             Container(
+  //                               height: 20,
+  //                               width: 20,
+  //                               margin: EdgeInsets.only(left: 16),
+  //                               decoration: BoxDecoration(
+  //                                 color: provider.tasksList[index].priority ==
+  //                                         'High'
+  //                                     ? Color.fromARGB(255, 223, 123, 123)
+  //                                     : provider.tasksList[index].priority ==
+  //                                             'Medium'
+  //                                         ? Color.fromARGB(255, 223, 180, 123)
+  //                                         : Color.fromARGB(255, 152, 224, 154),
+  //                                 shape: BoxShape.circle,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               provider.tasksList[index].task,
+  //                               textAlign: TextAlign.left,
+  //                             ),
+  //                             Checkbox(
+  //                                 value: provider.tasksList[index].value,
+  //                                 onChanged: (v) {
+  //                                   provider.updateCheckboxValue(v!, index);
+  //                                 })
+  //                           ],
+  //                         ),
+  //                       );
+  //                     }),
+  //       ),
+  //       SizedBox(
+  //         height: 10,
+  //       ),
+  //       Text(
+  //         'Completed',
+  //         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+  //       ),
+  //       SizedBox(
+  //         height: 10,
+  //       ),
+  //       Container(
+  //         height: MediaQuery.of(context).size.height / 2.5,
+  //         child: provider.completedtasksLoading
+  //             ? Center(
+  //                 child: CircularProgressIndicator(),
+  //               )
+  //             : provider.completedtasksList.isEmpty
+  //                 ? Center(
+  //                     child: Text(
+  //                     'List is empty',
+  //                     style: TextStyle(color: Colors.black, fontSize: 18),
+  //                   ))
+  //                 : ListView.builder(
+  //                     itemCount: provider.completedtasksList.length,
+  //                     shrinkWrap: true,
+  //                     itemBuilder: (context, index) {
+  //                       return Container(
+  //                         height: 50,
+  //                         width: MediaQuery.of(context).size.width,
+  //                         margin: EdgeInsets.only(
+  //                             left: 20, right: 20, top: 5, bottom: 5),
+  //                         decoration: BoxDecoration(
+  //                             color: Colors.white,
+  //                             // boxShadow: [
+  //                             //   BoxShadow(
+  //                             //     color: Colors.grey,
+  //                             //     blurRadius: 3,
+  //                             //   )
+  //                             // ],
+  //                             borderRadius: BorderRadius.circular(8)),
+  //                         //alignment: Alignment.center,
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             Container(
+  //                               height: 20,
+  //                               width: 20,
+  //                               margin: EdgeInsets.only(left: 16),
+  //                               decoration: BoxDecoration(
+  //                                 color: provider.completedtasksList[index]
+  //                                             .priority ==
+  //                                         'High'
+  //                                     ? Color.fromARGB(255, 223, 123, 123)
+  //                                     : provider.completedtasksList[index]
+  //                                                 .priority ==
+  //                                             'Medium'
+  //                                         ? Color.fromARGB(255, 223, 180, 123)
+  //                                         : Color.fromARGB(255, 152, 224, 154),
+  //                                 shape: BoxShape.circle,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               provider.completedtasksList[index].task,
+  //                               textAlign: TextAlign.left,
+  //                             ),
+  //                             Container(),
+  //
+  //                             // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
+  //                             //   provider.updateCheckboxValue(v!, index);
+  //                             // })
+  //                           ],
+  //                         ),
+  //                       );
+  //                     }),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   List<TasksCn> tasks = [];
 
@@ -220,18 +220,19 @@ class _TaskScreenState extends State<TaskScreen> {
               SizedBox(
                 height: 50,
                 child: AppBar(
-                  // backgroundColor: Color(0xff7b39ed),
+                  // foregroundColor: Colors.red,
+                  backgroundColor: Color(0xff7b39ed),
                   bottom: TabBar(
                     tabs: [
                       Tab(
                         child: Container(
-                            width: MediaQuery.of(context).size.width * 0.45,
+                            width: MediaQuery.of(context).size.width * 0.65,
                             // height: 100,
                             decoration: BoxDecoration(
                               //  border: Border.all(width: 1),
                               shape: BoxShape.rectangle,
                               // You can use like this way or like the below line
-                              borderRadius: new BorderRadius.circular(20.0),
+                              borderRadius: new BorderRadius.circular(10.0),
                               color: Color(0xff7b39ed),
                             ),
                             child: Padding(
@@ -241,13 +242,13 @@ class _TaskScreenState extends State<TaskScreen> {
                       ),
                       Tab(
                         child: Container(
-                            width: MediaQuery.of(context).size.width * 0.45,
+                            width: MediaQuery.of(context).size.width * 0.65,
                             // height: 100,
                             decoration: BoxDecoration(
                               //  border: Border.all(width: 1),
                               shape: BoxShape.rectangle,
                               // You can use like this way or like the below line
-                              borderRadius: new BorderRadius.circular(20.0),
+                              borderRadius: new BorderRadius.circular(10.0),
                               color: Color(0xff7b39ed),
                             ),
                             child: Padding(
@@ -289,7 +290,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                           DateTime dateTime =
                                               timestamp.toDate();
                                           bool isAfterDeadLine =
-                                              DateTime.now().isAfter(dateTime);
+                                          DateTime.now().isAfter(dateTime);
                                           String dateOnly =
                                               DateFormat('dd/MM/yyyy')
                                                   .format(dateTime);
@@ -297,14 +298,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                           /// It will be only return date DD/MM/YYYY format
                                           return GestureDetector(
                                             onTap: () {
-                                              Navigator.pop(context);
+                                              // Navigator.pop(context);
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           TaskDetail(
                                                             task: provider
-                                                                    .filteredTasks[
+                                                                    .tasksList[
                                                                 index],
                                                           )));
                                             },
@@ -378,7 +379,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             TextAlign.left,
                                                       ),
                                                       Text(
-                                                        '${dateOnly} ${isAfterDeadLine ? " - Late" : ""}',
+                                                        '${dateOnly} ${isAfterDeadLine ? " - ${timeAgo(dateTime)}" : ""}',
                                                         style: TextStyle(
                                                           color: isAfterDeadLine
                                                               ? Colors.red
@@ -463,8 +464,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                 .updateCheckboxValue(
                                                                     element
                                                                         .second!,
-                                                                    element
-                                                                        .first);
+                                                                tasks.indexOf(element));
                                                           });
                                                           tasks.clear();
                                                           Navigator.of(context)
@@ -519,14 +519,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
-                                        Navigator.pop(context);
+                                        // Navigator.pop(context);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     TaskDetail(
                                                       task: provider
-                                                          .filteredTasks[index],
+                                                          .completedtasksList[index],
                                                     )));
                                       },
                                       child: Container(
@@ -599,6 +599,22 @@ class _TaskScreenState extends State<TaskScreen> {
             ],
           ),
         ));
+  }
+  String timeAgo(DateTime d) {
+    Duration diff = DateTime.now().difference(d);
+    if (diff.inDays > 365)
+      return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"} Late !";
+    if (diff.inDays > 30)
+      return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"} Late !";
+    if (diff.inDays > 7)
+      return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"} Late !";
+    if (diff.inDays > 0)
+      return "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"} Late !";
+    if (diff.inHours > 0)
+      return "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} Late !";
+    if (diff.inMinutes > 0)
+      return "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} Late !";
+    return "Just Now";
   }
 }
 
