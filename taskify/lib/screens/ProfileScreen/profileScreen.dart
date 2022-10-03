@@ -15,6 +15,10 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
         elevation: 0.0,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.transparent),
+          onPressed: () {},
+        ),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
@@ -58,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 69,
+                      height: 115,
                     ),
                     Text(
                       '${FirebaseAuth.instance.currentUser!.displayName}',

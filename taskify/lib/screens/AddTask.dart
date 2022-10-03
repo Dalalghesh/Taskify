@@ -159,7 +159,7 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+                            final regExp = RegExp(r'^[a-zA-Z0-9 ]+$');
 
                             if (value!.isEmpty ||
                                 value == null ||
@@ -247,7 +247,7 @@ class _AddTask extends State<AddTask> {
                               color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
                           items: provider.taskList.map((value) {
                             return DropdownMenuItem<String>(
-                              value: value.list.toString(),
+                              value: value.docId,
                               child: Text(
                                 value.list,
                               ),
@@ -314,6 +314,7 @@ class _AddTask extends State<AddTask> {
                                 fillInColor: Color.fromARGB(255, 213, 241, 228))
                           ],
                           onChanged: (value) {
+                            print(value);
                             setState(() {
                               myVar = value;
                             });
@@ -377,15 +378,16 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+                            // final regExp = RegExp(r'^[a-zA-Z0-9]+$');
 
                             if (value!.isEmpty ||
                                 value == null ||
                                 value.trim() == '')
                               return "Please enter a description";
-                            else if (!regExp.hasMatch(value.trim())) {
-                              return 'You cannot enter special characters !@#\%^&*()';
-                            } else if (value.length <= 2)
+                            // else if (!regExp.hasMatch(value.trim())) {
+                            //   return 'You cannot enter special characters !@#\%^&*()';
+                            //  }
+                            else if (value.length <= 2)
                               return "Please enter at least 3 characters";
 
                             return null;
@@ -407,14 +409,22 @@ class _AddTask extends State<AddTask> {
                               child: ElevatedButton(
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
+                                final ress = await FirebaseFirestore.instance
+                                    .collection('List')
+                                    .doc(docid)
+                                    .get();
+                                List<dynamic> emails = [];
+                                String listName;
+                                emails = ress['UID'];
+                                listName = ress['List'];
+
                                 await FirebaseFirestore.instance
                                     .collection('tasks')
                                     .add({
                                   'CategoryName': selectCategory1,
-                                  'UID':
-                                      FirebaseAuth.instance.currentUser!.email,
+                                  'UID': emails,
                                   'Task': taskk,
-                                  'ListName': docid,
+                                  'ListName': listName,
                                   'Priority': myVar == 0
                                       ? 'High'
                                       : myVar == 1
@@ -422,6 +432,7 @@ class _AddTask extends State<AddTask> {
                                           : 'Low',
                                   'Deadline': dateTime,
                                   'description': description,
+                                  'status': 'pending',
                                 });
 
                                 final snackBar = SnackBar(
@@ -448,7 +459,7 @@ class _AddTask extends State<AddTask> {
                       ),
 
                       SizedBox(
-                        height: 200,
+                        height: 300,
                       ),
                     ],
                   ),

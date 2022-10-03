@@ -23,18 +23,21 @@ class RecievedInvitations extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          //leadingWidth: 32,
-          title: Text(
-            'Received Invitation',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.transparent),
-            onPressed: () {},
-          ),
-        ),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(50.0),
+            child: AppBar(
+              title: Text(
+                '  Received Invitation',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23),
+              ),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.transparent),
+                onPressed: () {},
+              ),
+            )),
         body: SingleChildScrollView(
           child: Container(
               padding: const EdgeInsets.all(16.0),
@@ -56,8 +59,11 @@ class RecievedInvitations extends StatelessWidget {
                           itemBuilder: (context, index) => SingleInvitaionItem(
                             invitationModel: InvitationModel(
                               id: invitation[index].id,
-                              recivereEmail: invitation[index].recivereEmail,
-                              senderEmail: invitation[index].senderEmail,
+                              listId: invitation[index].listId,
+                              recivereEmail:
+                                  invitation[index].recivereEmail.toLowerCase(),
+                              senderEmail:
+                                  invitation[index].senderEmail.toLowerCase(),
                               status: invitation[index].status,
                               category: invitation[index].category,
                               list: invitation[index].list,
