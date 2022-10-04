@@ -59,37 +59,13 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       // final senderEmail = _firebaseAuth.currentUser?.email;
       final validate = _formKey.currentState?.validate();
 
-      // final res = await _firebaseFirestore
-      //     .collection('invitations')
-      //     .where("senderEmail", isEqualTo: senderEmail)
-      //     .where(
-      //       "recieverEmail",
-      //       isEqualTo: recieverEmail,
-      //     )
-      //     .where("listId", isEqualTo: listId)
-      //     .get();
-
-      // final res1 = await _firebaseFirestore
-      //     .collection('invitations')
-      //     .where("senderEmail", isEqualTo: senderEmail)
-      //     .where("recieverEmail", isEqualTo: recieverEmail)
-      //     .get();
-
-      // if (res1.docs.isNotEmpty) {
-      //   print("dublicate00");
-      //   CoolAlert.show(
-      //     context: context,
-      //     type: CoolAlertType.error,
-      //     text: "You can't send same invitation twice!",
-      //     confirmBtnColor: const Color(0xff7b39ed),
-      //   );
-      // } else
 
       if (validate ?? false) {
         _formKey.currentState?.save();
         // print(email.toString());
         await context.read<InvitaitonProvider>().sendInvitation(
             email!, widget.category, widget.list, widget.listId);
+          
         // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
         CoolAlert.show(
           context: context,
@@ -160,19 +136,32 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
           ),
           ElevatedButton(
             onPressed: () async {
-              /* await context.read<InvitaitonProvider>().sendInvitation(
-            email!, widget.category, widget.list, widget.listId);
-             final currentUserEmail = _firebaseAuth.currentUser?.email;
-              checkifDuplicate(currentUserEmail!, widget.listId); */
+             String recieverEmail=email.toString() ;
+             final _firebaseFirestore = FirebaseFirestore.instance;
+      final senderEmail = _firebaseAuth.currentUser?.email;
 
-              await sendInviation(query, widget.listId);
-              print('h2');
-              print(query);
-              print(email.toString());
-              getUsersToken(email.toString());
-              //  print('dalal');
-              sendNotification('New Invitation', "");
-              //checkifDuplicate(email.toString());
+              final res = await _firebaseFirestore
+        .collection('invitations')
+        .where("recieverEmail", isEqualTo: recieverEmail).where("senderEmail", isEqualTo: senderEmail).where("listId", isEqualTo: widget.listId)
+        .get();
+
+        if (res.docs.isNotEmpty) {
+      print("helloooooooo");
+       print("dublicate00");
+    CoolAlert.show(
+         context: context,
+         type: CoolAlertType.error,
+         text: "The invitation has already been sent ",
+         confirmBtnColor: const Color(0xff7b39ed),
+       );
+         _typeAheadController.clear();
+       }
+       else{
+        await sendInviation(query, widget.listId);
+         getUsersToken(email.toString());   
+       }
+          
+      
             },
             child: const Text(
               'Invite',
@@ -291,43 +280,33 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     }
   }
 
-  // checkifDuplicate(String recieverEmail, String listId) async {
-  //   print("dlool");
-  //   print("dublicate");
-  //   final senderEmail = _firebaseAuth.currentUser?.email;
-  //   print(recieverEmail);
-  //   print(senderEmail);
-  //   print(listId);
-  //   print("dlool2");
-  //   //final recieverEmail = '';
-  //   /*final res = await _firebaseFirestore
-  //       .collection('invitations')
-  //       .where("senderEmail", isNotEqualTo: senderEmail).where("recieverEmail", isNotEqualTo : recieverEmail).where("listId",isNotEqualTo: listId)
-  //       .get();*/
-  //   final res = await _firebaseFirestore
-  //       .collection('invitations')
-  //       .where("senderEmail", isEqualTo: senderEmail)
-  //       .where("recieverEmail", isEqualTo: recieverEmail)
-  //       .where("listId", isEqualTo: listId)
-  //       .get();
+    checkNotDub (String recieverEmail ,String listId) async {
+      final _firebaseFirestore = FirebaseFirestore.instance;
+      final senderEmail = _firebaseAuth.currentUser?.email;
+      
+      print(recieverEmail);
+      print(listId);
 
-  //   final res1 = await _firebaseFirestore
-  //       .collection('invitations')
-  //       .where("senderEmail", isEqualTo: senderEmail)
-  //       .where("recieverEmail", isEqualTo: recieverEmail)
-  //       .get();
+    final res = await _firebaseFirestore
+        .collection('invitations')
+        .where("recieverEmail", isEqualTo: recieverEmail).where("senderEmail", isEqualTo: senderEmail).where("listId", isEqualTo: listId)
+        .get();
+        
+    if (res.docs.isNotEmpty) {
+      print("helloooooooo");
+       print("dublicate00");
+    CoolAlert.show(
+         context: context,
+         type: CoolAlertType.error,
+         text: "You can't send same invitation twice!",
+         confirmBtnColor: const Color(0xff7b39ed),
+       );
+       }
+       else{
+        return false;
+       }
+    }
+  }
 
-  //   print("dublicate2");
+  
 
-  //   if (res1.docs.isNotEmpty) {
-  //     print("dublicate00");
-  //     CoolAlert.show(
-  //       context: context,
-  //       type: CoolAlertType.error,
-  //       text: "You can't send same invitation twice!",
-  //       confirmBtnColor: const Color(0xff7b39ed),
-  //     );
-  //   }
-  //   print("dublicate4");
-  // }
-}
