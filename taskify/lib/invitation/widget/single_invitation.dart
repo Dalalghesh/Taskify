@@ -17,7 +17,7 @@ class SingleInvitaionItem extends StatelessWidget {
   }) : super(key: key);
   static String id = "ReceivedInvitation";
   final InvitationModel invitationModel;
-  static String FullName = "Dalal";
+  static String FullName ="Dalal";
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class SingleInvitaionItem extends StatelessWidget {
               //     fontWeight: FontWeight.bold,
               //   ),
               // ),
-              Text(
+                      Text(
                 " " + "$FullName" + " invites you",
                 style: TextStyle(
                   color: Colors.black,
@@ -54,7 +54,8 @@ class SingleInvitaionItem extends StatelessWidget {
                 ),
               ),
               Text(
-                'To ' +
+              
+                    'To ' +
                     invitationModel.list +
                     ' list \n In ' +
                     invitationModel.category +
@@ -189,29 +190,29 @@ class SingleInvitaionItem extends StatelessWidget {
     );
   }
 
-  findname(String senderEmail) async {
-    final _firebaseFirestore = FirebaseFirestore.instance;
+  findname (String senderEmail) async {
+      final _firebaseFirestore = FirebaseFirestore.instance;
     print(senderEmail);
 
     final res = await _firebaseFirestore
         .collection('users1')
         .where("email", isEqualTo: senderEmail)
         .get();
-
+        
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         if (res.docs[i]['email'] == senderEmail) {
           print('1');
           print(res.docs[i]['firstName']);
-          print(res.docs[i]['lastName']);
+           print(res.docs[i]['lastName']);
           print('2');
-          String fullname =
-              res.docs[i]['firstName'] + " " + res.docs[i]['lastName'];
+          String fullname = res.docs[i]['firstName'] +" "+res.docs[i]['lastName'];
           print(fullname);
           FullName = fullname;
           print(FullName);
         }
       }
     }
+
   }
 }
