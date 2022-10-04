@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/androidpublisher/v3.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/models/task_list.dart';
 
 import 'models/tasks.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AppState extends ChangeNotifier {
   List<dynamic> categories = [];
@@ -74,6 +74,7 @@ class AppState extends ChangeNotifier {
         .where('ListName', isEqualTo: list)
         .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
         .where('status', isEqualTo: 'pending')
+       //.orderBy('Deadline', descending: false)
         .get();
     for (int i = 0; i < res.docs.length; i++) {
       Tasksss taskss = Tasksss(
@@ -90,8 +91,6 @@ class AppState extends ChangeNotifier {
 
       // tasks.add(res.docs[i]['Task']);
     }
-    tasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
-
     // print(tasks.length);
     tasksLoading = false;
     notifyListeners();
@@ -129,7 +128,6 @@ class AppState extends ChangeNotifier {
 
       // tasks.add(res.docs[i]['Task']);
     }
-    completedtasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
     // print(tasks.length);
     completedtasksLoading = false;
     notifyListeners();
@@ -183,18 +181,16 @@ class AppState extends ChangeNotifier {
   }
 
   updateCheckboxValue(bool v, int index) async {
-
-
     tasksList[index].value = v;
-    // notifyListeners();
+
+    notifyListeners();
     completedtasksList.add(tasksList[index]);
     await FirebaseFirestore.instance
         .collection('tasks')
         .doc(tasksList[index].id)
         .update({'status': 'completed'});
-    tasksList.removeLast();
-    // tasksList.removeAt(index);
-    print("tasksList_3 ${tasksList.length}");
+    tasksList.removeAt(index);
+
     notifyListeners();
   }
 
@@ -202,7 +198,6 @@ class AppState extends ChangeNotifier {
   List<DateTime> toHighlight = [];
   bool allTasksLoading = false;
   getTasksofDate() async {
-    allTasks = [];
     allTasksLoading = true;
     //allTasks.clear();
     notifyListeners();
@@ -232,47 +227,18 @@ class AppState extends ChangeNotifier {
     }
     allTasksLoading = false;
     TasksModel.tasks = allTasks;
-    print("eeee ${allTasks.length}");
+    print(allTasks.length);
     notifyListeners();
   }
 
   List<Tasksss> filteredTasks = [];
-
-
   filterTasksByDate(date) {
     print(date);
     print('tasksk' + TasksModel.tasks.length.toString());
     filteredTasks.clear();
     notifyListeners();
-    // print('filteredTasks ${element.deadline.toString()}');
-    print('filteredTasks ${date.toString()}');
-    filteredTasks = TasksModel.tasks.where((element) {
-      String dateOnly = '' ;
-      if(element.deadline.runtimeType == Timestamp){
-        Timestamp timestamp = element.deadline;
-          DateTime dateTime =
-        timestamp.toDate();
-        dateOnly =
-            DateFormat('yyyy-MM-dd')
-                .format(dateTime);
-
-      }
-      else{
-        DateTime convertedDateTime = DateTime.parse(element.deadline.toString());
-        Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
-        DateTime dateTime =
-        timestamp.toDate();
-        dateOnly =
-            DateFormat('yyyy-MM-dd')
-                .format(dateTime);
-
-      }
-      print('filteredTasks ${dateOnly.toString()}');
-      print('filteredTasks ${date.toString()}');
-    return  dateOnly.toString() == date.toString();
-    // return  element.deadline.toString() == date.toString();
-    }).toList();
-    print('filteredTasks ${filteredTasks.length}');
+    filteredTasks =
+        TasksModel.tasks.where((element) => element.deadline == date).toList();
     notifyListeners();
   }
 

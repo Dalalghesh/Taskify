@@ -159,7 +159,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         var datee = DateFormat("yyyy-MM-dd").format(selectDay);
                         print(datee);
                         provider.filterTasksByDate(datee);
-                        print("provider.filteredTasks ${provider.filteredTasks}");
                         showTasksDialog(context, datee);
                         //print(selectDay);
 
@@ -343,7 +342,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                             itemBuilder: (context, index) {
                                               return GestureDetector(
                                                 onTap: () {
-                                                  // Navigator.pop(context);
+                                                  Navigator.pop(context);
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
