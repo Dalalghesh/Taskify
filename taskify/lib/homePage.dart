@@ -118,7 +118,7 @@ class NavBarState extends State<NavBar> {
         ),
         FABBottomAppBarItem(
           activeIcon: const Icon(
-            Icons.notifications,
+            Icons.person_add,
             color: Color.fromARGB(255, 170, 170, 170),
           ),
           inActiveIcon: const Icon(

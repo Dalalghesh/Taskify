@@ -24,10 +24,10 @@ class RecievedInvitations extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50.0),
+            preferredSize: Size.fromHeight(45.0),
             child: AppBar(
               title: Text(
-                '  Received Invitation',
+                '          Invitation',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
