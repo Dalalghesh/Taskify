@@ -64,6 +64,7 @@ class _AddTask extends State<AddTask> {
         type: CoolAlertType.error,
         text: "You don't have lists, create list first!",
         confirmBtnColor: const Color(0xff7b39ed),
+        title: "Ooops",
         onConfirmBtnTap: () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => AddList())),
       );
@@ -298,7 +299,7 @@ class _AddTask extends State<AddTask> {
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 223, 123, 123),
                                 fillInColor:
-                                    Color.fromARGB(255, 243, 207, 207)),
+                                    Color.fromARGB(255, 250, 170, 170)),
                             AnimatedRadioButtonItem(
                                 label: "Medium",
                                 labelTextStyle: TextStyle(
@@ -439,6 +440,7 @@ class _AddTask extends State<AddTask> {
                                     content: Text("Created successfully"));
 
                                 CoolAlert.show(
+                                  title: "Success",
                                   context: context,
                                   type: CoolAlertType.success,
                                   text: "List created successfuly!",

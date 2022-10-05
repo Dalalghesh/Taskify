@@ -28,7 +28,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   void initState() {
-
     // TODO: implement initState
     super.initState();
   }
@@ -185,17 +184,39 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Center(
-                                child: Container(
+                              Row(
+                                children: [
+                                  Container(
                                     margin: EdgeInsets.only(
                                         top: 14, left: 10, right: 10),
-                                    child: Text(
-                                      'Tasks of $date',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: const Icon(
+                                            Icons.close,
+                                          ),
+                                        ),
                                       ),
-                                    )),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                            top: 14, left: 10, right: 10),
+                                        child: Text(
+                                          'Tasks of $date',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                  ),
+                                ],
                               ),
                               Container(
                                 height: 200,
@@ -210,7 +231,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       )
                                     : provider.filteredTasks.isEmpty
                                         ? const Center(
-                                            child: Text('List is empty'),
+                                            child:
+                                                Text('There are no tasks yet'),
                                           )
                                         : ListView.builder(
                                             shrinkWrap: true,
@@ -313,36 +335,36 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.03,
                               ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                width: MediaQuery.of(context).size.width,
-                                alignment: Alignment.bottomRight,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          margin: EdgeInsets.only(right: 20),
-                                          child: const Text(
-                                            'OK',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                              // Container(
+                              //   margin: EdgeInsets.only(bottom: 10),
+                              //   height:
+                              //       MediaQuery.of(context).size.height * 0.05,
+                              //   width: MediaQuery.of(context).size.width,
+                              //   alignment: Alignment.bottomRight,
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.end,
+                              //     crossAxisAlignment: CrossAxisAlignment.end,
+                              //     children: [
+                              //       GestureDetector(
+                              //         onTap: () async {
+                              //           Navigator.pop(context);
+                              //         },
+                              //         child: Padding(
+                              //           padding: const EdgeInsets.all(8.0),
+                              //           child: Container(
+                              //             margin: EdgeInsets.only(right: 20),
+                              //             child: const Text(
+                              //               'OK',
+                              //               style: TextStyle(
+                              //                   fontWeight: FontWeight.w600,
+                              //                   fontSize: 16),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // )
                             ],
                           ),
                         ),
