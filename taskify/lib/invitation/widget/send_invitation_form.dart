@@ -132,6 +132,18 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                 if (value!.isEmpty) {
                   return 'Please enter email';
                 }
+                // if (email!.isEmpty) {
+                //   return 'Please Fill in the email';
+                // }
+
+                const p =
+                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(gmail.com)$';
+
+                final regExp = RegExp(p, caseSensitive: false);
+
+                if (!regExp.hasMatch(value.trim())) {
+                  return 'Please Enter Gmail Email Address';
+                }
               },
             ),
           ),
