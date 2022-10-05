@@ -151,7 +151,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     CoolAlert.show(
          context: context,
          type: CoolAlertType.error,
-         text: "The invitation has already been sent ",
+         text: "You can't send same invitation twice!",
          confirmBtnColor: const Color(0xff7b39ed),
        );
          _typeAheadController.clear();
@@ -161,7 +161,18 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
          getUsersToken(email.toString());   
        }
           
-      
+          
+              
+
+             /* await sendInviation(query, widget.listId);
+              print('h2');
+              print(query);
+              print(email.toString());
+              getUsersToken(email.toString());
+              //  print('dalal');
+              sendNotification('New Invitation', "");*/
+              //checkDub(email.toString() , widget.listId);
+              //checkifDuplicate(email.toString());
             },
             child: const Text(
               'Invite',
