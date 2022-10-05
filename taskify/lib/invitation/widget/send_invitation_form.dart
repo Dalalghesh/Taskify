@@ -45,6 +45,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   List<UserModel> modelTokens = [];
 
   void initState() {
+    // TODO: implement initState
     super.initState();
     FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((event) {
@@ -54,41 +55,41 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
 
-  Future<void> sendInviation(String recieverEmail, String listId) async {
-    try {
-      // final senderEmail = _firebaseAuth.currentUser?.email;
-      final validate = _formKey.currentState?.validate();
-
-
-      if (validate ?? false) {
-        _formKey.currentState?.save();
-        // print(email.toString());
-        await context.read<InvitaitonProvider>().sendInvitation(
-            email!, widget.category, widget.list, widget.listId);
-          
-        // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.success,
-          text: "Invitation sent successfully",
-          confirmBtnColor: const Color(0xff7b39ed),
-          // onConfirmBtnTap: () => route(isChecked),
-        );
-        // showPlatformDialogue(
-        //     context: context, title: "Invitation sent successfully");
-        _formKey.currentState?.reset();
-      }
-    } catch (e) {
-      _formKey.currentState?.reset();
+  Future<void> sendInviation() async {
+    // try {
+    final validate = _formKey.currentState?.validate();
+    if (validate ?? false) {
+      _formKey.currentState?.save();
+      // print(email.toString());
+      await context
+          .read<InvitaitonProvider>()
+          .sendInvitation(email!, widget.category, widget.list, widget.listId);
+      // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
       CoolAlert.show(
         context: context,
-        type: CoolAlertType.error,
-        text: "You can't invite yourself!",
+        type: CoolAlertType.success,
+        text: "Invitation sent successfully",
         confirmBtnColor: const Color(0xff7b39ed),
+        // onConfirmBtnTap: () => route(isChecked),
       );
+      // showPlatformDialogue(
+      //     context: context, title: "Invitation sent successfully");
+      _formKey.currentState?.reset();
+      _typeAheadController.clear();
     }
-    _typeAheadController.clear();
   }
+
+  // catch (e) {
+  //   _formKey.currentState?.reset();
+  //   CoolAlert.show(
+  //     context: context,
+  //     type: CoolAlertType.error,
+  //     text: "You can't invite yourself!",
+  //     confirmBtnColor: const Color(0xff7b39ed),
+  //   );
+  // }
+  // _typeAheadController.clear();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -287,26 +288,22 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
       print(recieverEmail);
       print(listId);
 
-    final res = await _firebaseFirestore
-        .collection('invitations')
-        .where("recieverEmail", isEqualTo: recieverEmail).where("senderEmail", isEqualTo: senderEmail).where("listId", isEqualTo: listId)
-        .get();
-        
-    if (res.docs.isNotEmpty) {
-      print("helloooooooo");
-       print("dublicate00");
-    CoolAlert.show(
-         context: context,
-         type: CoolAlertType.error,
-         text: "You can't send same invitation twice!",
-         confirmBtnColor: const Color(0xff7b39ed),
-       );
-       }
-       else{
-        return false;
-       }
-    }
-  }
+  //       final res1 = await _firebaseFirestore
+  //       .collection('invitations')
+  //       .where("senderEmail", isEqualTo: senderEmail).where("recieverEmail", isEqualTo : recieverEmail)
+  //       .get();
 
-  
+  //       print("dublicate2");
 
+  //        if (res1.docs.isNotEmpty) {
+  //         print("dublicate00");
+  //         CoolAlert.show(
+  //       context: context,
+  //       type: CoolAlertType.error,
+  //       text:  "You can't send same invitation twice!",
+  //       confirmBtnColor: const Color(0xff7b39ed),
+  //          );
+  //        }
+  //           print("dublicate4");
+  // }
+}
