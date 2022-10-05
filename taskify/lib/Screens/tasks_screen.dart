@@ -14,8 +14,11 @@ class TaskScreen extends StatefulWidget {
   final String category;
   final String list;
 
-  TaskScreen({Key? key, required this.category, required this.list})
-      : super(key: key);
+  TaskScreen({
+    Key? key,
+    required this.category,
+    required this.list,
+  }) : super(key: key);
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
