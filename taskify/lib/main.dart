@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:googleapis_auth/auth.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:provider/provider.dart';
@@ -8,18 +10,24 @@ import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/provider/invitation.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:taskify/service/local_push_notification.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'Util.dart';
 import 'firebase_options.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 
 import 'package:taskify/onboarding/onboarding_screen.dart';
+
+import 'homePage.dart';
 // #7b39ed - primary color
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   var _clientID = new ClientId(Secret.getId(), "");
   const _scopes = const [cal.CalendarApi.calendarScope];
+  LocalNotificationService.initialize();
   // await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
   //    CalendarClient.calendar = cal.CalendarApi(client);
   //  });
@@ -32,6 +40,15 @@ void prompt(String url) async {
   } else {
     throw 'Could not launch $url';
   }
+}
+
+void initState() {
+  FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onMessage.listen((event) {
+    LocalNotificationService.display(event);
+  });
+
+  FirebaseMessaging.instance.subscribeToTopic('subscription');
 }
 
 class MyApp extends StatelessWidget {
@@ -47,6 +64,16 @@ class MyApp extends StatelessWidget {
     800: Color(0xff7b39ed),
     900: Color(0xff7b39ed),
   });
+
+  void initState() {
+    // TODO: implement initState
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+
+    FirebaseMessaging.instance.subscribeToTopic('subscription');
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -49,7 +49,7 @@ class _TodoListState extends State<TodoList> {
           : provider.list.isEmpty
               ? Center(
                   child: Text(
-                  'List is empty',
+                  'There are no lists yet',
                   style: TextStyle(color: Colors.black, fontSize: 18),
                 ))
               : ListView.builder(

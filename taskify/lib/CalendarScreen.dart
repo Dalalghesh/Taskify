@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/controller/UserController.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:taskify/screens/Task_Detail.dart';
+import 'package:taskify/Screens/Task_Detail.dart';
 import 'package:taskify/screens/todo_list_screen.dart';
 import 'package:taskify/utils/app_colors.dart';
 import "package:googleapis_auth/auth_io.dart";
@@ -48,7 +48,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             TableCalendar(
               focusedDay: focusedDay,
               firstDay: DateTime(1990),
-              lastDay: DateTime(2050),
+              lastDay: DateTime(2024),
               calendarBuilders: CalendarBuilders(
                 defaultBuilder: (context, day, focusedDay) {
                   for (DateTime d in provider.toHighlight) {
@@ -59,20 +59,27 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       print('$d $type');
 
                       return Container(
-                        decoration: BoxDecoration(
-                          color: type == 'High'
-                              ? Color.fromARGB(255, 223, 123, 123)
-                              : type == 'Medium'
-                                  ? Color.fromARGB(255, 241, 207, 65)
-                                  : Color.fromARGB(255, 152, 224, 154),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8.0),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        height: 46,
+                        width: 33,
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: type == 'High'
+                                ? Color.fromARGB(255, 223, 123, 123)
+                                : type == 'Medium'
+                                    ? Color.fromARGB(255, 241, 207, 65)
+                                    : Color.fromARGB(255, 152, 224, 154),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${day.day}',
-                            style: const TextStyle(color: Colors.white),
+                          child: Center(
+                            widthFactor: 10,
+                            heightFactor: 10,
+                            child: Text(
+                              '${day.day}',
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       );
@@ -89,7 +96,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   format = _format;
                 });
               },
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: StartingDayOfWeek.sunday,
               daysOfWeekVisible: true,
 
               //Day Changed on select
@@ -114,7 +121,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               calendarStyle: CalendarStyle(
                 isTodayHighlighted: true,
                 selectedDecoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color(0xff7b39ed),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(5.0),
                 ),
@@ -138,7 +145,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 titleCentered: true,
                 formatButtonShowsNext: false,
                 formatButtonDecoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color(0xff7b39ed),
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 formatButtonTextStyle: TextStyle(
@@ -168,46 +175,64 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       Center(
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: context.theme.canvasColor,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black,
-                                    blurRadius: 2,
-                                    spreadRadius: .1)
-                              ]),
+                            borderRadius: BorderRadius.circular(4),
+                            color: context.theme.canvasColor,
+                          ),
                           margin: EdgeInsets.only(
                               top: 10, left: 10, right: 10, bottom: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Center(
-                                child: Container(
+                              Row(
+                                children: [
+                                  Container(
                                     margin: EdgeInsets.only(
                                         top: 14, left: 10, right: 10),
-                                    child: Text(
-                                      'Tasks of $date',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: const Icon(
+                                            Icons.close,
+                                          ),
+                                        ),
                                       ),
-                                    )),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                            top: 14, left: 10, right: 10),
+                                        child: Text(
+                                          'Tasks of $date',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                  ),
+                                ],
                               ),
                               Container(
                                 height: 200,
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                   left: 10,
                                   right: 10,
                                   top: 20,
                                 ),
                                 child: provider.allTasksLoading
-                                    ? Center(
+                                    ? const Center(
                                         child: CircularProgressIndicator(),
                                       )
                                     : provider.filteredTasks.isEmpty
-                                        ? Center(
-                                            child: Text('List is empty'),
+                                        ? const Center(
+                                            child:
+                                                Text('There are no tasks yet'),
                                           )
                                         : ListView.builder(
                                             shrinkWrap: true,
@@ -216,7 +241,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                             itemBuilder: (context, index) {
                                               return GestureDetector(
                                                 onTap: () {
-                                                  Navigator.pop(context);
+                                                  // Navigator.pop(context);
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
@@ -226,32 +251,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                                         .filteredTasks[
                                                                     index],
                                                               )));
-                                                  //    DateTime date = provider.completedtasksList[index].deadline.toDate();
-                                                  // var date1 =   DateFormat("yyyy-MM-dd").format(date);
-                                                  //   print(date1);
                                                 },
                                                 child: Container(
                                                   height: 50,
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  margin: EdgeInsets.only(
+                                                  margin: const EdgeInsets.only(
                                                       left: 20,
                                                       right: 20,
                                                       top: 5,
                                                       bottom: 5),
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.grey,
-                                                          blurRadius: 3,
-                                                        )
-                                                      ],
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8)),
-                                                  //alignment: Alignment.center,
+                                                  alignment: Alignment.center,
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -301,7 +317,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                                 index]
                                                             .task,
                                                         textAlign:
-                                                            TextAlign.left,
+                                                            TextAlign.right,
                                                       ),
                                                       Container(),
 
@@ -319,33 +335,36 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.03,
                               ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                width: MediaQuery.of(context).size.width,
-                                alignment: Alignment.bottomRight,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(right: 20),
-                                        child: Text(
-                                          'OK',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                              // Container(
+                              //   margin: EdgeInsets.only(bottom: 10),
+                              //   height:
+                              //       MediaQuery.of(context).size.height * 0.05,
+                              //   width: MediaQuery.of(context).size.width,
+                              //   alignment: Alignment.bottomRight,
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.end,
+                              //     crossAxisAlignment: CrossAxisAlignment.end,
+                              //     children: [
+                              //       GestureDetector(
+                              //         onTap: () async {
+                              //           Navigator.pop(context);
+                              //         },
+                              //         child: Padding(
+                              //           padding: const EdgeInsets.all(8.0),
+                              //           child: Container(
+                              //             margin: EdgeInsets.only(right: 20),
+                              //             child: const Text(
+                              //               'OK',
+                              //               style: TextStyle(
+                              //                   fontWeight: FontWeight.w600,
+                              //                   fontSize: 16),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // )
                             ],
                           ),
                         ),

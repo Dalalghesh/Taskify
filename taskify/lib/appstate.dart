@@ -8,12 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:taskify/models/task_list.dart';
 
 import 'models/tasks.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AppState extends ChangeNotifier {
   List<dynamic> categories = [];
   bool categoriesLoading = true;
+
   clearTask() {
-    tasksList.clear();
+    taskList.clear();
     notifyListeners();
   }
 
@@ -88,6 +90,8 @@ class AppState extends ChangeNotifier {
 
       // tasks.add(res.docs[i]['Task']);
     }
+    tasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
+
     // print(tasks.length);
     tasksLoading = false;
     notifyListeners();
@@ -125,6 +129,7 @@ class AppState extends ChangeNotifier {
 
       // tasks.add(res.docs[i]['Task']);
     }
+    completedtasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
     // print(tasks.length);
     completedtasksLoading = false;
     notifyListeners();
@@ -178,16 +183,18 @@ class AppState extends ChangeNotifier {
   }
 
   updateCheckboxValue(bool v, int index) async {
-    tasksList[index].value = v;
 
-    notifyListeners();
+
+    tasksList[index].value = v;
+    // notifyListeners();
     completedtasksList.add(tasksList[index]);
     await FirebaseFirestore.instance
         .collection('tasks')
         .doc(tasksList[index].id)
         .update({'status': 'completed'});
-    tasksList.removeAt(index);
-
+    tasksList.removeLast();
+    // tasksList.removeAt(index);
+    print("tasksList_3 ${tasksList.length}");
     notifyListeners();
   }
 
@@ -195,6 +202,7 @@ class AppState extends ChangeNotifier {
   List<DateTime> toHighlight = [];
   bool allTasksLoading = false;
   getTasksofDate() async {
+    allTasks = [];
     allTasksLoading = true;
     //allTasks.clear();
     notifyListeners();
@@ -204,9 +212,9 @@ class AppState extends ChangeNotifier {
         .get();
     for (int i = 0; i < res.docs.length; i++) {
       DateTime date = res.docs[i]['Deadline'].toDate();
-      // var date1 =  DateFormat("yyyy-MM-dd").format(date);
+      var date1 = DateFormat("yyyy-MM-dd").format(date);
       toHighlight.add(date);
-      // print(date1);
+      //print(date1);
 
       Tasksss tasks = Tasksss(
           id: res.docs[i].id,
@@ -216,7 +224,7 @@ class AppState extends ChangeNotifier {
           list: res.docs[i]['ListName'],
           description: res.docs[i]['description'],
           value: false,
-          deadline: Timestamp.fromDate(date));
+          deadline: date1);
 
       allTasks.add(tasks);
 
@@ -224,18 +232,47 @@ class AppState extends ChangeNotifier {
     }
     allTasksLoading = false;
     TasksModel.tasks = allTasks;
-    print(allTasks.length);
+    print("eeee ${allTasks.length}");
     notifyListeners();
   }
 
   List<Tasksss> filteredTasks = [];
+
+
   filterTasksByDate(date) {
     print(date);
     print('tasksk' + TasksModel.tasks.length.toString());
     filteredTasks.clear();
     notifyListeners();
-    filteredTasks =
-        TasksModel.tasks.where((element) => element.deadline == date).toList();
+    // print('filteredTasks ${element.deadline.toString()}');
+    print('filteredTasks ${date.toString()}');
+    filteredTasks = TasksModel.tasks.where((element) {
+      String dateOnly = '' ;
+      if(element.deadline.runtimeType == Timestamp){
+        Timestamp timestamp = element.deadline;
+          DateTime dateTime =
+        timestamp.toDate();
+        dateOnly =
+            DateFormat('yyyy-MM-dd')
+                .format(dateTime);
+
+      }
+      else{
+        DateTime convertedDateTime = DateTime.parse(element.deadline.toString());
+        Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
+        DateTime dateTime =
+        timestamp.toDate();
+        dateOnly =
+            DateFormat('yyyy-MM-dd')
+                .format(dateTime);
+
+      }
+      print('filteredTasks ${dateOnly.toString()}');
+      print('filteredTasks ${date.toString()}');
+    return  dateOnly.toString() == date.toString();
+    // return  element.deadline.toString() == date.toString();
+    }).toList();
+    print('filteredTasks ${filteredTasks.length}');
     notifyListeners();
   }
 

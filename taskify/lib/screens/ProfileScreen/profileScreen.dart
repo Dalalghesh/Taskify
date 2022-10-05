@@ -31,6 +31,7 @@ class HomeScreen extends StatelessWidget {
                   text: 'Do you want to logout?',
                   confirmBtnText: 'Yes',
                   cancelBtnText: 'No',
+                  title: "Logout",
                   confirmBtnColor: Color(0xff7b39ed),
                   onConfirmBtnTap: () async {
                     await FirebaseAuth.instance.signOut();
