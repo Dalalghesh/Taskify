@@ -38,6 +38,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   final TextEditingController _typeAheadController = TextEditingController();
   String query = '';
   String? email;
+  String? myemail = FirebaseAuth.instance.currentUser!.email;
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   List<String> tokens = [];
@@ -132,9 +133,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                 if (value!.isEmpty) {
                   return 'Please enter email';
                 }
-                // if (email!.isEmpty) {
-                //   return 'Please Fill in the email';
-                // }
+                if (value == myemail) return 'You cannot invite yourself';
 
                 const p =
                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(gmail.com)$';
