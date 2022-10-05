@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/received_invitations.dart';
-import '../../Util.dart';
+// import '../../Util.dart';
 import '../../homePage.dart';
 import '../../utils/app_colors.dart';
 import '../models/invitation.dart';
@@ -15,12 +15,15 @@ class SingleInvitaionItem extends StatelessWidget {
     Key? key,
     required this.invitationModel,
   }) : super(key: key);
+  static String id = "ReceivedInvitation";
   final InvitationModel invitationModel;
+  static String FullName = "Dalal";
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     AppState provider = Provider.of<AppState>(context, listen: false);
+    findname(invitationModel.senderEmail);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
       padding: const EdgeInsets.all(8),
@@ -34,22 +37,20 @@ class SingleInvitaionItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // const Text(
-              //   "New Invitation",
-              //   style: TextStyle(
-              //     color: Colors.black,
-              //     fontSize: 15,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
               Text(
-                ' ' +
-                    invitationModel.senderEmail +
-                    '\n To ' +
+                " " + "$FullName" + " invites you",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'To ' +
                     invitationModel.list +
                     ' list \n In ' +
                     invitationModel.category +
-                    ' category',
+                    'category',
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 17,
@@ -69,7 +70,16 @@ class SingleInvitaionItem extends StatelessWidget {
                   ),
 
                   onPressed: () async {
-                    print(invitationModel.category);
+                    CoolAlert.show(
+                      title: "Success",
+                      context: context,
+                      type: CoolAlertType.success,
+                      text: 'Invitation accepted successfully!',
+                      confirmBtnColor: AppColors.deepPurple,
+                      // onConfirmBtnTap: () {
+                      //   Navigator.of(context).pop();
+                      // }
+                    );
 
                     await FirebaseFirestore.instance
                         .collection('invitations')
@@ -107,13 +117,6 @@ class SingleInvitaionItem extends StatelessWidget {
                             [FirebaseAuth.instance.currentUser!.email])
                       }, SetOptions(merge: true));
                     }
-
-                    CoolAlert.show(
-                      context: context,
-                      type: CoolAlertType.success,
-                      text: 'Invitation accepted successfully!',
-                      confirmBtnColor: AppColors.deepPurple,
-                    );
                   },
 
                   icon: Icon(
@@ -141,21 +144,25 @@ class SingleInvitaionItem extends StatelessWidget {
                   ),
                   onPressed: () async {
                     print(invitationModel.senderEmail);
+                    void reject(InvitationModel ID) async {
+                      await FirebaseFirestore.instance
+                          .collection('invitations')
+                          .doc(ID.id)
+                          .update({'status': 'rejected'});
+                    }
 
                     CoolAlert.show(
+                        title: "Hmm..",
                         context: context,
                         type: CoolAlertType.confirm,
                         text: 'Are you sure you want to reject the invitation?',
                         confirmBtnText: 'Yes',
                         cancelBtnText: 'No',
                         confirmBtnColor: Colors.green,
-                        onConfirmBtnTap: () async {
-                          await FirebaseFirestore.instance
-                              .collection('invitations')
-                              .doc(invitationModel.id)
-                              .update({'status': 'rejected'});
+                        onConfirmBtnTap: () {
+                          reject(invitationModel);
 
-                          Util.routeToWidget(context, NavBar(tabs: 0));
+                          Navigator.of(context).pop();
                         });
                   },
                   icon: Icon(
@@ -178,5 +185,31 @@ class SingleInvitaionItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  findname(String senderEmail) async {
+    final _firebaseFirestore = FirebaseFirestore.instance;
+    print(senderEmail);
+
+    final res = await _firebaseFirestore
+        .collection('users1')
+        .where("email", isEqualTo: senderEmail)
+        .get();
+
+    if (res.docs.isNotEmpty) {
+      for (int i = 0; i < res.docs.length; i++) {
+        if (res.docs[i]['email'] == senderEmail) {
+          print('1');
+          print(res.docs[i]['firstName']);
+          print(res.docs[i]['lastName']);
+          print('2');
+          String fullname =
+              res.docs[i]['firstName'] + " " + res.docs[i]['lastName'];
+          print(fullname);
+          FullName = fullname;
+          print(FullName);
+        }
+      }
+    }
   }
 }

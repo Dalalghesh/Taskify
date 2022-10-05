@@ -159,7 +159,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         var datee = DateFormat("yyyy-MM-dd").format(selectDay);
                         print(datee);
                         provider.filterTasksByDate(datee);
-                        print("provider.filteredTasks ${provider.filteredTasks}");
+                        print(
+                            "provider.filteredTasks ${provider.filteredTasks}");
                         showTasksDialog(context, datee);
                         //print(selectDay);
 
@@ -221,7 +222,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               )
                             : provider.categories.isEmpty
                                 ? Center(
-                                    child: Text('Categories is empty'),
+                                    child: Text('There are no categories yet'),
                                   )
                                 : GridView.builder(
                                     gridDelegate:
@@ -244,6 +245,29 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                       )));
                                         },
                                         child: Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Icon(
+                                                  Icons.widgets,
+                                                  color: Color(0xff7b39ed),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  provider.categories[index],
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
                                           height: 80,
                                           margin: EdgeInsets.all(4),
                                           width: MediaQuery.of(context)
@@ -262,13 +286,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                             // ],
                                           ),
                                           alignment: Alignment.center,
-                                          child: Text(
-                                            provider.categories[index],
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600),
-                                          ),
+                                          // child: Text(
+                                          //   provider.categories[index],
+                                          //   style: TextStyle(
+                                          //       color: Colors.black,
+                                          //       fontSize: 18,
+                                          //       fontWeight: FontWeight.w600),
+                                          // ),
                                         ),
                                       );
                                     }))
@@ -296,12 +320,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             color: context.theme.canvasColor,
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //       color: Colors.black,
-                            //       blurRadius: 2,
-                            //       spreadRadius: .1)
-                            // ]
                           ),
                           margin: EdgeInsets.only(
                               top: 10, left: 10, right: 10, bottom: 20),
@@ -309,17 +327,39 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Center(
-                                child: Container(
+                              Row(
+                                children: [
+                                  Container(
                                     margin: EdgeInsets.only(
                                         top: 14, left: 10, right: 10),
-                                    child: Text(
-                                      'Tasks of $date',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: const Icon(
+                                            Icons.close,
+                                          ),
+                                        ),
                                       ),
-                                    )),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                            top: 14, left: 10, right: 10),
+                                        child: Text(
+                                          'Tasks of $date',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                  ),
+                                ],
                               ),
                               Container(
                                 height: 200,
@@ -334,7 +374,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                       )
                                     : provider.filteredTasks.isEmpty
                                         ? Center(
-                                            child: Text('List is empty'),
+                                            child:
+                                                Text('There are no tasks yet'),
                                           )
                                         : ListView.builder(
                                             shrinkWrap: true,
@@ -446,33 +487,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.03,
                               ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                width: MediaQuery.of(context).size.width,
-                                alignment: Alignment.bottomRight,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(right: 20),
-                                        child: Text(
-                                          'OK',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
                             ],
                           ),
                         ),

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
 import 'package:taskify/screens/Add_Category.dart';
-
 import '../homePage.dart';
 import 'AddTask.dart';
 import 'package:taskify/util.dart';
@@ -54,6 +53,7 @@ class _AddList extends State<AddList> {
     if (categoriesList.length == 0)
       CoolAlert.show(
         context: context,
+        title: "",
         type: CoolAlertType.error,
         text: "You don't have categories, create category first!",
         confirmBtnColor: const Color(0xff7b39ed),
@@ -263,6 +263,7 @@ class _AddList extends State<AddList> {
                             ListController.clear();
 
                             CoolAlert.show(
+                              title: "Success",
                               context: context,
                               type: CoolAlertType.success,
                               text: "List Added successfuly!",
