@@ -338,8 +338,12 @@ class _TaskScreenState extends State<TaskScreen> {
                                                               print("dalal");
                                                               print(widget.category);
                                                               print(widget.list);
-                                                               
-     
+                                                               for (int i = 0; i < res.docs.length; i++){
+                                                                 // final String receivertoken = res.docs[i]['token'];
+                                                                  //getUsersToken(receivertoken);
+                                                                  
+                                                               }
+
                                                             } else {
                                                              
                                                             }
@@ -548,9 +552,9 @@ class TasksCn {
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         if (res.docs[i]['email'] == recieverEmail) {
-          print('raghad');
+          print('dalal');
           print(res.docs[i]['token']);
-          print('raghad');
+          print('dalal');
           final String receivertoken = res.docs[i]['token'];
           sendNotification('Tasks Completed', receivertoken);
         }
