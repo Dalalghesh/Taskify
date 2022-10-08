@@ -4,13 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:taskify/models/tasks.dart';
 import 'package:intl/intl.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import '../screens/AddTask.dart';
 
 class TaskDetail extends StatelessWidget {
   final Tasksss task;
-  const TaskDetail({Key? key, required this.task}) : super(key: key);
+
+  TaskDetail({Key? key, required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    /*bool isopend = false;
+    AnimationController _AnimationController;
+    Animation<Color> _buttonColor;
+    Animation<double> _animationIcon;
+    Animation<double> _translateButton;
+    Curve _curve = Curves.easeOut;
+    double _fabHieght = 56.0;*/
+
     String dateOnly = "";
     if (task.deadline.runtimeType == Timestamp) {
       Timestamp timestamp = task.deadline;
@@ -51,6 +63,15 @@ class TaskDetail extends StatelessWidget {
               },
             ),
           ]),
+      /* floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Transform(
+            transform:
+                Matrix4.translation(0.0, _translateButton.value * 3.0, 0.0),
+          )
+        ],
+      ),*/
       body: Column(
         children: [
           Container(

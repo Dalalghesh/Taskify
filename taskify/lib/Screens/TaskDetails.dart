@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import 'package:cool_alert/cool_alert.dart';
 import '../screens/AddList.dart';
 import '../screens/Add_Category.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import '../screens/AddTask.dart';
 
 class TaskDetails extends StatelessWidget {
   final Tasksss task;
@@ -28,13 +31,28 @@ class TaskDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          task.task,
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xff7b39ed),
-      ),
+          title: Text(
+            task.task,
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          backgroundColor: Color(0xff7b39ed),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.confirm,
+                    text: 'Do you want to delete this task?',
+                    confirmBtnText: 'Yes',
+                    cancelBtnText: 'No',
+                    confirmBtnColor: Color(0xff7b39ed),
+                    title: "Delete",
+                    onConfirmBtnTap: () async {});
+              },
+            ),
+          ]),
       body: Column(
         children: [
           Container(

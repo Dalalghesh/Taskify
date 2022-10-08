@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:taskify/firebase_options.dart';
 import 'package:animated_radio_buttons/animated_radio_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +42,29 @@ Future<void> getUserData() async {
 }
 
 class _AddTask extends State<AddTask> {
+  //code for the picture
+
+  String taskPicLink = "";
+  void pickUploadtaskPic() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 512,
+      maxWidth: 512,
+      imageQuality: 90,
+    );
+
+    Reference ref = FirebaseStorage.instance.ref().child("taskpic.jpg");
+
+    await ref.putFile(File(image!.path));
+
+    ref.getDownloadURL().then((value) async {
+      setState(() {
+        taskPicLink = value;
+      });
+    });
+  }
+
+//code for the picture
   var selectCategory1;
   var selectCategory;
 
@@ -135,9 +161,49 @@ class _AddTask extends State<AddTask> {
                             height: 250,
                             width: 250,
                           )),
+
+                      Text(
+                        'Add picture:',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              pickUploadtaskPic();
+                            },
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(top: 80, bottom: 24),
+                              height: 120,
+                              width: 120,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              child: Center(
+                                child: taskPicLink == " "
+                                    ? const Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 80,
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.network(taskPicLink),
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 10,
                       ),
+
+                      //picture
 
                       Padding(
                         padding:
