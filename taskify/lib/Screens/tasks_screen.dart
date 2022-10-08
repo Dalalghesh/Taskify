@@ -69,9 +69,7 @@ class _TaskScreenState extends State<TaskScreen> {
               actions: [
                 IconButton(
                   icon: Icon(Icons.delete),
-                  onPressed: () {
-                    
-                  },
+                  onPressed: () {},
                 ),
               ]),
           body: Column(
@@ -377,6 +375,13 @@ class _TaskScreenState extends State<TaskScreen> {
                                   itemCount: provider.completedtasksList.length,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
+                                    Timestamp timestamp =
+                                        provider.tasksList[index].deadline;
+                                    DateTime dateTime = timestamp.toDate();
+
+                                    String dateOnly = DateFormat('dd/MM/yyyy')
+                                        .format(dateTime);
+
                                     return GestureDetector(
                                       onTap: () {
                                         // Navigator.pop(context);
@@ -443,13 +448,10 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   .task,
                                               textAlign: TextAlign.left,
                                             ),
-<<<<<<< Updated upstream:taskify/lib/Screens/tasks_screen.dart
-=======
                                             Text(
                                               '${dateOnly}',
                                             ),
 
->>>>>>> Stashed changes:taskify/lib/screens/tasks_screen.dart
                                             Container(),
 
                                             // Checkbox(value: provider.tasksList[index].value, onChanged: (v){

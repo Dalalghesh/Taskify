@@ -28,15 +28,6 @@ class TaskDetail extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-<<<<<<< Updated upstream
-        title: Text(
-          task.task,
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
-=======
           title: Text(
             task.task,
             style: TextStyle(color: Colors.white),
@@ -63,7 +54,6 @@ class TaskDetail extends StatelessWidget {
               },
             ),
           ]),
->>>>>>> Stashed changes
       body: Column(
         children: [
           Container(
