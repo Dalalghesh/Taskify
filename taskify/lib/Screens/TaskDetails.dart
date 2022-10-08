@@ -1,39 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/models/tasks.dart';
+import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+import 'package:cool_alert/cool_alert.dart';
+import '../screens/AddList.dart';
+import '../screens/Add_Category.dart';
 
 class TaskDetails extends StatelessWidget {
-  final String id;
-  final String category;
-  final String list;
-  final String priority;
-  final Timestamp deadline;
-  final String description;
-  final String task;
-  final bool value;
-  const TaskDetails({
-    Key? key,
-    required this.id,
-    required this.category,
-    required this.list,
-    required this.priority,
-    required this.deadline,
-    required this.description,
-    required this.task,
-    required this.value,
-  }) : super(key: key);
+  final Tasksss task;
+  const TaskDetails({Key? key, required this.task}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    String dateOnly = "";
+    if (task.deadline.runtimeType == Timestamp) {
+      Timestamp timestamp = task.deadline;
+      DateTime dateTime = timestamp.toDate();
+      dateOnly = DateFormat('dd/MM/yyyy').format(dateTime);
+    } else {
+      DateTime convertedDateTime = DateTime.parse(task.deadline.toString());
+      Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
+      DateTime dateTime = timestamp.toDate();
+      dateOnly = DateFormat('dd/MM/yyyy').format(dateTime);
+    }
+
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            task,
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          task.task,
+          style: TextStyle(color: Colors.white),
         ),
-        body: Column(children: [
+        centerTitle: true,
+        backgroundColor: Color(0xff7b39ed),
+      ),
+      body: Column(
+        children: [
           Container(
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -58,34 +61,29 @@ class TaskDetails extends StatelessWidget {
                       width: 20,
                       // margin: EdgeInsets.only(left: 16),
                       decoration: BoxDecoration(
-                        color: this.priority == 'High'
+                        color: task.priority == 'High'
                             ? Color.fromARGB(255, 223, 123, 123)
-                            : this.priority == 'Medium'
+                            : task.priority == 'Medium'
                                 ? Color.fromARGB(255, 223, 180, 123)
                                 : Color.fromARGB(255, 152, 224, 154),
                         shape: BoxShape.circle,
                       ),
                     ),
                     Text(
-                      this.task,
-                      style: TextStyle(
+                      task.task,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         //  color: Colors.grey.shade700,
                       ),
-                      textAlign: TextAlign.left,
+                      //  textAlign: TextAlign.left,
                     ),
-
-                    /*Text(
-                      tasks.deadline,
+                    Text(
+                      "${dateOnly}",
                       style: TextStyle(
                         color: Colors.grey.shade700,
                       ),
-                    ),*/
-
-                    // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
-                    //   provider.updateCheckboxValue(v!, index);
-                    // })
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -95,13 +93,34 @@ class TaskDetails extends StatelessWidget {
                   //    margin: EdgeInsets.only(left: 16),
 
                   child: Text(
-                    this.description,
+                    task.description,
                     style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
                   ),
                 ),
+                SizedBox(height: 15),
+                TextButton.icon(
+                    onPressed: () {
+                      // Respond to button press
+                    },
+                    icon: Icon(Icons.comment, size: 18),
+                    label: Text(
+                      "view comments",
+                      textAlign: TextAlign.center,
+                    )),
+                TextButton.icon(
+                    onPressed: () {
+                      // Respond to button press
+                    },
+                    icon: Icon(Icons.view_list, size: 18),
+                    label: Text(
+                      "view subtasks",
+                      textAlign: TextAlign.center,
+                    )),
               ],
             ),
-          )
-        ]));
+          ),
+        ],
+      ),
+    );
   }
 }

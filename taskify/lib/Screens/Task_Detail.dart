@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/models/tasks.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+import 'package:cool_alert/cool_alert.dart';
+import '../screens/AddList.dart';
+import '../screens/Add_Category.dart';
 
 class TaskDetail extends StatelessWidget {
   final Tasksss task;
@@ -23,6 +28,7 @@ class TaskDetail extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+<<<<<<< Updated upstream
         title: Text(
           task.task,
           style: TextStyle(color: Colors.black),
@@ -30,6 +36,34 @@ class TaskDetail extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
+=======
+          title: Text(
+            task.task,
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          backgroundColor: Color(0xff7b39ed),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.delete_rounded),
+              onPressed: () {
+                CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.confirm,
+                    text: 'Do you want to delete this task?',
+                    confirmBtnText: 'Yes',
+                    cancelBtnText: 'No',
+                    confirmBtnColor: Color(0xff7b39ed),
+                    title: "Delete",
+                    onConfirmBtnTap: () async {});
+              },
+            ),
+          ]),
+>>>>>>> Stashed changes
       body: Column(
         children: [
           Container(
@@ -79,10 +113,6 @@ class TaskDetail extends StatelessWidget {
                         color: Colors.grey.shade700,
                       ),
                     ),
-
-                    // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
-                    //   provider.updateCheckboxValue(v!, index);
-                    // })
                   ],
                 ),
                 SizedBox(
@@ -96,9 +126,37 @@ class TaskDetail extends StatelessWidget {
                     style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
                   ),
                 ),
+                SizedBox(height: 15),
+                TextButton.icon(
+                    onPressed: () {
+                      // Respond to button press
+                    },
+                    icon: Icon(Icons.comment, size: 18),
+                    label: Text(
+                      "view comments",
+                      textAlign: TextAlign.center,
+                    )),
+                TextButton.icon(
+                    onPressed: () {
+                      // Respond to button press
+                    },
+                    icon: Icon(Icons.view_list, size: 18),
+                    label: Text(
+                      "view subtasks",
+                      textAlign: TextAlign.center,
+                    )),
               ],
             ),
           ),
+          Container(
+            child: FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: Color(0xff7b39ed),
+              foregroundColor: Colors.white,
+              onPressed: () => {},
+            ),
+            alignment: Alignment(-0.8, -1),
+          )
         ],
       ),
     );

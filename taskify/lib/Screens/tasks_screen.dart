@@ -58,15 +58,22 @@ class _TaskScreenState extends State<TaskScreen> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(
-              widget.list,
-              style: TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
-            ),
-            centerTitle: true,
-            backgroundColor: Color(0xff7b39ed),
-            elevation: 0,
-          ),
+              title: Text(
+                widget.list,
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
+              ),
+              centerTitle: true,
+              backgroundColor: Color(0xff7b39ed),
+              elevation: 0,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    
+                  },
+                ),
+              ]),
           body: Column(
             children: <Widget>[
               SizedBox(
@@ -377,7 +384,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    TaskDetail(
+                                                    TaskDetails(
                                                       task: provider
                                                               .completedtasksList[
                                                           index],
@@ -436,6 +443,13 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   .task,
                                               textAlign: TextAlign.left,
                                             ),
+<<<<<<< Updated upstream:taskify/lib/Screens/tasks_screen.dart
+=======
+                                            Text(
+                                              '${dateOnly}',
+                                            ),
+
+>>>>>>> Stashed changes:taskify/lib/screens/tasks_screen.dart
                                             Container(),
 
                                             // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
