@@ -338,8 +338,8 @@ class _TaskScreenState extends State<TaskScreen> {
                                                               print("dalal");
                                                               print(widget.category);
                                                               print(widget.list);
-                                                               for (int i = 0; i < res.docs.length; i++){
-                                                                 // final String receivertoken = res.docs[i]['token'];
+                                                              // for (int i = 0; i < res.docs["UID"].length; i++){
+                                                                //final String receivertoken = res.docs[i]['token'];
                                                                   //getUsersToken(receivertoken);
                                                                   
                                                                }
