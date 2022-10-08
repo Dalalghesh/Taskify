@@ -80,7 +80,7 @@ class _Add_Category extends State<Add_Category> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Util.routeToWidget(context, NavBar(tabs: 0));
+              Navigator.pop(context);
             }, // home page
           ),
           actions: [

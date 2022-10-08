@@ -1,9 +1,12 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/screens/auth/login_screen.dart';
+import 'package:taskify/util.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'UpdateProfile.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -82,22 +85,38 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                       height: 50,
                     ),
-                    Container(
-                      height: 55,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Center(
-                          child: Text(
-                            "Update",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
+                    // Container(
+                    //   height: 55,
+                    //   width: double.infinity,
+                    //   child: ElevatedButton(
+                    //     onPressed: () {
+                    //       // Navigator.of(context).pushReplacement(
+                    //       //   MaterialPageRoute(
+                    //       //       builder: (context) => UpdateProfile()),
+                    //       // );
+                    //       Text(
+                    //           "Sdfjvfijpsdfpospodiopasidopaisopdisaopdipsoidposadospidpoasidopsadiapsodipoaidapsodiasopdoiaspdoasi");
+                    //       CoolAlert.show(
+                    //         context: context,
+                    //         type: CoolAlertType.success,
+                    //         title: "Success",
+                    //         text: "Created successfully",
+                    //         confirmBtnColor: const Color(0xff7b39ed),
+                    //         // onConfirmBtnTap: () => route(isChecked),
+                    //       );
+                    //       //     Util.routeToWidget(context, UpdateProfile());
+                    //     },
+                    //     child: Center(
+                    //       child: Text(
+                    //         "Update",
+                    //         style: TextStyle(
+                    //           fontSize: 20,
+                    //           color: Colors.white,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               )
@@ -133,11 +152,32 @@ class HomeScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.white,
                   image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/user-5.png'),
-                  ),
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          'https://cdn-icons-png.flaticon.com/512/847/847969.png')),
                 ),
               ),
+              SizedBox(
+                height: 104,
+              ),
+              Container(
+                height: 55,
+                width: 320,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Util.routeToWidget(context, UpdateProfile());
+                  },
+                  child: Center(
+                    child: Text(
+                      "Update",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ],
