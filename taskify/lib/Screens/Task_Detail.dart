@@ -3,10 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/models/tasks.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 import 'package:cool_alert/cool_alert.dart';
-import '../screens/AddList.dart';
-import '../screens/Add_Category.dart';
 
 class TaskDetail extends StatelessWidget {
   final Tasksss task;

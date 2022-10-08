@@ -451,12 +451,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                             Text(
                                               '${dateOnly}',
                                             ),
-
                                             Container(),
-
-                                            // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
-                                            //   provider.updateCheckboxValue(v!, index);
-                                            // })
                                           ],
                                         ),
                                       ),
