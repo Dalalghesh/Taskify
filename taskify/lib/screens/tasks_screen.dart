@@ -9,6 +9,12 @@ import 'package:taskify/homePage.dart';
 import 'package:intl/intl.dart';
 import '../controller/UserController.dart';
 import 'Task_Detail.dart';
+import 'dart:convert';
+import 'package:taskify/service/local_push_notification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 class TaskScreen extends StatefulWidget {
   final String category;
@@ -369,6 +375,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
+
                                         // Navigator.pop(context);
                                         Navigator.push(
                                             context,
@@ -475,3 +482,43 @@ class TasksCn {
   bool? second;
   TasksCn(this.first, this.second);
 }
+
+
+  sendNotification(String title, String token) async {
+    print('dalal');
+    print('raghad');
+
+    final data = {
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+      'id': '1',
+      'status': 'done',
+      'message': title,
+    };
+
+    try {
+      http.Response response =
+          await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+                'Authorization':
+                    'key=AAAArqJFQfk:APA91bFyFdlX-dk-72NHyaoN0hb4xsp8wuDUhr63ZgI7vroxRSBX1mXbd2pASgdzoYKA_8A0ZYRw61GzRaIH_6eakiVtyr_X8FJrlax-HwJdSUzbk022EGjfVjkDo7dlgYZNXaMfJS4T'
+              },
+              body: jsonEncode(<String, dynamic>{
+                'notification': <String, dynamic>{
+                  'title': title,
+                  'body': 'Your friend has completed some tasks!'
+                },
+                'priority': 'high',
+                'data': data,
+                'to': '$token'
+              }));
+
+      if (response.statusCode == 200) {
+        print("Yeh notificatin is sended");
+      } else {
+        print("Error");
+      }
+    } catch (e) {}
+  }
+
+
