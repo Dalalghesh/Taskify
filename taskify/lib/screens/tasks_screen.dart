@@ -333,7 +333,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         /////// send notifaiction for all users on the list 
                                                          final _firebaseFirestore = FirebaseFirestore.instance;
                                                           final res = await _firebaseFirestore
-                                                          .collection('List').where("CategoryName", isEqualTo:widget.category ).where("List", isEqualTo: widget.list).get(); 
+                                                          .collection('tasks').where("CategoryName", isEqualTo:widget.category ).where("ListName", isEqualTo: widget.list).get(); 
                                                             if (res.docs.isNotEmpty) {
                                                               print("dalal");
                                                               print(widget.category);
@@ -535,5 +535,28 @@ class TasksCn {
       }
     } catch (e) {}
   }
+
+
+  Future getUsersToken(String recieverEmail) async {
+      final _firebaseFirestore = FirebaseFirestore.instance;
+      
+
+    final res = await _firebaseFirestore
+        .collection('users1')
+        .where("email", isNotEqualTo: recieverEmail)
+        .get();
+    if (res.docs.isNotEmpty) {
+      for (int i = 0; i < res.docs.length; i++) {
+        if (res.docs[i]['email'] == recieverEmail) {
+          print('raghad');
+          print(res.docs[i]['token']);
+          print('raghad');
+          final String receivertoken = res.docs[i]['token'];
+          sendNotification('Tasks Completed', receivertoken);
+        }
+      }
+    }
+  }
+
 
 
