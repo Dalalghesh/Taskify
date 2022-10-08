@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +50,7 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context);
+    
     // TODO: implement build
 
     return buildColumnNew(context, provider);
@@ -303,7 +305,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   onCancelBtnTap: () {
                                                     Navigator.of(context).pop();
                                                   },
-                                                  onConfirmBtnTap: () {
+                                                  onConfirmBtnTap: () async {
                                                     CoolAlert.show(
                                                         title: "Successful",
                                                         context: context,
@@ -328,6 +330,19 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           Navigator.of(context)
                                                               .pop();
                                                         });
+                                                        /////// send notifaiction for all users on the list 
+                                                         final _firebaseFirestore = FirebaseFirestore.instance;
+                                                          final res = await _firebaseFirestore
+                                                          .collection('List').where("CategoryName", isEqualTo:widget.category ).where("List", isEqualTo: widget.list).get(); 
+                                                            if (res.docs.isNotEmpty) {
+                                                              print("dalal");
+                                                              print(widget.category);
+                                                              print(widget.list);
+                                                               
+     
+                                                            } else {
+                                                             
+                                                            }
                                                   },
                                                   confirmBtnColor:
                                                       Color(0xff7b39ed),
