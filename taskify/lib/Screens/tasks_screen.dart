@@ -200,20 +200,15 @@ class _TaskScreenState extends State<TaskScreen> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-              title: Text(
-                widget.list,
-                style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
-              ),
-              centerTitle: true,
-              backgroundColor: Color(0xff7b39ed),
-              elevation: 0,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {},
-                ),
-              ]),
+            title: Text(
+              widget.list,
+              style: TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
+            ),
+            centerTitle: true,
+            backgroundColor: Color(0xff7b39ed),
+            elevation: 0,
+          ),
           body: Column(
             children: <Widget>[
               SizedBox(
@@ -334,6 +329,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
+                                                  Container(
+                                                    child: IconButton(
+                                                      icon: Icon(
+                                                          Icons.arrow_right),
+                                                      iconSize: 35,
+                                                      onPressed: () {},
+                                                    ),
+                                                  ),
                                                   Container(
                                                     height: 20,
                                                     width: 20,
@@ -564,6 +567,13 @@ class _TaskScreenState extends State<TaskScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
+                                            Container(
+                                              child: IconButton(
+                                                icon: Icon(Icons.arrow_right),
+                                                iconSize: 35,
+                                                onPressed: () {},
+                                              ),
+                                            ),
                                             Container(
                                               height: 20,
                                               width: 20,

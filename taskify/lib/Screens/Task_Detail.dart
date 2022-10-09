@@ -15,14 +15,6 @@ class TaskDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*bool isopend = false;
-    AnimationController _AnimationController;
-    Animation<Color> _buttonColor;
-    Animation<double> _animationIcon;
-    Animation<double> _translateButton;
-    Curve _curve = Curves.easeOut;
-    double _fabHieght = 56.0;*/
-
     String dateOnly = "";
     if (task.deadline.runtimeType == Timestamp) {
       Timestamp timestamp = task.deadline;
@@ -63,15 +55,6 @@ class TaskDetail extends StatelessWidget {
               },
             ),
           ]),
-      /* floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Transform(
-            transform:
-                Matrix4.translation(0.0, _translateButton.value * 3.0, 0.0),
-          )
-        ],
-      ),*/
       body: Column(
         children: [
           Container(
@@ -139,15 +122,6 @@ class TaskDetail extends StatelessWidget {
                     onPressed: () {
                       // Respond to button press
                     },
-                    icon: Icon(Icons.comment, size: 18),
-                    label: Text(
-                      "view comments",
-                      textAlign: TextAlign.center,
-                    )),
-                TextButton.icon(
-                    onPressed: () {
-                      // Respond to button press
-                    },
                     icon: Icon(Icons.view_list, size: 18),
                     label: Text(
                       "view subtasks",
@@ -156,15 +130,6 @@ class TaskDetail extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            child: FloatingActionButton(
-              child: Icon(Icons.add),
-              backgroundColor: Color(0xff7b39ed),
-              foregroundColor: Colors.white,
-              onPressed: () => {},
-            ),
-            alignment: Alignment(-0.8, -1),
-          )
         ],
       ),
     );

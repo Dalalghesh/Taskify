@@ -120,15 +120,6 @@ class TaskDetails extends StatelessWidget {
                     onPressed: () {
                       // Respond to button press
                     },
-                    icon: Icon(Icons.comment, size: 18),
-                    label: Text(
-                      "view comments",
-                      textAlign: TextAlign.center,
-                    )),
-                TextButton.icon(
-                    onPressed: () {
-                      // Respond to button press
-                    },
                     icon: Icon(Icons.view_list, size: 18),
                     label: Text(
                       "view subtasks",

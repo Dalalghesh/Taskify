@@ -38,9 +38,9 @@ class _TodoListState extends State<TodoList> {
         centerTitle: true,
         title: Text(
           widget.category,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xff7b39ed),
       ),
       body: provider.listLoading
           ? Center(
