@@ -42,29 +42,6 @@ Future<void> getUserData() async {
 }
 
 class _AddTask extends State<AddTask> {
-  //code for the picture
-
-  String taskPicLink = "";
-  void pickUploadtaskPic() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxHeight: 512,
-      maxWidth: 512,
-      imageQuality: 90,
-    );
-
-    Reference ref = FirebaseStorage.instance.ref().child("taskpic.jpg");
-
-    await ref.putFile(File(image!.path));
-
-    ref.getDownloadURL().then((value) async {
-      setState(() {
-        taskPicLink = value;
-      });
-    });
-  }
-
-//code for the picture
   var selectCategory1;
   var selectCategory;
 
@@ -165,39 +142,6 @@ class _AddTask extends State<AddTask> {
                       Text(
                         'Add picture:',
                         style: Theme.of(context).textTheme.subtitle1,
-                      ),
-
-                      Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              pickUploadtaskPic();
-                            },
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.only(top: 80, bottom: 24),
-                              height: 120,
-                              width: 120,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white,
-                              ),
-                              child: Center(
-                                child: taskPicLink == " "
-                                    ? const Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 80,
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Image.network(taskPicLink),
-                                      ),
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                       SizedBox(
                         height: 10,
