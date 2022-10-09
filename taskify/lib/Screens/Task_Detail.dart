@@ -29,32 +29,13 @@ class TaskDetail extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            task.task,
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-          backgroundColor: Color(0xff7b39ed),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.delete_rounded),
-              onPressed: () {
-                CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.confirm,
-                    text: 'Do you want to delete this task?',
-                    confirmBtnText: 'Yes',
-                    cancelBtnText: 'No',
-                    confirmBtnColor: Color(0xff7b39ed),
-                    title: "Delete",
-                    onConfirmBtnTap: () async {});
-              },
-            ),
-          ]),
+        title: Text(
+          task.task,
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Color(0xff7b39ed),
+      ),
       body: Column(
         children: [
           Container(
@@ -108,6 +89,28 @@ class TaskDetail extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 20,
+                ),
+                Container(
+                  child: IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {},
+                  ),
+                ),
+                Container(
+                  child: IconButton(
+                    icon: Icon(Icons.delete_rounded),
+                    onPressed: () {
+                      CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.confirm,
+                          text: 'Do you want to delete this task?',
+                          confirmBtnText: 'Yes',
+                          cancelBtnText: 'No',
+                          confirmBtnColor: Color(0xff7b39ed),
+                          title: "Delete",
+                          onConfirmBtnTap: () async {});
+                    },
+                  ),
                 ),
                 Container(
                   //    margin: EdgeInsets.only(left: 16),

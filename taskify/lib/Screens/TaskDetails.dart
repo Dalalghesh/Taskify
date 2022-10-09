@@ -31,28 +31,13 @@ class TaskDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            task.task,
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-          backgroundColor: Color(0xff7b39ed),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.confirm,
-                    text: 'Do you want to delete this task?',
-                    confirmBtnText: 'Yes',
-                    cancelBtnText: 'No',
-                    confirmBtnColor: Color(0xff7b39ed),
-                    title: "Delete",
-                    onConfirmBtnTap: () async {});
-              },
-            ),
-          ]),
+        title: Text(
+          task.task,
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Color(0xff7b39ed),
+      ),
       body: Column(
         children: [
           Container(
@@ -103,6 +88,22 @@ class TaskDetails extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                Container(
+                  child: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.confirm,
+                          text: 'Do you want to delete this task?',
+                          confirmBtnText: 'Yes',
+                          cancelBtnText: 'No',
+                          confirmBtnColor: Color(0xff7b39ed),
+                          title: "Delete",
+                          onConfirmBtnTap: () async {});
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 20,
