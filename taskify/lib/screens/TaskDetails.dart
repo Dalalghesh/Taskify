@@ -102,6 +102,35 @@ class TaskDetails extends StatelessWidget {
               ],
             ),
           )
+           child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 20,
+                      // margin: EdgeInsets.only(left: 16),
+                      decoration: BoxDecoration(
+                        color: this.priority == 'High'
+                            ? Color.fromARGB(255, 223, 123, 123)
+                            : this.priority == 'Medium'
+                                ? Color.fromARGB(255, 223, 180, 123)
+                                : Color.fromARGB(255, 152, 224, 154),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    Text(
+                      this.task,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        //  color: Colors.grey.shade700,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+
         ]));
   }
 }
