@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
+import 'package:taskify/widgets/extensions.dart';
+import 'package:taskify/widgets/icons.dart';
+import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -60,6 +62,13 @@ class _Add_Category extends State<Add_Category> {
     });
   }
 
+  final chipIndex = 0.obs;
+  void changeChipIndex(int value) {
+    chipIndex.value = value;
+  }
+
+  @override
+  final icons = getIcons();
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -132,7 +141,7 @@ class _Add_Category extends State<Add_Category> {
                         ),
                       ),
                       validator: (value) {
-                        final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+                        final regExp = RegExp(r'^[a-zA-Z0-9 ]+$');
 
                         if (value!.isEmpty ||
                             value == null ||
@@ -149,6 +158,27 @@ class _Add_Category extends State<Add_Category> {
                   SizedBox(
                     height: 8,
                   ),
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(vertical: 5.0.wp),
+                  //   child: Wrap(
+                  //     spacing: 2.0.wp,
+                  //     children: icons
+                  //         .map((e) => Obx(() {
+                  //               final index = icons.indexOf(e);
+                  //               return ChoiceChip(
+                  //                 label: e,
+                  //                 selectedColor: Colors.grey[200],
+                  //                 pressElevation: 0,
+                  //                 backgroundColor: Colors.white,
+                  //                 selected: chipIndex.value == index,
+                  //                 onSelected: (bool selected) {
+                  //                   chipIndex.value = selected ? index : 0;
+                  //                 },
+                  //               );
+                  //             }))
+                  //         .toList(),
+                  //   ),
+                  // ),
                   Row(
                     children: [
                       Expanded(
@@ -159,6 +189,7 @@ class _Add_Category extends State<Add_Category> {
                             CoolAlert.show(
                               context: context,
                               type: CoolAlertType.success,
+                              title: "Success",
                               text: "Created successfully",
                               confirmBtnColor: const Color(0xff7b39ed),
                               // onConfirmBtnTap: () => route(isChecked),

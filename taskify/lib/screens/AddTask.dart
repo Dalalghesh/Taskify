@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:taskify/firebase_options.dart';
 import 'package:animated_radio_buttons/animated_radio_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +42,29 @@ Future<void> getUserData() async {
 }
 
 class _AddTask extends State<AddTask> {
+  //code for the picture
+
+  String taskPicLink = "";
+  void pickUploadtaskPic() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 512,
+      maxWidth: 512,
+      imageQuality: 90,
+    );
+
+    Reference ref = FirebaseStorage.instance.ref().child("taskpic.jpg");
+
+    await ref.putFile(File(image!.path));
+
+    ref.getDownloadURL().then((value) async {
+      setState(() {
+        taskPicLink = value;
+      });
+    });
+  }
+
+//code for the picture
   var selectCategory1;
   var selectCategory;
 
@@ -64,6 +90,7 @@ class _AddTask extends State<AddTask> {
         type: CoolAlertType.error,
         text: "You don't have lists, create list first!",
         confirmBtnColor: const Color(0xff7b39ed),
+        title: "Ooops",
         onConfirmBtnTap: () => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => AddList())),
       );
@@ -134,9 +161,49 @@ class _AddTask extends State<AddTask> {
                             height: 250,
                             width: 250,
                           )),
+
+                      Text(
+                        'Add picture:',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              pickUploadtaskPic();
+                            },
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(top: 80, bottom: 24),
+                              height: 120,
+                              width: 120,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              child: Center(
+                                child: taskPicLink == " "
+                                    ? const Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 80,
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.network(taskPicLink),
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 10,
                       ),
+
+                      //picture
 
                       Padding(
                         padding:
@@ -159,7 +226,7 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+                            final regExp = RegExp(r'^[a-zA-Z0-9 ]+$');
 
                             if (value!.isEmpty ||
                                 value == null ||
@@ -297,21 +364,24 @@ class _AddTask extends State<AddTask> {
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 223, 123, 123),
-                                fillInColor: Color.fromARGB(255, 243, 89, 89)),
+                                fillInColor:
+                                    Color.fromARGB(255, 250, 170, 170)),
                             AnimatedRadioButtonItem(
                                 label: "Medium",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 223, 180, 123),
-                                fillInColor: Color.fromARGB(255, 241, 194, 92)),
+                                fillInColor:
+                                    Color.fromARGB(255, 238, 211, 153)),
                             AnimatedRadioButtonItem(
                                 label: "Low",
                                 labelTextStyle: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                 color: Color.fromARGB(255, 152, 224, 154),
-                                fillInColor: Color.fromARGB(255, 54, 252, 159))
+                                fillInColor: Color.fromARGB(255, 213, 241, 228))
                           ],
                           onChanged: (value) {
+                            print(value);
                             setState(() {
                               myVar = value;
                             });
@@ -375,15 +445,16 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+                            // final regExp = RegExp(r'^[a-zA-Z0-9]+$');
 
                             if (value!.isEmpty ||
                                 value == null ||
                                 value.trim() == '')
                               return "Please enter a description";
-                            else if (!regExp.hasMatch(value.trim())) {
-                              return 'You cannot enter special characters !@#\%^&*()';
-                            } else if (value.length <= 2)
+                            // else if (!regExp.hasMatch(value.trim())) {
+                            //   return 'You cannot enter special characters !@#\%^&*()';
+                            //  }
+                            else if (value.length <= 2)
                               return "Please enter at least 3 characters";
 
                             return null;
@@ -435,6 +506,7 @@ class _AddTask extends State<AddTask> {
                                     content: Text("Created successfully"));
 
                                 CoolAlert.show(
+                                  title: "Success",
                                   context: context,
                                   type: CoolAlertType.success,
                                   text: "List created successfuly!",
@@ -455,7 +527,7 @@ class _AddTask extends State<AddTask> {
                       ),
 
                       SizedBox(
-                        height: 200,
+                        height: 300,
                       ),
                     ],
                   ),
