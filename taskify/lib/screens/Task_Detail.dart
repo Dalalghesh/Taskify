@@ -97,7 +97,25 @@ class TaskDetail extends StatelessWidget {
                   height: 20,
                 ),
                 Container(
-                  //    margin: EdgeInsets.only(left: 16),
+                  getCategories() async {
+    categoriesLoading = true;
+    final res = await FirebaseFirestore.instance
+        .collection('users1')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    categories = res['categories'];
+    categoriesLoading = false;
+    notifyListeners();
+  }
+
+  List<TaskListModel> list = [];
+  bool listLoading = true;
+  getList(cat) async {
+    listLoading = true;
+    notifyListeners();
+    list.clear();
+    print(cat);
+
 
                   child: Text(
                     task.description,
