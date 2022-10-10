@@ -83,27 +83,25 @@ class TaskDetails extends StatelessWidget {
                     ),
                     Text(
                       "${dateOnly}",
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                      ),
+                      style:
+                          TextStyle(color: Colors.grey.shade700, fontSize: 16),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      alignment: Alignment.topRight,
+                      onPressed: () {
+                        CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.confirm,
+                            text: 'Do you want to delete this task?',
+                            confirmBtnText: 'Yes',
+                            cancelBtnText: 'No',
+                            confirmBtnColor: Color(0xff7b39ed),
+                            title: "Delete",
+                            onConfirmBtnTap: () async {});
+                      },
                     ),
                   ],
-                ),
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.confirm,
-                          text: 'Do you want to delete this task?',
-                          confirmBtnText: 'Yes',
-                          cancelBtnText: 'No',
-                          confirmBtnColor: Color(0xff7b39ed),
-                          title: "Delete",
-                          onConfirmBtnTap: () async {});
-                    },
-                  ),
                 ),
                 SizedBox(
                   height: 20,
