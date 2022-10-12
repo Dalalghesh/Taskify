@@ -74,26 +74,10 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
           .read<InvitaitonProvider>()
           .sendInvitation(email!, widget.category, widget.list, widget.listId);
 
-      // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
-
-      // showPlatformDialogue(
-      //     context: context, title: "Invitation sent successfully");
       _formKey.currentState?.reset();
     }
     _typeAheadController.clear();
   }
-
-  // catch (e) {
-  //   _formKey.currentState?.reset();
-  //   CoolAlert.show(
-  //     context: context,
-  //     type: CoolAlertType.error,
-  //     text: "You can't invite yourself!",
-  //     confirmBtnColor: const Color(0xff7b39ed),
-  //   );
-  // }
-  // _typeAheadController.clear();
-  // }
 
   @override
   Widget build(BuildContext context) {

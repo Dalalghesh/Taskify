@@ -8,11 +8,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'UpdateProfile.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  _HomeScreen createState() => _HomeScreen();
+}
+
+class _HomeScreen extends State<HomeScreen> {
+  bool _editMode = false;
+  bool pressGeoON = false;
   @override
   Widget build(BuildContext context) {
+    TextEditingController email = TextEditingController(
+        text: '${FirebaseAuth.instance.currentUser!.email}');
+    TextEditingController name = TextEditingController(
+        text: '${FirebaseAuth.instance.currentUser!.displayName}');
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
@@ -56,6 +67,13 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
+          CustomPaint(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
+            painter: HeaderCurvedContainer(),
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -66,68 +84,76 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 115,
+                      height: 50,
                     ),
-                    Text(
-                      '${FirebaseAuth.instance.currentUser!.displayName}',
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                    ),
-                    Text(
-                      '${FirebaseAuth.instance.currentUser!.email}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                    ),
+                    Column(children: <Widget>[
+                      _editMode
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                  Text(
+                                    '${FirebaseAuth.instance.currentUser!.displayName}',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${FirebaseAuth.instance.currentUser!.email}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  )
+                                ])
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                  Container(
+                                    width: 290,
+                                    height: 30,
+                                    child: TextField(
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff7b39ed)),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff7b39ed)),
+                                        ),
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff7b39ed)),
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                      controller: name,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    '${FirebaseAuth.instance.currentUser!.email}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  )
+                                ])
+                    ]),
                     SizedBox(
                       height: 50,
                     ),
-                    // Container(
-                    //   height: 55,
-                    //   width: double.infinity,
-                    //   child: ElevatedButton(
-                    //     onPressed: () {
-                    //       // Navigator.of(context).pushReplacement(
-                    //       //   MaterialPageRoute(
-                    //       //       builder: (context) => UpdateProfile()),
-                    //       // );
-                    //       Text(
-                    //           "Sdfjvfijpsdfpospodiopasidopaisopdisaopdipsoidposadospidpoasidopsadiapsodipoaidapsodiasopdoiaspdoasi");
-                    //       CoolAlert.show(
-                    //         context: context,
-                    //         type: CoolAlertType.success,
-                    //         title: "Success",
-                    //         text: "Created successfully",
-                    //         confirmBtnColor: const Color(0xff7b39ed),
-                    //         // onConfirmBtnTap: () => route(isChecked),
-                    //       );
-                    //       //     Util.routeToWidget(context, UpdateProfile());
-                    //     },
-                    //     child: Center(
-                    //       child: Text(
-                    //         "Update",
-                    //         style: TextStyle(
-                    //           fontSize: 20,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // )
                   ],
                 ),
               )
             ],
-          ),
-          CustomPaint(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            ),
-            painter: HeaderCurvedContainer(),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -165,16 +191,26 @@ class HomeScreen extends StatelessWidget {
                 width: 320,
                 child: ElevatedButton(
                   onPressed: () {
-                    Util.routeToWidget(context, UpdateProfile());
+                    setState(() {
+                      _editMode = !_editMode;
+                      pressGeoON = !pressGeoON;
+                    });
+                    // Util.routeToWidget(context, UpdateProfile());
                   },
                   child: Center(
-                    child: Text(
-                      "Update",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: pressGeoON
+                        ? Text("Update",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ))
+                        : Text(
+                            "Save",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               )
