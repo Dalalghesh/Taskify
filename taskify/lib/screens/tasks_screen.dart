@@ -576,13 +576,33 @@ class TasksCn {
     }
   }
 
-  getUsers() async {
-   List<dynamic> UIDS = [];
+  getUsers(String CategoryName , String ListName) async {
+    
+      List<dynamic> UIDS = [];
+
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final res = await _firebaseFirestore.collection('tasks').where("CategoryName", isEqualTo:CategoryName)
+  .where("ListName", isEqualTo: ListName).get(); 
+
+       if (res.docs.isNotEmpty) {
+        
+
+       
+       
+       }
+    
+  }
+
+/*
+   getCategories() async {
+    categoriesLoading = true;
     final res = await FirebaseFirestore.instance
         .collection('users1')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-     UIDS = res['UID'];
-    
-  }
+    categories = res['categories'];
+    categoriesLoading = false;
+    notifyListeners();
+  }*/
+
 
