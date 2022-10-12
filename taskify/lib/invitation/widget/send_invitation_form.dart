@@ -310,6 +310,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
         .collection('users1')
         .where("email", isNotEqualTo: currentUserEmail)
         .get();
+    
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         if (res.docs[i]['email'] == receiver) {

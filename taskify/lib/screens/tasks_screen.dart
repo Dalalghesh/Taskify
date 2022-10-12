@@ -332,6 +332,9 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           Navigator.of(context)
                                                               .pop();
                                                         });
+print('befor calling');
+                                                        getUsers(widget.category , widget.list);
+                                                        print('after calling');
                                                         /////////////////////////////////
                                                         final res1 = await FirebaseFirestore.instance
                                                                .collection('tasks')
@@ -340,28 +343,13 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                .get();
 
                                                                 //List<dynamic> UIDS = [];
-                                                                
-
+                                                              
 
                                                         /////// send notifaiction for all users on the list 
                                                          final _firebaseFirestore = FirebaseFirestore.instance;
                                                           final res = await _firebaseFirestore
                                                           .collection('tasks').where("CategoryName", isEqualTo:widget.category ).where("ListName", isEqualTo: widget.list).get(); 
-                                                         
-
-                                                            if (res.docs.isNotEmpty) {
-                                                              print("dalal");
-                                                              print(widget.category);
-                                                              print(widget.list);
-                                                               for (int i = 0; i < res.docs.length; i++){
-                                                                 final String receivertoken = res.docs[i]['token'];
-                                                                  //getUsersToken(receivertoken);
-                                                                  
-                                                               }
-
-                                                            } else {
-                                                             
-                                                            }
+                                               
                                                   },
                                                   confirmBtnColor:
                                                       Color(0xff7b39ed),
@@ -555,73 +543,55 @@ class TasksCn {
     } catch (e) {}
   }
 
-
-  Future getUsersToken(String recieverEmail) async {
-      final _firebaseFirestore = FirebaseFirestore.instance;
-      
-
-    final res = await _firebaseFirestore
-        .collection('users1')
-        .where("email", isNotEqualTo: recieverEmail)
-        .get();
-    if (res.docs.isNotEmpty) {
-      for (int i = 0; i < res.docs.length; i++) {
-        if (res.docs[i]['email'] == recieverEmail) {
-          print('dalal');
-          print(res.docs[i]['token']);
-          print('dalal');
-          final String receivertoken = res.docs[i]['token'];
-          sendNotification('Tasks Completed', receivertoken);
-        }
-      }
-    }
-  }
-
-
   getUsers(String CategoryName , String ListName) async {
-
+    print('1');
      List<dynamic> UIDS = [];
   final _firebaseFirestore = FirebaseFirestore.instance;
 
     final res = await _firebaseFirestore
         .collection('tasks')
         .where("CategoryName", isEqualTo: CategoryName).where("ListName", isEqualTo: ListName).get(); 
-        
+
+        print('2');
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         if (res.docs[i]['ListName'] == ListName) {
           UIDS = res.docs[i]['UID'];
            for (int i = 0; i < UIDS.length; i++){
-            String useremail = UIDS[i].get();
+            print('dlool');
+            final String useremail = UIDS[i];
             print(useremail);
+            print('3');
+            print(useremail);
+            getUsersToken(useremail);
            }
-          print('D');
+        }
+      }
+    }  
+  }
+
+ Future getUsersToken(String receiver) async {
+    final _firebaseFirestore = FirebaseFirestore.instance;
+      final _firebaseAuth = FirebaseAuth.instance;
+      print(receiver);
+    print('hello');
+    final currentUserEmail = _firebaseAuth.currentUser?.email;
+    final sendEmail = '';
+ print('hello2');
+    final res = await _firebaseFirestore
+        .collection('users1')
+        .get();
+     print('hello3');
+    if (res.docs.isNotEmpty) {
+      for (int i = 0; i < res.docs.length; i++) {
+        if (res.docs[i]['email'] == receiver) {
+          print('dalll');
           print(res.docs[i]['token']);
-          print('d');
+          print('alll');
           final String receivertoken = res.docs[i]['token'];
-          sendNotification('New Invitation', receivertoken);
+          sendNotification('New task completed', receivertoken);
         }
       }
     }
-
-  final res1 = await _firebaseFirestore.collection('tasks').where("CategoryName", isEqualTo:CategoryName)
-  .where("ListName", isEqualTo: ListName).get(); 
-       if (res.docs.isNotEmpty) {
-    
-       }
-    
   }
-
-/*
-   getCategories() async {
-    categoriesLoading = true;
-    final res = await FirebaseFirestore.instance
-        .collection('users1')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    categories = res['categories'];
-    categoriesLoading = false;
-    notifyListeners();
-  }*/
-
 
