@@ -8,6 +8,16 @@ import 'package:taskify/invitation/screens/send_invitation.dart';
 import 'package:taskify/screens/tasks_screen.dart';
 
 import '../controller/UserController.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:taskify/models/task_list.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TodoList extends StatefulWidget {
   final String category;
@@ -32,6 +42,8 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
+    List<dynamic> Uids = [];
+
     AppState provider = Provider.of<AppState>(context);
     // TODO: implement build
     return Scaffold(
@@ -61,41 +73,53 @@ class _TodoListState extends State<TodoList> {
 
                     return Dismissible(
                         key: Key(item),
-                        // background: Container(
-                        //   alignment: Alignment.centerRight,
-                        //   color: Colors.red,
-                        //   child: const Icon(
-                        //     Icons.delete,
-                        //     size: 40.0,
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
-
                         confirmDismiss: (direction) {
                           return showDialog(
                               context: context,
                               builder: (context) {
-                                // CoolAlert.show(
-                                //   title: "Hmm..",
-                                //   context: context,
-                                //   type: CoolAlertType.confirm,
-                                //   text:
-                                //       'Are you sure you want to delete this list?',
-                                //   confirmBtnText: 'Yes',
-                                //   cancelBtnText: 'No',
-                                //   confirmBtnColor: Colors.green,
-                                //   onConfirmBtnTap: () {
-                                //     Navigator.of(context).pop(true);
-                                //   },
-                                //   onCancelBtnTap: () {
-                                //     Navigator.of(context).pop(false);
-                                //   },
-                                //   // onCancelBtnTap:  Navigator.of(context).pop(),
-                                // );
+                                provider.list[index].private
+                                    ? AlertDialog(
+                                        title: const Text('Hmm..'),
+                                        content: const Text(
+                                            'Are you sure you want to leave and delete this list?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            child: const Text('Yes'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                            child: const Text('No'),
+                                          )
+                                        ],
+                                      )
+                                    : AlertDialog(
+                                        title: const Text('Hmm..'),
+                                        content: const Text(
+                                            'Are you sure you want to leave and delete this list?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            child: const Text('Yes'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                            child: const Text('No'),
+                                          )
+                                        ],
+                                      );
                                 return AlertDialog(
                                   title: const Text('Hmm..'),
                                   content: const Text(
-                                      'Are you sure you want to delete this list?'),
+                                      'Are you sure you want to leave and delete this list?'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
@@ -107,33 +131,44 @@ class _TodoListState extends State<TodoList> {
                                       onPressed: () {
                                         Navigator.of(context).pop(false);
                                       },
-                                      child: const Text('no'),
+                                      child: const Text('No'),
                                     )
                                   ],
                                 );
                               });
                         },
-                        // confirmDismiss: (DismissDirection direction) async {
-                        //   if (direction == DismissDirection.endToStart) {
-                        // CoolAlert.show(
-                        //   title: "Hmm..",
-                        //   context: context,
-                        //   type: CoolAlertType.confirm,
-                        //   text:
-                        //       'Are you sure you want to delete this list?',
-                        //   confirmBtnText: 'Yes',
-                        //   cancelBtnText: 'No',
-                        //   confirmBtnColor: Colors.green,
-                        //   onConfirmBtnTap: () {
-                        //     Navigator.of(context).pop();
-                        //   },
-                        //   // onCancelBtnTap:  Navigator.of(context).pop(),
-                        // );
+                        //  List<dynamic> Uids = [];
+                        onDismissed: (direction) async {
+                          if (provider.list[index].email.contains(
+                              FirebaseAuth.instance.currentUser?.email)) {
+                            DocumentReference docRef = await FirebaseFirestore
+                                .instance
+                                .collection('List')
+                                .doc(provider.list[index].docId);
 
-                        //     return true;
-                        //   }
-                        // },
-                        onDismissed: (direction) {},
+                            docRef.update({
+                              'UID': FieldValue.arrayRemove(
+                                  [FirebaseAuth.instance.currentUser?.email])
+                            });
+                          }
+
+                          // DocumentSnapshot doc = await docRef.get();
+                          // List uid = doc.data['UID'];
+                          // await FirebaseFirestore.instance
+                          //     .collection('List')
+                          //     .doc(provider.list[index].docId)
+                          //     .update({
+                          //   'UID': FieldValue.arrayRemove(),
+                          // });
+                          //  Uids = provider.list[index].email;
+                          // for (int i = 0; i < Uids.length; i++) {
+                          //   // if (Uids[i] == FirebaseAuth.instance.currentUser)
+                          //   // if (Uids[i] == FirebaseAuth.instance.currentUser)
+                          //     // Uids.removeWhere((item) =>
+                          //     //     Uids[i] == FirebaseAuth.instance.currentUser);
+
+                          // }
+                        },
                         background: slideLeftBackground(),
                         child: InkWell(
                           onTap: () {
