@@ -18,6 +18,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
 class TaskScreen extends StatefulWidget {
+   List<dynamic> UIDS = [];
   final String category;
   final String list;
 
@@ -330,16 +331,29 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           Navigator.of(context)
                                                               .pop();
                                                         });
+                                                        /////////////////////////////////
+                                                        final res1 = await FirebaseFirestore.instance
+                                                               .collection('tasks')
+                                                              .where('CategoryName', isEqualTo: widget.category).where("ListName", isEqualTo: widget.list)
+                                                               .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+                                                               .get();
+
+                                                                //List<dynamic> UIDS = [];
+                                                                
+
+
                                                         /////// send notifaiction for all users on the list 
                                                          final _firebaseFirestore = FirebaseFirestore.instance;
                                                           final res = await _firebaseFirestore
                                                           .collection('tasks').where("CategoryName", isEqualTo:widget.category ).where("ListName", isEqualTo: widget.list).get(); 
+                                                         
+
                                                             if (res.docs.isNotEmpty) {
                                                               print("dalal");
                                                               print(widget.category);
                                                               print(widget.list);
-                                                              // for (int i = 0; i < res.docs["UID"].length; i++){
-                                                                //final String receivertoken = res.docs[i]['token'];
+                                                               for (int i = 0; i < res.docs.length; i++){
+                                                                 final String receivertoken = res.docs[i]['token'];
                                                                   //getUsersToken(receivertoken);
                                                                   
                                                                }
@@ -562,5 +576,13 @@ class TasksCn {
     }
   }
 
-
+  getUsers() async {
+   List<dynamic> UIDS = [];
+    final res = await FirebaseFirestore.instance
+        .collection('users1')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+     UIDS = res['UID'];
+    
+  }
 
