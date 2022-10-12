@@ -38,6 +38,7 @@ class _TaskScreenState extends State<TaskScreen> {
     getTask();
   }
 
+
   getTask() async {
     print(widget.category);
     await Future.delayed(Duration(milliseconds: 100));
@@ -576,19 +577,37 @@ class TasksCn {
     }
   }
 
+
   getUsers(String CategoryName , String ListName) async {
-    
-      List<dynamic> UIDS = [];
 
+     List<dynamic> UIDS = [];
   final _firebaseFirestore = FirebaseFirestore.instance;
-  final res = await _firebaseFirestore.collection('tasks').where("CategoryName", isEqualTo:CategoryName)
-  .where("ListName", isEqualTo: ListName).get(); 
 
-       if (res.docs.isNotEmpty) {
+    final res = await _firebaseFirestore
+        .collection('tasks')
+        .where("CategoryName", isEqualTo: CategoryName).where("ListName", isEqualTo: ListName).get(); 
         
+    if (res.docs.isNotEmpty) {
+      for (int i = 0; i < res.docs.length; i++) {
+        if (res.docs[i]['ListName'] == ListName) {
+          UIDS = res.docs[i]['UID'];
+           for (int i = 0; i < UIDS.length; i++){
+            String useremail = UIDS[i].get();
+            print(useremail);
+           }
+          print('D');
+          print(res.docs[i]['token']);
+          print('d');
+          final String receivertoken = res.docs[i]['token'];
+          sendNotification('New Invitation', receivertoken);
+        }
+      }
+    }
 
-       
-       
+  final res1 = await _firebaseFirestore.collection('tasks').where("CategoryName", isEqualTo:CategoryName)
+  .where("ListName", isEqualTo: ListName).get(); 
+       if (res.docs.isNotEmpty) {
+    
        }
     
   }
