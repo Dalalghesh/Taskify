@@ -77,49 +77,13 @@ class _TodoListState extends State<TodoList> {
                           return showDialog(
                               context: context,
                               builder: (context) {
-                                provider.list[index].private
-                                    ? AlertDialog(
-                                        title: const Text('Hmm..'),
-                                        content: const Text(
-                                            'Are you sure you want to leave and delete this list?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(true);
-                                            },
-                                            child: const Text('Yes'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(false);
-                                            },
-                                            child: const Text('No'),
-                                          )
-                                        ],
-                                      )
-                                    : AlertDialog(
-                                        title: const Text('Hmm..'),
-                                        content: const Text(
-                                            'Are you sure you want to leave and delete this list?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(true);
-                                            },
-                                            child: const Text('Yes'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(false);
-                                            },
-                                            child: const Text('No'),
-                                          )
-                                        ],
-                                      );
                                 return AlertDialog(
                                   title: const Text('Hmm..'),
-                                  content: const Text(
-                                      'Are you sure you want to leave and delete this list?'),
+                                  content: provider.list[index].private
+                                      ? const Text(
+                                          'Are you sure you want to delete this list?')
+                                      : const Text(
+                                          'Are you sure you want to leave and delete this list?'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
