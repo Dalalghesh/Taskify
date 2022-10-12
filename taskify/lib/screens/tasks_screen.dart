@@ -16,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:taskify/models/users.dart';
 
 class TaskScreen extends StatefulWidget {
    List<dynamic> UIDS = [];
@@ -36,8 +37,12 @@ class _TaskScreenState extends State<TaskScreen> {
     super.initState();
     Provider.of<AppState>(context, listen: false).clearTask();
     getTask();
+        FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+      FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
-
 
   getTask() async {
     print(widget.category);
