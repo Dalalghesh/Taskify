@@ -579,7 +579,7 @@ class TasksCn {
     final sendEmail = '';
  print('hello2');
     final res = await _firebaseFirestore
-        .collection('users1')
+        .collection('users1').where("email", isEqualTo: receiver)
         .get();
      print('hello3');
     if (res.docs.isNotEmpty) {
