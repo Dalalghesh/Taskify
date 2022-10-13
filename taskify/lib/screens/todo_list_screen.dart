@@ -92,7 +92,37 @@ class _TodoListState extends State<TodoList> {
                                         Icons.people,
                                         color: Color(0xff7b39ed),
                                       ),
-                                final ratings = Container(
+                                Future<void> _showMyDialog() async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('added successfully '),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: const <Widget>[
+              Text('completed!'),
+              Text('Would you like to cancel ?'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('completed'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+link
+
+                                final suuper = Container(
   padding: const EdgeInsets.all(20),
   child: Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
