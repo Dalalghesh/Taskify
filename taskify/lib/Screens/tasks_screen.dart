@@ -208,6 +208,13 @@ class _TaskScreenState extends State<TaskScreen> {
             centerTitle: true,
             backgroundColor: Color(0xff7b39ed),
             elevation: 0,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.filter_list),
+                onPressed: () {},
+                color: Colors.white,
+              )
+            ],
           ),
           body: Column(
             children: <Widget>[
@@ -381,7 +388,21 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             TextAlign.left,
                                                       ),
                                                       Text(
-                                                        '${dateOnly} ${isAfterDeadLine ? " - ${timeAgo(dateTime)}" : ""}',
+                                                        '${dateOnly} ',
+                                                        style: TextStyle(
+                                                          color: isAfterDeadLine
+                                                              ? Colors.black
+                                                              : Colors.black,
+                                                          fontWeight:
+                                                              isAfterDeadLine
+                                                                  ? FontWeight
+                                                                      .bold
+                                                                  : FontWeight
+                                                                      .normal,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        ' ${isAfterDeadLine ? " ${timeAgo(dateTime)}" : ""}',
                                                         style: TextStyle(
                                                           color: isAfterDeadLine
                                                               ? Colors.red
