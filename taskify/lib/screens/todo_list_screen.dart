@@ -79,6 +79,7 @@ class _TodoListState extends State<TodoList> {
                                 borderRadius: BorderRadius.circular(8)),
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             //alignment: Alignment.center,
+                            
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -91,6 +92,25 @@ class _TodoListState extends State<TodoList> {
                                         Icons.people,
                                         color: Color(0xff7b39ed),
                                       ),
+                                final ratings = Container(
+  padding: const EdgeInsets.all(20),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      stars,
+      const Text(
+        ' tasks',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w800,
+          fontFamily: 'Roboto',
+          letterSpacing: 0.5,
+          fontSize: 20,
+        ),
+      ),
+    ],
+  ),
+);
                                 Text(
                                   provider.list[index].list,
                                   style: TextStyle(
@@ -103,6 +123,23 @@ class _TodoListState extends State<TodoList> {
                                             color: Color.fromARGB(
                                                 0, 117, 117, 117)),
                                       )
+                                padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return const Divider();
+
+        final index = i ~/ 2;
+        if (index >= _suggestions.length) {
+          _suggestions.addAll(generateWordPairs().take(10));
+        }
+        return ListTile(
+          title: Text(
+            _suggestions[index].asPascalCase,
+            style: _biggerFont,
+          ),
+        );
+      },
+    );
+  }
                                     : IconButton(
                                         onPressed: () {
                                           Navigator.push(
