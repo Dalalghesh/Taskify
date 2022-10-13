@@ -589,12 +589,15 @@ class TasksCn {
      print('hello3');
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
-        if (res.docs[i]['email'] == receiver) {
+        if (res.docs[i]['email'] == receiver ) {
+          ///// exept current user 
+          if(res.docs[i]['email'] == currentUserEmail){
           print('dalll');
           print(res.docs[i]['token']);
           print('alll');
           final String receivertoken = res.docs[i]['token'];
           sendNotification('New task completed', receivertoken);
+          }
         }
       }
     }
