@@ -554,13 +554,13 @@ class TasksCn {
   final _firebaseFirestore = FirebaseFirestore.instance;
 
     final res = await _firebaseFirestore
-        .collection('tasks')
-        .where("CategoryName", isEqualTo: CategoryName).where("ListName", isEqualTo: ListName).get(); 
+        .collection('List')
+        .where("CategoryName", isEqualTo: CategoryName).where("List", isEqualTo: ListName).get(); 
 
         print('2');
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
-        if (res.docs[i]['ListName'] == ListName) {
+        if (res.docs[i]['List'] == ListName) {
           UIDS = res.docs[i]['UID'];
            for (int i = 0; i < UIDS.length; i++){
             print('dlool');
