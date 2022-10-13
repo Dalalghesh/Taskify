@@ -75,6 +75,22 @@ class TaskDetails extends StatelessWidget {
                       ),
                       textAlign: TextAlign.left,
                     ),
+                     child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 10, color: Colors.black38),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+        ),
+        margin: const EdgeInsets.all(4),
+        child: Image.asset('images/pic$imageIndex.jpg'),
+      ),
+    );
+
+Widget _buildImageRow(int imageIndex) => Row(
+      children: [
+        _buildDecoratedImage(imageIndex),
+        _buildDecoratedImage(imageIndex + 1),
+      ],
+    );
 
                     /*Text(
                       tasks.deadline,
