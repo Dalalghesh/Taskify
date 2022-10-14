@@ -178,20 +178,6 @@ class UpdateProfile extends StatelessWidget {
                       ),
                     )),
               ),
-              // Text(
-              //   '${FirebaseAuth.instance.currentUser!.displayName}',
-              //   style: TextStyle(
-              //     fontSize: 25,
-              //     color: Color.fromARGB(255, 0, 0, 0),
-              //   ),
-              // ),
-              // Text(
-              //   '${FirebaseAuth.instance.currentUser!.email}',
-              //   style: TextStyle(
-              //     fontSize: 18,
-              //     color: Color.fromARGB(255, 0, 0, 0),
-              //   ),
-              // ),
               SizedBox(
                 height: 50,
               ),
@@ -211,19 +197,6 @@ class UpdateProfile extends StatelessWidget {
                   ),
                 ),
               )
-              // Positioned(
-              //     bottom: 100000,
-              //     right: 5550,
-              //     child: Container(
-              //       margin: const EdgeInsets.only(
-              //           top: 1, bottom: 200, left: 90.0, right: 20.0),
-              //       height: 40,
-              //       width: 30,
-              //       decoration: BoxDecoration(
-              //           shape: BoxShape.circle,
-              //           border: Border.all(width: 2, color: Colors.white),
-              //           color: Colors.red),
-              //     ))
             ],
           ),
         ],
