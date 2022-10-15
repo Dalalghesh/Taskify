@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -9,6 +13,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../utils/validators.dart';
 import 'UpdateProfile.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
+import '../../firebase_options.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,7 +24,58 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+  File? image;
+
   late String namee;
+
+  Future pickImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return;
+
+    final imageTemp = File(image.path);
+    setState(() => this.image = imageTemp);
+    return imageTemp;
+  }
+
+  // dialoge to choose image
+  _selectImage(BuildContext parentContext) async {
+    return showDialog(
+      context: parentContext,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0))),
+          title: const Text('Upload photo'),
+          children: <Widget>[
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Take a photo'),
+                onPressed: () {
+                  pickImage(ImageSource.camera);
+                  Navigator.pop(context);
+                }),
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Choose from Gallery'),
+                onPressed: () {
+                  pickImage(ImageSource.gallery);
+                  Navigator.pop(context);
+                }),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 
   final formKey = GlobalKey<FormState>();
   bool _isInvalid = false;
@@ -41,7 +99,7 @@ class _HomeScreen extends State<HomeScreen> {
     getName();
     TextEditingController email = TextEditingController(
         text: '${FirebaseAuth.instance.currentUser!.email}');
-    var name = TextEditingController(text: nameee);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -51,44 +109,42 @@ class _HomeScreen extends State<HomeScreen> {
         title: Text(
           "My profile",
           style: TextStyle(
-            fontSize: 35,
+            fontSize: 30,
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.transparent),
-          onPressed: () {},
-        ),
         actions: [
-          IconButton(
-            padding: EdgeInsets.only(
-              right: 15,
-            ),
-            onPressed: () async {
-              CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.confirm,
-                  text: 'Do you want to logout?',
-                  confirmBtnText: 'Yes',
-                  cancelBtnText: 'No',
-                  title: "Logout",
-                  confirmBtnColor: Color(0xff7b39ed),
-                  onConfirmBtnTap: () async {
-                    await FirebaseAuth.instance.signOut();
+          _editMode
+              ? IconButton(
+                  padding: EdgeInsets.only(
+                    right: 15,
+                  ),
+                  onPressed: () async {
+                    CoolAlert.show(
+                        context: context,
+                        type: CoolAlertType.confirm,
+                        text: 'Do you want to logout?',
+                        confirmBtnText: 'Yes',
+                        cancelBtnText: 'No',
+                        title: "Logout",
+                        confirmBtnColor: Color(0xff7b39ed),
+                        onConfirmBtnTap: () async {
+                          await FirebaseAuth.instance.signOut();
 
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                    );
-                  });
-            },
-            icon: Icon(
-              Icons.logout_outlined,
-              color: Color.fromRGBO(255, 255, 255, 1),
-              size: 30,
-            ),
-          ),
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
+                        });
+                  },
+                  icon: Icon(
+                    Icons.logout_outlined,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                    size: 30,
+                  ),
+                )
+              : Container(),
         ],
       ),
       body: Stack(
@@ -119,42 +175,43 @@ class _HomeScreen extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      width: MediaQuery.of(context).size.width / 2.29,
-                      height: MediaQuery.of(context).size.width / 2.29,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 5),
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                'https://cdn-icons-png.flaticon.com/512/847/847969.png')),
-                      ),
-                    ),
-                    // SizedBox(
-                    //   height: 104,
-                    // ),
                   ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
-                      // height: 530,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         children: [
-                          // SizedBox(
-                          //   height: 50,
-                          // ),
                           Column(children: <Widget>[
                             _editMode
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10.0),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.29,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.29,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.white, width: 5),
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: AssetImage(
+                                                  'assets/user-5.png'),
+                                            ),
+                                          ),
+                                        ),
                                         Text(
                                           nameee,
                                           style: TextStyle(
@@ -174,13 +231,69 @@ class _HomeScreen extends State<HomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                         Container(
+                                          padding: EdgeInsets.all(10.0),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.29,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.29,
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                _selectImage(context);
+                                              }, // Image tapped
+
+                                              child: Stack(
+                                                children: <Widget>[
+                                                  Container(
+                                                      // decoration:
+                                                      //     new BoxDecoration(
+                                                      //         color:
+                                                      //             Colors.white),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      height: 240,
+                                                      child: Image.asset(
+                                                          'assets/user-5.png',
+                                                          // width: 110.0,
+                                                          // height: 110.0,
+                                                          fit: BoxFit.cover)),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.bottomRight,
+                                                    child: Icon(
+                                                      Icons.camera_alt_rounded,
+                                                      size: 30,
+                                                    ),
+                                                  )
+                                                ],
+                                                // Image.asset(
+                                                //   'assets/user-5.png',
+                                                //   fit: BoxFit.cover,
+                                                //   width: 110.0,
+                                                //   height: 110.0,
+                                                // ),
+                                              )),
+                                          decoration: BoxDecoration(
+                                            // border: Border.all(
+                                            //     color: Colors.white,
+                                            //     width: 1.0),
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Container(
                                           width: 290,
                                           height: _isInvalid ? 65 : 40,
                                           child: TextFormField(
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                            autocorrect: false,
+                                            keyboardType:
+                                                TextInputType.visiblePassword,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
-                                              // errorStyle: const TextStyle(
-                                              //     fontSize: 0.01),
                                               contentPadding:
                                                   EdgeInsets.symmetric(
                                                       vertical: 5.0,
@@ -192,10 +305,11 @@ class _HomeScreen extends State<HomeScreen> {
                                               color:
                                                   Color.fromARGB(255, 0, 0, 0),
                                             ),
-                                            keyboardType: TextInputType.text,
                                             textInputAction:
                                                 TextInputAction.next,
-                                            //   controller: name,
+                                            initialValue: nameee,
+                                            // controller: _controller,
+                                            // controller: name,
                                             //   validator: Validators.emptyValidator,
                                             validator: (value) {
                                               _isInvalid = false;
@@ -215,11 +329,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                 setState(() {
                                                   _isInvalid = true;
                                                 });
-                                                return 'You cannot enter special characters !@#\%^&*()';
-                                              }
-                                              //   name.text = value!;
-
-                                              else if (spaceIndex! > 10 ||
+                                                return 'You cannot enter numbers and special characters !@#\%^&*()';
+                                              } else if (spaceIndex! > 10 ||
                                                   value.length > 21) {
                                                 setState(() {
                                                   _isInvalid = true;
@@ -236,8 +347,9 @@ class _HomeScreen extends State<HomeScreen> {
                                               return null;
                                             },
 
-                                            onChanged: (value) async {
-                                              //  name.text = value;
+                                            onChanged: (value) {
+                                              // _controller.text = value; //
+                                              // name.text = "It changed!";
                                             },
                                           ),
                                         ),
@@ -276,46 +388,78 @@ class _HomeScreen extends State<HomeScreen> {
                                             ))),
                                   ),
                                 )
-                              : Container(
-                                  height: 55,
-                                  width: 320,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (formKey.currentState!.validate()) {
-                                        setState(() {
-                                          _editMode = !_editMode;
-                                          pressGeoON = !pressGeoON;
-                                        });
-                                        FirebaseFirestore.instance
-                                            .collection('users1')
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                            .update({
-                                          "firstName": firstName,
-                                          "lastName": lastName,
-                                        });
-                                        // FirebaseFirestore.instance
-                                        //     .collection('users1')
-                                        //     .doc('g7YRfNDuxNN8SftgUUIOuDDdJvt1')
-                                        //     .set({'firstName': firstName});
-                                        CoolAlert.show(
-                                          title: "Success",
-                                          context: context,
-                                          type: CoolAlertType.success,
-                                          text: "List Added successfuly!",
-                                          confirmBtnColor:
-                                              const Color(0xff7b39ed),
-                                        );
-                                      }
-                                    },
-                                    child: Center(
-                                        child: Text("Save",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                            ))),
-                                  ),
-                                )
+                              : Column(
+                                  children: [
+                                    Container(
+                                      height: 55,
+                                      width: 320,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            setState(() {
+                                              _editMode = !_editMode;
+                                              pressGeoON = !pressGeoON;
+                                            });
+
+                                            FirebaseFirestore.instance
+                                                .collection('users1')
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                                .update({
+                                              "firstName": firstName,
+                                              "lastName": lastName,
+                                            });
+
+                                            CoolAlert.show(
+                                              title: "Success",
+                                              context: context,
+                                              type: CoolAlertType.success,
+                                              text: "List Added successfuly!",
+                                              confirmBtnColor:
+                                                  const Color(0xff7b39ed),
+                                            );
+                                          }
+                                        },
+                                        child: Center(
+                                            child: Text("Save",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                ))),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                            style: TextButton.styleFrom(
+                                              primary: Colors.grey.shade600,
+                                              textStyle:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                pressGeoON = !pressGeoON;
+                                                _editMode = !_editMode;
+                                                _isInvalid = false;
+                                                //_isInvalid = !_isInvalid;
+                                                print(_editMode);
+                                              });
+                                            },
+                                            child: const Text(
+                                              'Later',
+                                              style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                     )

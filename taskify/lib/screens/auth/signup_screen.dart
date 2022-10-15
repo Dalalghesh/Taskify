@@ -263,6 +263,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'categories': <Map>[],
         'uid': userCredential.user!.uid,
         'timestamp': FieldValue.serverTimestamp(),
+        'Photo': 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
       };
       final docRef = FirebaseFirestore.instance.collection('users1').doc(uid);
       await docRef.set(userData, SetOptions(merge: true));
