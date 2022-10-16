@@ -8,7 +8,7 @@ import 'package:cool_alert/cool_alert.dart';
 import '../screens/AddList.dart';
 import '../screens/Add_Category.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+
 import '../screens/AddTask.dart';
 
 class TaskDetails extends StatelessWidget {

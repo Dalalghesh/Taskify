@@ -18,7 +18,6 @@ import 'package:taskify/firebase_options.dart';
 import 'package:animated_radio_buttons/animated_radio_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

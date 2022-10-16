@@ -5,7 +5,7 @@ import 'package:taskify/models/tasks.dart';
 import 'package:intl/intl.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+
 import '../screens/AddTask.dart';
 
 class TaskDetail extends StatelessWidget {
