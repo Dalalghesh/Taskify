@@ -112,11 +112,14 @@ class _HomeScreen extends State<HomeScreen> {
               color:
                   _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
           onPressed: () {
-            setState(() {
-              pressGeoON = !pressGeoON;
-              _editMode = !_editMode;
-              _isInvalid = false;
-            });
+            _editMode
+                ? setState(() {
+                    pressGeoON = !pressGeoON;
+                    _editMode = !_editMode;
+                    _isInvalid = false;
+                  })
+                : print('');
+            ;
           }, // home page
         ),
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
@@ -439,14 +442,14 @@ class _HomeScreen extends State<HomeScreen> {
                                               _editMode = !_editMode;
                                               pressGeoON = !pressGeoON;
                                             });
-                                            CoolAlert.show(
-                                              title: "Success",
-                                              context: context,
-                                              type: CoolAlertType.success,
-                                              text: "List Added successfuly!",
-                                              confirmBtnColor:
-                                                  const Color(0xff7b39ed),
-                                            );
+                                            // CoolAlert.show(
+                                            //   title: "Success",
+                                            //   context: context,
+                                            //   type: CoolAlertType.success,
+                                            //   text: "List Added successfuly!",
+                                            //   confirmBtnColor:
+                                            //       const Color(0xff7b39ed),
+                                            // );
 
                                             FirebaseFirestore.instance
                                                 .collection('users1')
