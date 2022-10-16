@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:taskify/Screens/AddList.dart';
+import 'package:taskify/Storing_DB.dart';
 import 'package:taskify/screens/auth/login_screen.dart';
 import 'package:taskify/util.dart';
 import 'package:taskify/widgets/primary_button.dart';
@@ -79,17 +80,19 @@ class _HomeScreen extends State<HomeScreen> {
 
   final formKey = GlobalKey<FormState>();
   bool _isInvalid = false;
-  bool _editMode = false;
-  bool pressGeoON = false;
+  bool _editMode = true;
+  bool pressGeoON = true;
   late String firstName;
   late String lastName;
   String nameee = '';
+  String photo = '';
   Future<void> getName() async {
     final res = await FirebaseFirestore.instance
         .collection('users1')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     setState(() {
+      photo = res['photo'];
       nameee = res['firstName'] + ' ' + res['lastName'];
     });
   }
@@ -103,6 +106,19 @@ class _HomeScreen extends State<HomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              size: 30,
+              color:
+                  _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
+          onPressed: () {
+            setState(() {
+              pressGeoON = !pressGeoON;
+              _editMode = !_editMode;
+              _isInvalid = false;
+            });
+          }, // home page
+        ),
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
         elevation: 0.0,
         centerTitle: true,
@@ -200,16 +216,19 @@ class _HomeScreen extends State<HomeScreen> {
                                                   .size
                                                   .width /
                                               2.29,
+                                          child: ClipOval(
+                                            child: SizedBox.fromSize(
+                                              size: Size.fromRadius(
+                                                  48), // Image radius
+                                              child: Image.network(photo,
+                                                  fit: BoxFit.cover),
+                                            ),
+                                          ),
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: Colors.white, width: 5),
+                                                color: Colors.white, width: 0),
                                             shape: BoxShape.circle,
                                             color: Colors.white,
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  'assets/user-5.png'),
-                                            ),
                                           ),
                                         ),
                                         Text(
@@ -247,19 +266,44 @@ class _HomeScreen extends State<HomeScreen> {
 
                                               child: Stack(
                                                 children: <Widget>[
-                                                  Container(
-                                                      // decoration:
-                                                      //     new BoxDecoration(
-                                                      //         color:
-                                                      //             Colors.white),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: 240,
-                                                      child: Image.asset(
-                                                          'assets/user-5.png',
-                                                          // width: 110.0,
-                                                          // height: 110.0,
-                                                          fit: BoxFit.cover)),
+                                                  image == null
+                                                      ? Container(
+                                                          // decoration:
+                                                          //     new BoxDecoration(
+                                                          //         color:
+                                                          //             Colors.white),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          height: 240,
+
+                                                          child: ClipOval(
+                                                            child: SizedBox
+                                                                .fromSize(
+                                                              size: Size.fromRadius(
+                                                                  400), // Image radius
+                                                              child: Image.network(
+                                                                  photo,
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          height: 240,
+                                                          child: ClipOval(
+                                                            child: SizedBox
+                                                                .fromSize(
+                                                              size: Size.fromRadius(
+                                                                  400), // Image radius
+                                                              child: Image.file(
+                                                                  image!,
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                        ),
                                                   Align(
                                                     alignment:
                                                         Alignment.bottomRight,
@@ -269,12 +313,6 @@ class _HomeScreen extends State<HomeScreen> {
                                                     ),
                                                   )
                                                 ],
-                                                // Image.asset(
-                                                //   'assets/user-5.png',
-                                                //   fit: BoxFit.cover,
-                                                //   width: 110.0,
-                                                //   height: 110.0,
-                                                // ),
                                               )),
                                           decoration: BoxDecoration(
                                             // border: Border.all(
@@ -401,6 +439,14 @@ class _HomeScreen extends State<HomeScreen> {
                                               _editMode = !_editMode;
                                               pressGeoON = !pressGeoON;
                                             });
+                                            CoolAlert.show(
+                                              title: "Success",
+                                              context: context,
+                                              type: CoolAlertType.success,
+                                              text: "List Added successfuly!",
+                                              confirmBtnColor:
+                                                  const Color(0xff7b39ed),
+                                            );
 
                                             FirebaseFirestore.instance
                                                 .collection('users1')
@@ -410,15 +456,10 @@ class _HomeScreen extends State<HomeScreen> {
                                               "firstName": firstName,
                                               "lastName": lastName,
                                             });
-
-                                            CoolAlert.show(
-                                              title: "Success",
-                                              context: context,
-                                              type: CoolAlertType.success,
-                                              text: "List Added successfuly!",
-                                              confirmBtnColor:
-                                                  const Color(0xff7b39ed),
-                                            );
+                                            addPhoto(
+                                                image!,
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid);
                                           }
                                         },
                                         child: Center(
@@ -429,35 +470,35 @@ class _HomeScreen extends State<HomeScreen> {
                                                 ))),
                                       ),
                                     ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextButton(
-                                            style: TextButton.styleFrom(
-                                              primary: Colors.grey.shade600,
-                                              textStyle:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                pressGeoON = !pressGeoON;
-                                                _editMode = !_editMode;
-                                                _isInvalid = false;
-                                                //_isInvalid = !_isInvalid;
-                                                print(_editMode);
-                                              });
-                                            },
-                                            child: const Text(
-                                              'Later',
-                                              style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Expanded(
+                                    //       child: TextButton(
+                                    //         style: TextButton.styleFrom(
+                                    //           primary: Colors.grey.shade600,
+                                    //           textStyle:
+                                    //               const TextStyle(fontSize: 18),
+                                    //         ),
+                                    //         onPressed: () {
+                                    //           setState(() {
+                                    //             pressGeoON = !pressGeoON;
+                                    //             _editMode = !_editMode;
+                                    //             _isInvalid = false;
+                                    //             //_isInvalid = !_isInvalid;
+                                    //             print(_editMode);
+                                    //           });
+                                    //         },
+                                    //         child: const Text(
+                                    //           'Cancel',
+                                    //           style: TextStyle(
+                                    //             decoration:
+                                    //                 TextDecoration.underline,
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
                                   ],
                                 ),
                         ],

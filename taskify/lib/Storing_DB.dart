@@ -7,8 +7,7 @@ import 'package:path/path.dart';
 
 import '../../firebase_options.dart';
 
-addPhoto(File img, String catg, String wholePlace, double place1, double place2,
-    String rev, String tag, String ID) async {
+addPhoto(File img, String ID) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       // options: DefaultFirebaseOptions.currentPlatform
@@ -17,14 +16,15 @@ addPhoto(File img, String catg, String wholePlace, double place1, double place2,
 
   //uploadImageToFirebase
   FirebaseStorage firebaseStorageRef = FirebaseStorage.instance;
+
   Reference ref = firebaseStorageRef.ref().child('images/$fileName');
   UploadTask uploadTask = ref.putFile(img);
+
   final TaskSnapshot downloadUrl = (await uploadTask);
+
   final String url = await downloadUrl.ref.getDownloadURL();
 
-  CollectionReference PostRec =
-      await FirebaseFirestore.instance.collection('users1');
-  PostRec.add({
+  FirebaseFirestore.instance.collection('users1').doc(ID).update({
     "photo": url,
   });
 }
