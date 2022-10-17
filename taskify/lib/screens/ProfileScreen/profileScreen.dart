@@ -419,18 +419,34 @@ class _HomeScreen extends State<HomeScreen> {
                          type: CoolAlertType.error,
                            text: 'Do you want to delete your account?',
                            confirmBtnText: 'Yes',
-                          cancelBtnText: 'No',
+                         cancelBtnText: 'No',
                             title: "Delete Account",
                   confirmBtnColor: Color(0xff7b39ed),
                   onConfirmBtnTap: () async {
-                    Delete();
-                    Navigator.of(context).pushReplacement(
+                try {
+  await FirebaseAuth.instance.currentUser!.delete();
+} on FirebaseAuthException catch (e) {
+  if (e.code == 'requires-recent-login') {
+    print('The user must reauthenticate before this operation can be executed.');
+    // Prompt the user to enter their email and password
+String email = 'barry.allen@example.com';
+String password = 'SuperSecretPassword!';
+
+// Create a credential
+AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+
+// Reauthenticate
+await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+
+  }else{
+    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                           builder: (context) => const LoginScreen()),
                     );
+  }
+}
                   });
-                        }
-,
+                        },
                                     child: Center(
                                         child: Text("Delete Account",
                                             style: TextStyle(
@@ -568,7 +584,7 @@ class HeaderCurvedContainer extends CustomPainter {
 }
 
 Delete() async {
-
+print("Dalal");
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   final useremail = _firebaseAuth.currentUser?.email;
