@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:googleapis/driveactivity/v2.dart';
+import 'package:googleapis/spanner/v1.dart';
+import 'package:http/http.dart';
 import 'package:taskify/screens/auth/login_screen.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,7 +90,22 @@ class HomeScreen extends StatelessWidget {
                       height: 55,
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                           CoolAlert.show(
+                          context: context,
+                         type: CoolAlertType.error,
+                           text: 'Do you want to delete your account?',
+                           confirmBtnText: 'Yes',
+                            title: "Delete Account",
+                  confirmBtnColor: Color(0xff7b39ed),
+                  onConfirmBtnTap: () async {
+                    Delete();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                    );
+                  });
+                        },
                         child: Center(
                           child: Text(
                             "Update",
@@ -160,4 +179,23 @@ class HeaderCurvedContainer extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+Delete() async {
+
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+  final useremail = _firebaseAuth.currentUser?.email;
+  final userdocid = _firebaseAuth.currentUser?.uid;
+
+   /*final res1 = await _firebaseFirestore
+                  .collection('users1')
+                  .where("email", isEqualTo: useremail).get(); 
+                  FirebaseFirestore.instance.collection("users1").where("email", isEqualTo: useremail).get();*/
+
+                _firebaseFirestore.collection("users1").doc(userdocid).delete().then(
+                (doc) => print("Document deleted"),
+                 onError: (e) => print("Error updating document $e"),
+
+    );  
 }
