@@ -413,9 +413,24 @@ class _HomeScreen extends State<HomeScreen> {
                                   height: 55,
                                   width: 320,
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      
-                                    },
+                                    onPressed: () async {
+                           CoolAlert.show(
+                          context: context,
+                         type: CoolAlertType.error,
+                           text: 'Do you want to delete your account?',
+                           confirmBtnText: 'Yes',
+                          cancelBtnText: 'No',
+                            title: "Delete Account",
+                  confirmBtnColor: Color(0xff7b39ed),
+                  onConfirmBtnTap: () async {
+                    Delete();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                    );
+                  });
+                        }
+,
                                     child: Center(
                                         child: Text("Delete Account",
                                             style: TextStyle(
@@ -550,4 +565,41 @@ class HeaderCurvedContainer extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+Delete() async {
+
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+  final useremail = _firebaseAuth.currentUser?.email;
+  final userdocid = _firebaseAuth.currentUser?.uid;
+
+  try {
+  await FirebaseAuth.instance.currentUser!.delete();
+} on FirebaseAuthException catch (e) {
+  if (e.code == 'requires-recent-login') {
+    print('The user must reauthenticate before this operation can be executed.');
+  }
+}
+// Prompt the user to enter their email and password
+
+String email = 'barry.allen@example.com';
+String password = 'SuperSecretPassword!';
+
+// Create a credential
+AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+
+// Reauthenticate
+await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+
+   /*final res1 = await _firebaseFirestore
+                  .collection('users1')
+                  .where("email", isEqualTo: useremail).get(); 
+                  FirebaseFirestore.instance.collection("users1").where("email", isEqualTo: useremail).get();*/
+
+                /*_firebaseFirestore.collection("users1").doc(userdocid).delete().then(
+                (doc) => print("Account deleted"),
+                 onError: (e) => print("Error updating document $e"),
+
+    );  */
 }
