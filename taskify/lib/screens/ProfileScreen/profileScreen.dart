@@ -96,6 +96,7 @@ class HomeScreen extends StatelessWidget {
                          type: CoolAlertType.error,
                            text: 'Do you want to delete your account?',
                            confirmBtnText: 'Yes',
+                            cancelBtnText: 'No',
                             title: "Delete Account",
                   confirmBtnColor: Color(0xff7b39ed),
                   onConfirmBtnTap: () async {
