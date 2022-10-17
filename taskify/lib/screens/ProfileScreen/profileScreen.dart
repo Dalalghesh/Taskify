@@ -409,6 +409,24 @@ class _HomeScreen extends State<HomeScreen> {
                           SizedBox(
                             height: 20,
                           ),
+                          Container(
+                                  height: 55,
+                                  width: 320,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      
+                                    },
+                                    child: Center(
+                                        child: Text("Delete Account",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                            ))),
+                                  ),
+                                ),
+                                 SizedBox(
+                            height: 20,
+                          ),
                           pressGeoON
                               ? Container(
                                   height: 55,
