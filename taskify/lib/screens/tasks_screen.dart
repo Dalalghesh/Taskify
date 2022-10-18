@@ -473,6 +473,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             const Color(
                                                                 0xff7b39ed),
                                                         onConfirmBtnTap: () {
+                                                               getUsers(widget.category , widget.list);
                                                           tasks.forEach(
                                                               (element) {
                                                             provider.updateCheckboxValue(
@@ -486,23 +487,24 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           Navigator.of(context)
                                                               .pop();
                                                         });
-print('befor calling');
+                                                      print('befor calling');
                                                         getUsers(widget.category , widget.list);
                                                         print('after calling');
                                                         /////////////////////////////////
-                                                        final res1 = await FirebaseFirestore.instance
+                                                       /* final res1 = await FirebaseFirestore.instance
                                                                .collection('tasks')
                                                               .where('CategoryName', isEqualTo: widget.category).where("ListName", isEqualTo: widget.list)
                                                                .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
-                                                               .get();
+                                                               .get();*/
 
                                                                 //List<dynamic> UIDS = [];
                                                               
 
                                                         /////// send notifaiction for all users on the list 
-                                                         final _firebaseFirestore = FirebaseFirestore.instance;
+                                                        /* final _firebaseFirestore = FirebaseFirestore.instance;
                                                           final res = await _firebaseFirestore
-                                                          .collection('tasks').where("CategoryName", isEqualTo:widget.category ).where("ListName", isEqualTo: widget.list).get(); 
+                                                          .collection('tasks').where("CategoryName", isEqualTo:widget.category )
+                                                          .where("ListName", isEqualTo: widget.list).get(); */
                                                
                                                   },
                                                   confirmBtnColor:
@@ -670,6 +672,7 @@ class TasksCn {
 
 
   sendNotification(String title, String token) async {
+    print(token);
     print('dalal');
     print('raghad');
 
@@ -710,21 +713,20 @@ class TasksCn {
     print('1');
      List<dynamic> UIDS = [];
   final _firebaseFirestore = FirebaseFirestore.instance;
-
+print(CategoryName);
+print(ListName);
     final res = await _firebaseFirestore
         .collection('List')
         .where("CategoryName", isEqualTo: CategoryName).where("List", isEqualTo: ListName).get(); 
 
-        print('2');
+        print('after bring collection');
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         if (res.docs[i]['List'] == ListName) {
           UIDS = res.docs[i]['UID'];
            for (int i = 0; i < UIDS.length; i++){
-            print('dlool');
+            print('Inside loop+i' );
             final String useremail = UIDS[i];
-            print(useremail);
-            print('3');
             print(useremail);
             getUsersToken(useremail);
            }
@@ -748,14 +750,13 @@ class TasksCn {
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         if (res.docs[i]['email'] == receiver ) {
-          ///// exept current user 
-          if(res.docs[i]['email'] == currentUserEmail){
+        
           print('dalll');
-          print(res.docs[i]['token']);
+         // print(res.docs[i]['token']);
           print('alll');
           final String receivertoken = res.docs[i]['token'];
           sendNotification('New task completed', receivertoken);
-          }
+          
         }
       }
     }
