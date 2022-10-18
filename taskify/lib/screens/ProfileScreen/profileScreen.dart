@@ -25,6 +25,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getName();
+  }
+
   File? image;
 
   late String namee;
@@ -99,7 +106,7 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getName();
+    // getName();
     TextEditingController email = TextEditingController(
         text: '${FirebaseAuth.instance.currentUser!.email}');
 
