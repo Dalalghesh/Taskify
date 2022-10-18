@@ -2,41 +2,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/models/tasks.dart';
 import 'package:intl/intl.dart';
+
 class TaskDetail extends StatelessWidget {
   final Tasksss task;
   const TaskDetail({Key? key, required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String  dateOnly = "" ;
-    if(task.deadline.runtimeType == Timestamp){
+    String dateOnly = "";
+    if (task.deadline.runtimeType == Timestamp) {
       Timestamp timestamp = task.deadline;
-      DateTime dateTime =
-      timestamp.toDate();
-       dateOnly =
-      DateFormat('dd/MM/yyyy')
-          .format(dateTime);
-
-    }
-    else{
+      DateTime dateTime = timestamp.toDate();
+      dateOnly = DateFormat('dd/MM/yyyy').format(dateTime);
+    } else {
       DateTime convertedDateTime = DateTime.parse(task.deadline.toString());
       Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
-      DateTime dateTime =
-      timestamp.toDate();
-       dateOnly =
-      DateFormat('dd/MM/yyyy')
-          .format(dateTime);
-
+      DateTime dateTime = timestamp.toDate();
+      dateOnly = DateFormat('dd/MM/yyyy').format(dateTime);
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           task.task,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xff7b39ed),
       ),
       body: Column(
         children: [
