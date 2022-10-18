@@ -420,61 +420,6 @@ class _HomeScreen extends State<HomeScreen> {
                                         )
                                       ])
                           ]),
-//                           SizedBox(
-//                             height: 20,
-//                           ),
-//                           Container(
-//                             height: 55,
-//                             width: 320,
-//                             child: ElevatedButton(
-//                               onPressed: () async {
-//                                 CoolAlert.show(
-//                                     context: context,
-//                                     type: CoolAlertType.confirm,
-//                                     text: 'Do you want to delete your account?',
-//                                     confirmBtnText: 'Yes',
-//                                     cancelBtnText: 'No',
-//                                     title: "Delete Account",
-//                                     confirmBtnColor: Color(0xff7b39ed),
-//                                     onConfirmBtnTap: () async {
-//                                       try {
-//                                         await FirebaseAuth.instance.currentUser!
-//                                             .delete();
-//                                         Util.routeToWidget(
-//                                             context, LoginScreen());
-//                                       } on FirebaseAuthException catch (e) {
-//                                         if (e.code == 'requires-recent-login') {
-//                                           print(
-//                                               'The user must reauthenticate before this operation can be executed.');
-//                                           // Prompt the user to enter their email and password
-//                                           String email =
-//                                               'barry.allen@example.com';
-//                                           String password =
-//                                               'SuperSecretPassword!';
-
-// // Create a credential
-//                                           AuthCredential credential =
-//                                               EmailAuthProvider.credential(
-//                                                   email: email,
-//                                                   password: password);
-
-// // Reauthenticate
-//                                           await FirebaseAuth
-//                                               .instance.currentUser!
-//                                               .reauthenticateWithCredential(
-//                                                   credential);
-//                                         }
-//                                       }
-//                                     });
-//                               },
-//                               child: Center(
-//                                   child: Text("Delete Account",
-//                                       style: TextStyle(
-//                                         fontSize: 20,
-//                                         color: Colors.white,
-//                                       ))),
-//                             ),
-//                           ),
                           SizedBox(
                             height: 20,
                           ),
@@ -511,14 +456,15 @@ class _HomeScreen extends State<HomeScreen> {
                                               _editMode = !_editMode;
                                               pressGeoON = !pressGeoON;
                                             });
-                                            // CoolAlert.show(
-                                            //   title: "Success",
-                                            //   context: context,
-                                            //   type: CoolAlertType.success,
-                                            //   text: "List Added successfuly!",
-                                            //   confirmBtnColor:
-                                            //       const Color(0xff7b39ed),
-                                            // );
+                                            CoolAlert.show(
+                                              title: "Success",
+                                              context: context,
+                                              type: CoolAlertType.success,
+                                              text:
+                                                  "Profile updated successfuly!",
+                                              confirmBtnColor:
+                                                  const Color(0xff7b39ed),
+                                            );
 
                                             FirebaseFirestore.instance
                                                 .collection('users1')
