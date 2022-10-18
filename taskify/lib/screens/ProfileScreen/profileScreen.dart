@@ -112,11 +112,14 @@ class _HomeScreen extends State<HomeScreen> {
               color:
                   _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
           onPressed: () {
-            setState(() {
-              pressGeoON = !pressGeoON;
-              _editMode = !_editMode;
-              _isInvalid = false;
-            });
+            _editMode
+                ? setState(() {
+                    pressGeoON = !pressGeoON;
+                    _editMode = !_editMode;
+                    _isInvalid = false;
+                  })
+                : print('');
+            ;
           }, // home page
         ),
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
@@ -407,48 +410,58 @@ class _HomeScreen extends State<HomeScreen> {
                             height: 20,
                           ),
                           Container(
-                                  height: 55,
-                                  width: 320,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                           CoolAlert.show(
-                          context: context,
-                         type: CoolAlertType.confirm,
-                           text: 'Do you want to delete your account?',
-                           confirmBtnText: 'Yes',
-                         cancelBtnText: 'No',
-                            title: "Delete Account",
-                  confirmBtnColor: Color(0xff7b39ed),
-                  onConfirmBtnTap: () async {
-                try {
-  await FirebaseAuth.instance.currentUser!.delete();
-  Util.routeToWidget(context, LoginScreen());
-} on FirebaseAuthException catch (e) {
-  if (e.code == 'requires-recent-login') {
-    print('The user must reauthenticate before this operation can be executed.');
-    // Prompt the user to enter their email and password
-    String email = 'barry.allen@example.com';
-    String password = 'SuperSecretPassword!';
+                            height: 55,
+                            width: 320,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.confirm,
+                                    text: 'Do you want to delete your account?',
+                                    confirmBtnText: 'Yes',
+                                    cancelBtnText: 'No',
+                                    title: "Delete Account",
+                                    confirmBtnColor: Color(0xff7b39ed),
+                                    onConfirmBtnTap: () async {
+                                      try {
+                                        await FirebaseAuth.instance.currentUser!
+                                            .delete();
+                                        Util.routeToWidget(
+                                            context, LoginScreen());
+                                      } on FirebaseAuthException catch (e) {
+                                        if (e.code == 'requires-recent-login') {
+                                          print(
+                                              'The user must reauthenticate before this operation can be executed.');
+                                          // Prompt the user to enter their email and password
+                                          String email =
+                                              'barry.allen@example.com';
+                                          String password =
+                                              'SuperSecretPassword!';
 
 // Create a credential
-AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+                                          AuthCredential credential =
+                                              EmailAuthProvider.credential(
+                                                  email: email,
+                                                  password: password);
 
 // Reauthenticate
-await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
-
-  }
-}
-                  });
-                        },
-                                    child: Center(
-                                        child: Text("Delete Account",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                            ))),
-                                  ),
-                                ),
-                                 SizedBox(
+                                          await FirebaseAuth
+                                              .instance.currentUser!
+                                              .reauthenticateWithCredential(
+                                                  credential);
+                                        }
+                                      }
+                                    });
+                              },
+                              child: Center(
+                                  child: Text("Delete Account",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ))),
+                            ),
+                          ),
+                          SizedBox(
                             height: 20,
                           ),
                           pressGeoON
@@ -484,14 +497,14 @@ await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential
                                               _editMode = !_editMode;
                                               pressGeoON = !pressGeoON;
                                             });
-                                            CoolAlert.show(
-                                              title: "Success",
-                                              context: context,
-                                              type: CoolAlertType.success,
-                                              text: "List Added successfuly!",
-                                              confirmBtnColor:
-                                                  const Color(0xff7b39ed),
-                                            );
+                                            // CoolAlert.show(
+                                            //   title: "Success",
+                                            //   context: context,
+                                            //   type: CoolAlertType.success,
+                                            //   text: "List Added successfuly!",
+                                            //   confirmBtnColor:
+                                            //       const Color(0xff7b39ed),
+                                            // );
 
                                             FirebaseFirestore.instance
                                                 .collection('users1')
@@ -577,36 +590,39 @@ class HeaderCurvedContainer extends CustomPainter {
 }
 
 Delete() async {
-print("Dalal");
+  print("Dalal");
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   final useremail = _firebaseAuth.currentUser?.email;
   final userdocid = _firebaseAuth.currentUser?.uid;
 
   try {
-  await FirebaseAuth.instance.currentUser!.delete();
-} on FirebaseAuthException catch (e) {
-  if (e.code == 'requires-recent-login') {
-    print('The user must reauthenticate before this operation can be executed.');
+    await FirebaseAuth.instance.currentUser!.delete();
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'requires-recent-login') {
+      print(
+          'The user must reauthenticate before this operation can be executed.');
+    }
   }
-}
 // Prompt the user to enter their email and password
 
-String email = 'barry.allen@example.com';
-String password = 'SuperSecretPassword!';
+  String email = 'barry.allen@example.com';
+  String password = 'SuperSecretPassword!';
 
 // Create a credential
-AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+  AuthCredential credential =
+      EmailAuthProvider.credential(email: email, password: password);
 
 // Reauthenticate
-await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+  await FirebaseAuth.instance.currentUser!
+      .reauthenticateWithCredential(credential);
 
-   /*final res1 = await _firebaseFirestore
+  /*final res1 = await _firebaseFirestore
                   .collection('users1')
                   .where("email", isEqualTo: useremail).get(); 
                   FirebaseFirestore.instance.collection("users1").where("email", isEqualTo: useremail).get();*/
 
-                /*_firebaseFirestore.collection("users1").doc(userdocid).delete().then(
+  /*_firebaseFirestore.collection("users1").doc(userdocid).delete().then(
                 (doc) => print("Account deleted"),
                  onError: (e) => print("Error updating document $e"),
 
