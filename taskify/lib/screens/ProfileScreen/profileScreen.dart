@@ -416,7 +416,7 @@ class _HomeScreen extends State<HomeScreen> {
                                     onPressed: () async {
                            CoolAlert.show(
                           context: context,
-                         type: CoolAlertType.error,
+                         type: CoolAlertType.confirm,
                            text: 'Do you want to delete your account?',
                            confirmBtnText: 'Yes',
                          cancelBtnText: 'No',
@@ -438,11 +438,6 @@ AuthCredential credential = EmailAuthProvider.credential(email: email, password:
 // Reauthenticate
 await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
 
-  }else{
-    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                    );
   }
 }
                   });
