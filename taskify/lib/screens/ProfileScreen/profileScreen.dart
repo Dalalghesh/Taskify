@@ -376,13 +376,21 @@ class _HomeScreen extends State<HomeScreen> {
                                                 setState(() {
                                                   _isInvalid = true;
                                                 });
-                                                return 'You cannot enter numbers and special characters !@#\%^&*()';
-                                              } else if (spaceIndex! > 10 ||
+                                                return 'You cannot enter numbers and special characters';
+                                              } else if (spaceIndex! > 10) {
+                                                setState(() {
+                                                  _isInvalid = true;
+                                                });
+                                                return 'First name must be maximum 10 characters';
+                                              } else if ((value.length -
+                                                          spaceIndex +
+                                                          1) >
+                                                      10 ||
                                                   value.length > 21) {
                                                 setState(() {
                                                   _isInvalid = true;
                                                 });
-                                                return 'Name must be maximum 10 characters';
+                                                return 'Last name must be maximum 10 characters';
                                               } else {
                                                 firstName = value.substring(
                                                     0, spaceIndex);
