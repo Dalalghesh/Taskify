@@ -74,10 +74,13 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
           .read<InvitaitonProvider>()
           .sendInvitation(email!, widget.category, widget.list, widget.listId);
 
+<<<<<<< HEAD
       // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
 
       // showPlatformDialogue(
       //     context: context, title: "Invitation sent successfully");
+=======
+>>>>>>> Raghad
       _formKey.currentState?.reset();
     }
     _typeAheadController.clear();
@@ -154,14 +157,18 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               String recieverEmail = email.toString();
               final _firebaseFirestore = FirebaseFirestore.instance;
               final senderEmail = _firebaseAuth.currentUser?.email;
+<<<<<<< HEAD
               bool invitationStatus1 = false; 
               bool invitationStatus2 = false; 
+=======
+>>>>>>> Raghad
 
               
               final res = await _firebaseFirestore
                   .collection('invitations')
                   .where("recieverEmail", isEqualTo: recieverEmail)
                   .where("senderEmail", isEqualTo: senderEmail)
+<<<<<<< HEAD
                   .where("listId", isEqualTo: widget.listId).where("status", isEqualTo:"pending")
                   .get();
               
@@ -205,6 +212,25 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               }
               }_typeAheadController.clear();
 
+=======
+                  .where("listId", isEqualTo: widget.listId)
+                  .get();
+
+              if (res.docs.isNotEmpty) {
+                print("helloooooooo");
+                print("dublicate00");
+                CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.error,
+                  text: "The invitation has already been sent ",
+                  confirmBtnColor: const Color(0xff7b39ed),
+                );
+                _typeAheadController.clear();
+              } else {
+                await sendInviation(query, widget.listId);
+                getUsersToken(email.toString());
+              }
+>>>>>>> Raghad
             },
             child: const Text(
               'Invite',
