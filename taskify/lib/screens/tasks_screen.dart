@@ -19,7 +19,7 @@ import 'package:http/http.dart' as http;
 import 'package:taskify/models/users.dart';
 
 class TaskScreen extends StatefulWidget {
-  List<dynamic> UIDS = [];
+   List<dynamic> UIDS = [];
   final String category;
   final String list;
 
@@ -37,11 +37,11 @@ class _TaskScreenState extends State<TaskScreen> {
     super.initState();
     Provider.of<AppState>(context, listen: false).clearTask();
     getTask();
-    FirebaseMessaging.instance.getInitialMessage();
+        FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((event) {
       LocalNotificationService.display(event);
     });
-    FirebaseMessaging.instance.subscribeToTopic('subscription');
+      FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
 
   getTask() async {
@@ -57,7 +57,7 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context);
-
+    
     // TODO: implement build
 
     return buildColumnNew(context, provider);
@@ -473,6 +473,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             const Color(
                                                                 0xff7b39ed),
                                                         onConfirmBtnTap: () {
+                                                               getUsers(widget.category , widget.list);
                                                           tasks.forEach(
                                                               (element) {
                                                             provider.updateCheckboxValue(
@@ -486,47 +487,25 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           Navigator.of(context)
                                                               .pop();
                                                         });
-                                                    print('befor calling');
-                                                    getUsers(widget.category,
-                                                        widget.list);
-                                                    print('after calling');
-                                                    /////////////////////////////////
-                                                    final res1 =
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection('tasks')
-                                                            .where(
-                                                                'CategoryName',
-                                                                isEqualTo: widget
-                                                                    .category)
-                                                            .where("ListName",
-                                                                isEqualTo:
-                                                                    widget.list)
-                                                            .where('UID',
-                                                                arrayContains:
-                                                                    FirebaseAuth
-                                                                        .instance
-                                                                        .currentUser!
-                                                                        .email)
-                                                            .get();
+                                                      print('befor calling');
+                                                        getUsers(widget.category , widget.list);
+                                                        print('after calling');
+                                                        /////////////////////////////////
+                                                       /* final res1 = await FirebaseFirestore.instance
+                                                               .collection('tasks')
+                                                              .where('CategoryName', isEqualTo: widget.category).where("ListName", isEqualTo: widget.list)
+                                                               .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+                                                               .get();*/
 
-                                                    //List<dynamic> UIDS = [];
+                                                                //List<dynamic> UIDS = [];
+                                                              
 
-                                                    /////// send notifaiction for all users on the list
-                                                    final _firebaseFirestore =
-                                                        FirebaseFirestore
-                                                            .instance;
-                                                    final res =
-                                                        await _firebaseFirestore
-                                                            .collection('tasks')
-                                                            .where(
-                                                                "CategoryName",
-                                                                isEqualTo: widget
-                                                                    .category)
-                                                            .where("ListName",
-                                                                isEqualTo:
-                                                                    widget.list)
-                                                            .get();
+                                                        /////// send notifaiction for all users on the list 
+                                                        /* final _firebaseFirestore = FirebaseFirestore.instance;
+                                                          final res = await _firebaseFirestore
+                                                          .collection('tasks').where("CategoryName", isEqualTo:widget.category )
+                                                          .where("ListName", isEqualTo: widget.list).get(); */
+                                               
                                                   },
                                                   confirmBtnColor:
                                                       Color(0xff7b39ed),
@@ -580,6 +559,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                         .format(dateTime);
                                     return GestureDetector(
                                       onTap: () {
+
                                         // Navigator.pop(context);
                                         Navigator.push(
                                             context,
@@ -690,97 +670,95 @@ class TasksCn {
   TasksCn(this.first, this.second);
 }
 
-sendNotification(String title, String token) async {
-  print('dalal');
-  print('raghad');
 
-  final data = {
-    'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-    'id': '1',
-    'status': 'done',
-    'message': title,
-  };
+  sendNotification(String title, String token) async {
+    print(token);
+    print('dalal');
+    print('raghad');
 
-  try {
-    http.Response response =
-        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
-            headers: <String, String>{
-              'Content-Type': 'application/json',
-              'Authorization':
-                  'key=AAAArqJFQfk:APA91bFyFdlX-dk-72NHyaoN0hb4xsp8wuDUhr63ZgI7vroxRSBX1mXbd2pASgdzoYKA_8A0ZYRw61GzRaIH_6eakiVtyr_X8FJrlax-HwJdSUzbk022EGjfVjkDo7dlgYZNXaMfJS4T'
-            },
-            body: jsonEncode(<String, dynamic>{
-              'notification': <String, dynamic>{
-                'title': title,
-                'body': 'Your friend has completed some tasks!'
+    final data = {
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+      'id': '1',
+      'status': 'done',
+      'message': title,
+    };
+
+    try {
+      http.Response response =
+          await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+                'Authorization':
+                    'key=AAAArqJFQfk:APA91bFyFdlX-dk-72NHyaoN0hb4xsp8wuDUhr63ZgI7vroxRSBX1mXbd2pASgdzoYKA_8A0ZYRw61GzRaIH_6eakiVtyr_X8FJrlax-HwJdSUzbk022EGjfVjkDo7dlgYZNXaMfJS4T'
               },
-              'priority': 'high',
-              'data': data,
-              'to': '$token'
-            }));
+              body: jsonEncode(<String, dynamic>{
+                'notification': <String, dynamic>{
+                  'title': title,
+                  'body': 'Your friend has completed some tasks!'
+                },
+                'priority': 'high',
+                'data': data,
+                'to': '$token'
+              }));
 
-    if (response.statusCode == 200) {
-      print("Yeh notificatin is sended");
-    } else {
-      print("Error");
-    }
-  } catch (e) {}
-}
+      if (response.statusCode == 200) {
+        print("Yeh notificatin is sended");
+      } else {
+        print("Error");
+      }
+    } catch (e) {}
+  }
 
-getUsers(String CategoryName, String ListName) async {
-  print('1');
-  List<dynamic> UIDS = [];
+  getUsers(String CategoryName , String ListName) async {
+    print('1');
+     List<dynamic> UIDS = [];
   final _firebaseFirestore = FirebaseFirestore.instance;
+print(CategoryName);
+print(ListName);
+    final res = await _firebaseFirestore
+        .collection('List')
+        .where("CategoryName", isEqualTo: CategoryName).where("List", isEqualTo: ListName).get(); 
 
-  final res = await _firebaseFirestore
-      .collection('List')
-      .where("CategoryName", isEqualTo: CategoryName)
-      .where("List", isEqualTo: ListName)
-      .get();
-
-  print('2');
-  if (res.docs.isNotEmpty) {
-    for (int i = 0; i < res.docs.length; i++) {
-      if (res.docs[i]['List'] == ListName) {
-        UIDS = res.docs[i]['UID'];
-        for (int i = 0; i < UIDS.length; i++) {
-          print('dlool');
-          final String useremail = UIDS[i];
-          print(useremail);
-          print('3');
-          print(useremail);
-          getUsersToken(useremail);
+        print('after bring collection');
+    if (res.docs.isNotEmpty) {
+      for (int i = 0; i < res.docs.length; i++) {
+        if (res.docs[i]['List'] == ListName) {
+          UIDS = res.docs[i]['UID'];
+           for (int i = 0; i < UIDS.length; i++){
+            print('Inside loop+i' );
+            final String useremail = UIDS[i];
+            print(useremail);
+            getUsersToken(useremail);
+           }
         }
       }
-    }
+    }  
   }
-}
 
-Future getUsersToken(String receiver) async {
-  final _firebaseFirestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-  print(receiver);
-  print('hello');
-  final currentUserEmail = _firebaseAuth.currentUser?.email;
-  final sendEmail = '';
-  print('hello2');
-  final res = await _firebaseFirestore
-      .collection('users1')
-      .where("email", isEqualTo: receiver)
-      .get();
-  print('hello3');
-  if (res.docs.isNotEmpty) {
-    for (int i = 0; i < res.docs.length; i++) {
-      if (res.docs[i]['email'] == receiver) {
-        ///// exept current user
-        if (res.docs[i]['email'] == currentUserEmail) {
+ Future getUsersToken(String receiver) async {
+    final _firebaseFirestore = FirebaseFirestore.instance;
+      final _firebaseAuth = FirebaseAuth.instance;
+      print(receiver);
+    print('hello');
+    final currentUserEmail = _firebaseAuth.currentUser?.email;
+    final sendEmail = '';
+ print('hello2');
+    final res = await _firebaseFirestore
+        .collection('users1').where("email", isEqualTo: receiver)
+        .get();
+     print('hello3');
+    if (res.docs.isNotEmpty) {
+      for (int i = 0; i < res.docs.length; i++) {
+        if (res.docs[i]['email'] == receiver ) {
+        
           print('dalll');
-          print(res.docs[i]['token']);
+         // print(res.docs[i]['token']);
           print('alll');
           final String receivertoken = res.docs[i]['token'];
           sendNotification('New task completed', receivertoken);
+          
         }
       }
     }
   }
-}
+
