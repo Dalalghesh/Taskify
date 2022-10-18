@@ -425,12 +425,13 @@ class _HomeScreen extends State<HomeScreen> {
                   onConfirmBtnTap: () async {
                 try {
   await FirebaseAuth.instance.currentUser!.delete();
+  Util.routeToWidget(context, LoginScreen());
 } on FirebaseAuthException catch (e) {
   if (e.code == 'requires-recent-login') {
     print('The user must reauthenticate before this operation can be executed.');
     // Prompt the user to enter their email and password
-String email = 'barry.allen@example.com';
-String password = 'SuperSecretPassword!';
+    String email = 'barry.allen@example.com';
+    String password = 'SuperSecretPassword!';
 
 // Create a credential
 AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
