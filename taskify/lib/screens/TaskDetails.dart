@@ -118,6 +118,40 @@ Widget _buildImageRow(int imageIndex) => Row(
               ],
             ),
           )
+           return showDialog(
+        context: context,
+        builder: (context) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.white,
+                          ),
+                          margin: EdgeInsets.only(
+                              top: 10, left: 10, right: 10, bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        top: 14, left: 10, right: 10),
+                                    child: Text(
+                                      'Priority',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
+                              ),
            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
