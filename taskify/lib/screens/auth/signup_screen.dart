@@ -256,6 +256,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       final userData = {
         'email': email.toLowerCase(),
+        'photo':
+            'https://firebasestorage.googleapis.com/v0/b/taskify-e4ca5.appspot.com/o/images%2Fimage_picker6844504952285532027.png?alt=media&token=33c9972d-e44f-4339-8454-253b95e1a06f',
         'firstName': firstname,
         'lastName': lastName,
         'gender': gender,
@@ -263,7 +265,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'categories': <Map>[],
         'uid': userCredential.user!.uid,
         'timestamp': FieldValue.serverTimestamp(),
-        'Photo': 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
       };
       final docRef = FirebaseFirestore.instance.collection('users1').doc(uid);
       await docRef.set(userData, SetOptions(merge: true));
