@@ -74,29 +74,10 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
           .read<InvitaitonProvider>()
           .sendInvitation(email!, widget.category, widget.list, widget.listId);
 
-<<<<<<< HEAD
-      // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
-
-      // showPlatformDialogue(
-      //     context: context, title: "Invitation sent successfully");
-=======
->>>>>>> Raghad
       _formKey.currentState?.reset();
     }
     _typeAheadController.clear();
   }
-
-  // catch (e) {
-  //   _formKey.currentState?.reset();
-  //   CoolAlert.show(
-  //     context: context,
-  //     type: CoolAlertType.error,
-  //     text: "You can't invite yourself!",
-  //     confirmBtnColor: const Color(0xff7b39ed),
-  //   );
-  // }
-  // _typeAheadController.clear();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -157,62 +138,11 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               String recieverEmail = email.toString();
               final _firebaseFirestore = FirebaseFirestore.instance;
               final senderEmail = _firebaseAuth.currentUser?.email;
-<<<<<<< HEAD
-              bool invitationStatus1 = false; 
-              bool invitationStatus2 = false; 
-=======
->>>>>>> Raghad
 
-              
               final res = await _firebaseFirestore
                   .collection('invitations')
                   .where("recieverEmail", isEqualTo: recieverEmail)
                   .where("senderEmail", isEqualTo: senderEmail)
-<<<<<<< HEAD
-                  .where("listId", isEqualTo: widget.listId).where("status", isEqualTo:"pending")
-                  .get();
-              
-              //Case1 pending
-              if (res.docs.isNotEmpty) {
-                print("helloooooooo");
-                print("dublicate00");
-                CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.error,
-                  text: "The invitation has already been sent",
-                  confirmBtnColor: const Color(0xff7b39ed),
-                );
-                _typeAheadController.clear();
-
-              
-              } else { 
-                
-                   final res1 = await _firebaseFirestore
-                  .collection('invitations')
-                  .where("recieverEmail", isEqualTo: recieverEmail)
-                  .where("senderEmail", isEqualTo: senderEmail)
-                  .where("listId", isEqualTo: widget.listId).where("status", isEqualTo:"accepted")
-                  .get();
-
-                  //Case2 accepted
-                  if(res1.docs.isNotEmpty){
-                     print("accepted");
-                    CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.error,
-                  text: "Friend already has this list!",
-                  confirmBtnColor: const Color(0xff7b39ed),
-                );
-                   
-                  }
-                  //case3+4 Fisrt Time or rejected
-                  else{
-                     await sendInviation(query, widget.listId);
-                   getUsersToken(email.toString());
-              }
-              }_typeAheadController.clear();
-
-=======
                   .where("listId", isEqualTo: widget.listId)
                   .get();
 
@@ -230,7 +160,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                 await sendInviation(query, widget.listId);
                 getUsersToken(email.toString());
               }
->>>>>>> Raghad
             },
             child: const Text(
               'Invite',
@@ -336,7 +265,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
         .collection('users1')
         .where("email", isNotEqualTo: currentUserEmail)
         .get();
-    
     if (res.docs.isNotEmpty) {
       for (int i = 0; i < res.docs.length; i++) {
         if (res.docs[i]['email'] == receiver) {
