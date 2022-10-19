@@ -115,7 +115,7 @@ class _AddTask extends State<AddTask> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Util.routeToWidget(context, NavBar(tabs: 0));
             },
           ),
           actions: [
@@ -141,7 +141,13 @@ class _AddTask extends State<AddTask> {
                       //   style: Theme.of(context).textTheme.headline4,
                       // ),
                       SizedBox(
-                        height: 0,
+                        height: 2,
+                      ),
+                      // Align(
+                      //     alignment: Alignment.center,
+                      //     child: Image.asset(
+                      //       "assets/AddTasks.png",
+                      //       height: 250,
                       //       width: 250,
                       //     )),
 
