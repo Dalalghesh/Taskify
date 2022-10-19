@@ -85,6 +85,28 @@ class AppState extends ChangeNotifier {
           deadline: res.docs[i]['Deadline']);
 
       tasksList.add(taskss);
+       TextFormField(
+                    validator: Validators.passwordValidator,
+                    maxLines: 1,
+                    obscureText: true,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      hintText: "At least 8 Character",
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
+                    controller: _passwordController,
+                  ),
+                  const SizedBox(height: 4),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SendInstructionsView(),
+                        ),
+                      );
 
       // tasks.add(res.docs[i]['Task']);
     }
