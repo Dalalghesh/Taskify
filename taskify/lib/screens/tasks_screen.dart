@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'package:taskify/models/users.dart';
 
 class TaskScreen extends StatefulWidget {
+  static String id = "Taskscompleted";
    List<dynamic> UIDS = [];
   final String category;
   final String list;
