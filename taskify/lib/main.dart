@@ -13,12 +13,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:taskify/service/local_push_notification.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'Util.dart';
+import 'Screens/tasks_screen.dart';
 import 'firebase_options.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 
 import 'package:taskify/onboarding/onboarding_screen.dart';
 
 import 'homePage.dart';
+import 'util.dart';
 // #7b39ed - primary color
 
 Future<void> main() async {
@@ -43,6 +45,7 @@ void prompt(String url) async {
 }
 
 void initState() {
+  
   FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onMessage.listen((event) {
     LocalNotificationService.display(event);
@@ -65,21 +68,9 @@ class MyApp extends StatelessWidget {
     900: Color(0xff7b39ed),
   });
 
-  initNotification() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print("onMessage:$message");
-    }); 
-                
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print("onMessageOpenedApp: $message");
-      // Navigator.of(context).pushNamed("ReceivedInvitation");
-      //Util.routeToWidget(context, NavBar(tabs: 0));
-      
-    });
-  }
-  
+
   void initState() {
-    initNotification();
+  
     // TODO: implement initState
     FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((event) {
@@ -91,6 +82,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     initNotification() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print("onMessage:$message");
+    }); 
+                
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print("onMessageOpenedApp: $message");
+      Navigator.of(context).pushNamed("Taskscompleted");
+      Util.routeToWidget(context, TaskScreen as Widget);
+      
+    });
+  }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => InvitaitonProvider())

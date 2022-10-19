@@ -28,7 +28,7 @@ class NavBar extends StatefulWidget {
                 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print("onMessageOpenedApp: $message");
-      // Navigator.of(context).pushNamed("ReceivedInvitation");
+      //Navigator.of(context).pushNamed("Taskscompleted");
       //Util.routeToWidget(context, NavBar(tabs: 0));
       
     });
@@ -78,11 +78,12 @@ class NavBarState extends State<NavBar> {
                 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print("onMessageOpenedApp: $message");
-       Navigator.of(context).pushNamed("Taskscompleted");
-      //Util.routeToWidget(context, TaskScreen as Widget);
+      Navigator.of(context).pushNamed("Taskscompleted");
+      Util.routeToWidget(context, TaskScreen as Widget);
       
     });
   }
+  
   @override
   Widget build(BuildContext context) {
     List<Widget> tabs = [
