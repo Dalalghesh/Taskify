@@ -96,6 +96,15 @@ class _AddTask extends State<AddTask> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Add Task",
+            style: TextStyle(
+              fontSize: 25,
+              color: Color.fromARGB(255, 0, 0, 0),
+              //fontWeight: FontWeight.w600,
+            ),
+          ),
           leadingWidth: 40,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -121,10 +130,10 @@ class _AddTask extends State<AddTask> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Add Task',
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
+                      // Text(
+                      //   'Add Task',
+                      //   style: Theme.of(context).textTheme.headline4,
+                      // ),
                       SizedBox(
                         height: 0,
                       ),

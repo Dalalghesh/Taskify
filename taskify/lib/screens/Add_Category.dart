@@ -76,6 +76,15 @@ class _Add_Category extends State<Add_Category> {
 
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Add Category",
+            style: TextStyle(
+              fontSize: 25,
+              color: Color.fromARGB(255, 0, 0, 0),
+              //fontWeight: FontWeight.w600,
+            ),
+          ),
           leadingWidth: 50,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -97,10 +106,10 @@ class _Add_Category extends State<Add_Category> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Create Category',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
+                  // Text(
+                  //   'Add Category',
+                  //   style: Theme.of(context).textTheme.headline4,
+                  // ),
                   SizedBox(
                     height: 10,
                   ),
