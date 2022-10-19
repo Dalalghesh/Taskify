@@ -115,6 +115,45 @@ class TaskDetail extends StatelessWidget {
     notifyListeners();
     list.clear();
     print(cat);
+    child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 20,
+                                            width: 20,
+                                            // margin: EdgeInsets.only(left: 16),
+                                            decoration: BoxDecoration(
+                                              color:  Color.fromARGB(255, 223, 180, 123),
+
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text('Medium', style: TextStyle(
+                                              fontSize: 16
+                                          ),),
+                                        ],
+                                      ),
+                                      widget.task.priority == 'Medium' ? Icon(Icons.done): Container(),
+
+                                    ],
+                                  ),
+                                ),
+                              ), GestureDetector(
+                                onTap: ()async{
+                                  widget.task.priority = 'Low';
+                                  Navigator.pop(context);
+
+
+
+
+
 
 
                   child: Text(
