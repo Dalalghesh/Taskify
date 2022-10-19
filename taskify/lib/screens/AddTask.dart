@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:taskify/models/task_list.dart';
+import 'package:taskify/utils/app_colors.dart';
 import 'package:taskify/utils/validators.dart';
 import 'AddList.dart';
 import 'package:taskify/util.dart';
@@ -16,6 +18,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:taskify/firebase_options.dart';
 import 'package:animated_radio_buttons/animated_radio_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,6 +96,8 @@ class _AddTask extends State<AddTask> {
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context, listen: true);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    var imageLink =
+        'https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg';
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -136,17 +142,63 @@ class _AddTask extends State<AddTask> {
                       // ),
                       SizedBox(
                         height: 0,
+                      //       width: 250,
+                      //     )),
+
+                      Text(
+                        'Add picture:',
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            "assets/AddTasks.png",
-                            height: 250,
-                            width: 250,
-                          )),
                       SizedBox(
                         height: 10,
                       ),
+
+                      GestureDetector(
+                        onTap: () {
+                          provider.uploadTaskImage();
+                        },
+                        child: Center(
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 120,
+                                width: 120,
+                                decoration:
+                                    BoxDecoration(shape: BoxShape.circle),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(120),
+                                    child: Image.network(
+                                      provider.url,
+                                      fit: BoxFit.fill,
+                                    )),
+                              ),
+                              Positioned(
+                                  bottom: 2,
+                                  right: 10,
+                                  child: Container(
+                                      padding: EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+
+                                        color: AppColors.deepPurple,
+
+                                        // width: 2
+
+                                        // )
+                                      ),
+                                      child: Icon(
+                                        Icons.camera_alt_outlined,
+                                        color: Colors.white,
+                                      )))
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      //picture
 
                       Padding(
                         padding:
@@ -255,7 +307,7 @@ class _AddTask extends State<AddTask> {
                           itemHeight: 35,
                           style: TextStyle(
                               color: Color.fromRGBO(0, 0, 0, 1), fontSize: 15),
-                          items: provider.taskList.map((value) {
+                          items: provider.filteredtaskList.map((value) {
                             return DropdownMenuItem<String>(
                               value: value.docId,
                               child: Text(
@@ -434,6 +486,7 @@ class _AddTask extends State<AddTask> {
                                   'CategoryName': selectCategory1,
                                   'UID': emails,
                                   'Task': taskk,
+                                  'Image': provider.url,
                                   'ListName': listName,
                                   'Priority': myVar == 0
                                       ? 'High'

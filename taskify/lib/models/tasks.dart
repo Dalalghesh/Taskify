@@ -6,15 +6,19 @@ class TasksModel {
 
 class Tasksss {
   String id;
+  String image;
   String category;
   String list;
   String priority;
   var deadline;
   String description;
+  String status;
   String task;
   bool value;
+  bool showSubTasks;
 
   Tasksss({
+    required this.image,
     required this.id,
     required this.priority,
     required this.category,
@@ -23,5 +27,7 @@ class Tasksss {
     required this.deadline,
     required this.task,
     required this.value,
+    required this.status,
+    required this.showSubTasks,
   });
 }
