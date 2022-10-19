@@ -82,19 +82,38 @@ class AppState extends ChangeNotifier {
         .where('status', isEqualTo: 'pending')
         .get();
     for (int i = 0; i < res.docs.length; i++) {
-      Tasksss taskss = Tasksss(
-          id: res.docs[i].id,
-          image: res.docs[i]['Image'],
-          task: res.docs[i]['Task'],
-          priority: res.docs[i]['Priority'],
-          category: res.docs[i]['CategoryName'],
-          list: res.docs[i]['ListName'],
-          description: res.docs[i]['description'],
-          value: false,
-          showSubTasks: false,
-          deadline: res.docs[i]['Deadline']);
+      try{
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            image: res.docs[i]['Image'],
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            status: res.docs[i]['status'],
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
 
-      tasksList.add(taskss);
+        tasksList.add(taskss);
+      } catch (e){
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            status: res.docs[i]['status'],
+            image: "",
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        tasksList.add(taskss);
+      }
+
 
       // tasks.add(res.docs[i]['Task']);
     }
@@ -123,19 +142,50 @@ class AppState extends ChangeNotifier {
         .where('status', isEqualTo: 'completed')
         .get();
     for (int i = 0; i < res.docs.length; i++) {
-      Tasksss taskss = Tasksss(
-          id: res.docs[i].id,
-          task: res.docs[i]['Task'],
-          image: res.docs[i]['Image'],
-          priority: res.docs[i]['Priority'],
-          category: res.docs[i]['CategoryName'],
-          list: res.docs[i]['ListName'],
-          description: res.docs[i]['description'],
-          value: false,
-          showSubTasks: false,
-          deadline: res.docs[i]['Deadline']);
+      try{
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            image: res.docs[i]['Image'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            status: res.docs[i]['status'],
+            deadline: res.docs[i]['Deadline']);
 
-      completedtasksList.add(taskss);
+        completedtasksList.add(taskss);
+      }catch(e){
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            image: "",
+            status: res.docs[i]['status'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        completedtasksList.add(taskss);
+      }
+      // Tasksss taskss = Tasksss(
+      //     id: res.docs[i].id,
+      //     task: res.docs[i]['Task'],
+      //     image: res.docs[i]['Image'],
+      //     priority: res.docs[i]['Priority'],
+      //     category: res.docs[i]['CategoryName'],
+      //     list: res.docs[i]['ListName'],
+      //     description: res.docs[i]['description'],
+      //     value: false,
+      //     showSubTasks: false,
+      //     deadline: res.docs[i]['Deadline']);
+      //
+      // completedtasksList.add(taskss);
 
       // tasks.add(res.docs[i]['Task']);
     }
@@ -224,21 +274,39 @@ class AppState extends ChangeNotifier {
       DateTime date = res.docs[i]['Deadline'].toDate();
       var date1 = DateFormat("yyyy-MM-dd").format(date);
       toHighlight.add(date);
-      //print(date1);
+      // print("date1 ${res.docs[i]['Task']}");
 
-      Tasksss tasks = Tasksss(
-          id: res.docs[i].id,
-          task: res.docs[i]['Task'],
-          image: res.docs[i]['Image'],
-          priority: res.docs[i]['Priority'],
-          category: res.docs[i]['CategoryName'],
-          list: res.docs[i]['ListName'],
-          description: res.docs[i]['description'],
-          value: false,
-          showSubTasks: false,
-          deadline: date1);
+      try{
+        Tasksss tasks = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            image: res.docs[i]['Image'] ?? "",
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            status: res.docs[i]['status'],
+            value: false,
+            showSubTasks: false,
+            deadline: date1);
+           allTasks.add(tasks);
+      } catch (e){
+        Tasksss tasks = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            image:  "",
+            list: res.docs[i]['ListName'],
+            status: res.docs[i]['status'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: date1);
+           allTasks.add(tasks);
+      }
 
-      allTasks.add(tasks);
+      // allTasks.add(tasks);
 
       // tasks.add(res.docs[i]['Task']);
     }
@@ -252,12 +320,10 @@ class AppState extends ChangeNotifier {
 
 
   filterTasksByDate(date) {
-    print(date);
-    print('tasksk' + TasksModel.tasks.length.toString());
+    // print(date);
+    // print('tasksk' + TasksModel.tasks.length.toString());
     filteredTasks.clear();
     notifyListeners();
-    // print('filteredTasks ${element.deadline.toString()}');
-    print('filteredTasks ${date.toString()}');
     filteredTasks = TasksModel.tasks.where((element) {
       String dateOnly = '' ;
       if(element.deadline.runtimeType == Timestamp){
@@ -270,6 +336,7 @@ class AppState extends ChangeNotifier {
 
       }
       else{
+
         DateTime convertedDateTime = DateTime.parse(element.deadline.toString());
         Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
         DateTime dateTime =
@@ -279,9 +346,7 @@ class AppState extends ChangeNotifier {
                 .format(dateTime);
 
       }
-      print('filteredTasks ${dateOnly.toString()}');
-      print('filteredTasks ${date.toString()}');
-    return  dateOnly.toString() == date.toString();
+    return  dateOnly.toString() == date.toString() && element.status != "deleted";
     // return  element.deadline.toString() == date.toString();
     }).toList();
     print('filteredTasks ${filteredTasks.length}');
@@ -315,7 +380,10 @@ class AppState extends ChangeNotifier {
 //bool showSubTasks = false;
 updateShowSubTasks(val, i){
 
+  // task.showSubTasks = val;
   tasksList[i].showSubTasks = val;
+
+
   notifyListeners();
 }
 

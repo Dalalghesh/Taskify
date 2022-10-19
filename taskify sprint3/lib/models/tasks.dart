@@ -12,6 +12,7 @@ class Tasksss {
   String priority;
   var deadline;
   String description;
+  String status;
   String task;
   bool value;
   bool showSubTasks;
@@ -26,6 +27,7 @@ class Tasksss {
     required this.deadline,
     required this.task,
     required this.value,
+    required this.status,
     required this.showSubTasks,
   });
 }

@@ -18,39 +18,58 @@ import '../screens/AddTask.dart';
 
 class TaskDetail extends StatefulWidget {
   final Tasksss task;
+  final Tasksss taskOld;
   final int index;
+  final bool isConpleted;
 
-  TaskDetail({Key? key, required this.task, required this.index}){
-
-  }
+  TaskDetail(
+      {Key? key,
+      required this.task,
+      required this.index,
+      required this.taskOld,
+      this.isConpleted = false}) {}
 
   @override
   State<TaskDetail> createState() => _TaskDetailState();
 }
 
 class _TaskDetailState extends State<TaskDetail> {
+  late Tasksss myTask;
+  late Tasksss oldMyTask;
   //DateTime dateTime;
   TextEditingController taskNameController = TextEditingController();
-
   TextEditingController taskDescriptionController = TextEditingController();
 
-  List<DateTime?> _dialogCalendarPickerValue = [
-    DateTime.now(),
+  @override
+  void initState() {
+    myTask = widget.task;
+    oldMyTask = widget.task;
+    // TODO: implement initState
+    super.initState();
+    // if(widge)
+    print("ddd ${widget.isConpleted}");
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // print("ddd ${widget.isConpleted}");
+      // Provider.of<AppState>(context, listen: false).updateEditTask(false);
+    });
 
-  ];
+    taskDescriptionController.text = myTask.description;
+    taskNameController.text = myTask.task;
+
+    formatDate();
+  }
+
   String dateOnly = "";
 
   formatDate() {
-
-    if (widget.task.deadline.runtimeType == Timestamp) {
-      Timestamp timestamp = widget.task.deadline;
+    if (myTask.deadline.runtimeType == Timestamp) {
+      Timestamp timestamp = myTask.deadline;
       DateTime dateTime = timestamp.toDate();
       print(dateTime);
       dateTimeUpdate = dateTime;
       dateOnly = DateFormat('dd/MM/yyyy').format(dateTime);
     } else {
-      DateTime convertedDateTime = DateTime.parse(
-          widget.task.deadline.toString());
+      DateTime convertedDateTime = DateTime.parse(myTask.deadline.toString());
       Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
       DateTime dateTime = timestamp.toDate();
       dateTimeUpdate = dateTime;
@@ -58,27 +77,8 @@ class _TaskDetailState extends State<TaskDetail> {
     }
   }
 
-
   DateTime dateTimeUpdate = DateTime.now();
   DateTime FdateTime = new DateTime.utc(2024, 1, 1);
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-
-      Provider.of<AppState>(context, listen: false).updateEditTask(false);
-
-    });
-
-
-    taskDescriptionController.text = widget.task.description;
-    taskNameController.text = widget.task.task;
-
-    formatDate();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,16 +89,15 @@ class _TaskDetailState extends State<TaskDetail> {
     );
     AppState provider = Provider.of<AppState>(context);
 
-
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pop(true);
-        return true ;
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            widget.task.task,
+            myTask.task,
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
@@ -108,22 +107,21 @@ class _TaskDetailState extends State<TaskDetail> {
         // body: buildSingleChildScrollViewOld(context, provider),
       ),
     );
-
   }
 
-  SingleChildScrollView buildSingleChildScrollView(BuildContext context, AppState provider)  {
+  SingleChildScrollView buildSingleChildScrollView(
+      BuildContext context, AppState provider) {
     return SingleChildScrollView(
       child: Column(
         children: [
-
           Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            padding: EdgeInsets.all(16),
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     blurRadius: 3,
                     color: Colors.grey,
@@ -133,63 +131,132 @@ class _TaskDetailState extends State<TaskDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: IconButton(
-                        icon:
-                        provider.editTask ?
-                        Icon(Icons.done):
-                        Icon(Icons.edit),
-                        onPressed: ()async {
+                    const Text(
+                      "Task Detail:",
+                      maxLines: 1,
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                    Row(
+                      children: [
+                        if (!widget.isConpleted)
+                          Container(
+                            child: IconButton(
+                              icon: provider.editTask
+                                  ? const Icon(Icons.done)
+                                  : const Icon(Icons.edit),
+                              onPressed: () async {
+                                print("myTask ${widget.taskOld.task}");
+                                print("myTask ${myTask.task}");
+                                print("myTask ${oldMyTask.task}");
+                                // provider.updateEditTask(!provider.editTask);
+                                ///
+                                if (provider.editTask == true &&
+                                    provider.imageLoading == false) {
+                                  // await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
+                                  //     {
+                                  //       'Deadline': dateTimeUpdate,
+                                  //       'description': myTask.description,
+                                  //       'Image': myTask.image,
+                                  //       'Task':myTask.task,
+                                  //       'Priority':myTask.priority
+                                  //     });
+                                  CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.confirm,
+                                      text: 'Do you want to edit this task?',
+                                      confirmBtnText: 'Yes',
+                                      cancelBtnText: 'No & Back',
+                                      confirmBtnColor: const Color(0xff7b39ed),
+                                      title: "Edit",
+                                      onCancelBtnTap: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        // Navigator.of(context).pop();
+                                        provider
+                                            .updateEditTask(!provider.editTask);
+                                      },
+                                      onConfirmBtnTap: () async {
+                                        await FirebaseFirestore.instance
+                                            .collection('tasks')
+                                            .doc(myTask.id)
+                                            .update({
+                                          'Deadline': dateTimeUpdate,
+                                          'description': myTask.description,
+                                          'Image': myTask.image,
+                                          'Task': myTask.task,
+                                          'Priority': myTask.priority
+                                        });
+                                        CoolAlert.show(
+                                          title: "Success",
+                                          context: context,
+                                          type: CoolAlertType.success,
+                                          text: "Task Edited successfuly!",
+                                          confirmBtnColor:
+                                              const Color(0xff7b39ed),
+                                          onConfirmBtnTap: () {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                            provider.updateEditTask(
+                                                !provider.editTask);
+                                          },
+                                        );
+                                      });
+                                } else {
+                                  provider.updateEditTask(!provider.editTask);
+                                }
+                              },
+                            ),
+                          ),
+                        Container(
+                          child: IconButton(
+                            icon: const Icon(Icons.delete_rounded),
+                            onPressed: () {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.confirm,
+                                  text: 'Do you want to delete this task?',
+                                  confirmBtnText: 'Yes',
+                                  cancelBtnText: 'No',
+                                  confirmBtnColor: const Color(0xff7b39ed),
+                                  title: "Delete",
+                                  onConfirmBtnTap: () async {
+                                    await FirebaseFirestore.instance
+                                        .collection('tasks')
+                                        .doc(myTask.id)
+                                        .update({'status': 'deleted'});
+                                    // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: myTask.category,)), (route) => false);
 
-
-                          if(provider.editTask== true && provider.imageLoading== false ){
-                            await FirebaseFirestore.instance.collection('tasks').doc(widget.task.id).update(
-                                {
-                                  'Deadline': dateTimeUpdate,
-                                  'description': widget.task.description,
-                                  'Image': widget.task.image,
-                                  'Task':widget.task.task,
-                                  'Priority':widget.task.priority
-                                });
-                          }
-
-                          provider.updateEditTask(!provider.editTask);
-                        },
-                      ),
+                                    CoolAlert.show(
+                                      title: "Success",
+                                      context: context,
+                                      type: CoolAlertType.success,
+                                      text: "Task Deleted successfuly!",
+                                      confirmBtnColor: const Color(0xff7b39ed),
+                                      onConfirmBtnTap: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                    );
+                                  });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     //SizedBox(width: 6,),
-                    Container(
-                      child: IconButton(
-                        icon: Icon(Icons.delete_rounded),
-                        onPressed: () {
-
-
-                          CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.confirm,
-                              text: 'Do you want to delete this task?',
-                              confirmBtnText: 'Yes',
-                              cancelBtnText: 'No',
-                              confirmBtnColor: Color(0xff7b39ed),
-                              title: "Delete",
-                              onConfirmBtnTap: () async {
-                                await FirebaseFirestore.instance.collection('tasks').doc(widget.task.id).update(
-                                    {
-                                      'status': 'deleted'
-                                    });
-                                // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: widget.task.category,)), (route) => false);
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pop();
-                              });
-                        },
-                      ),
-                    ),
-
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -217,9 +284,9 @@ class _TaskDetailState extends State<TaskDetail> {
                         //         width: 20,
                         //         // margin: EdgeInsets.only(left: 16),
                         //         decoration: BoxDecoration(
-                        //           color: widget.task.priority == 'High'
+                        //           color: myTask.priority == 'High'
                         //               ? Color.fromARGB(255, 223, 123, 123)
-                        //               : widget.task.priority == 'Medium'
+                        //               : myTask.priority == 'Medium'
                         //               ? Color.fromARGB(255, 223, 180, 123)
                         //               : Color.fromARGB(255, 152, 224, 154),
                         //           shape: BoxShape.circle,
@@ -228,100 +295,116 @@ class _TaskDetailState extends State<TaskDetail> {
                         //     ),
                         //   ),
                         // ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
                             Container(
-                              //    margin: EdgeInsets.only(left: 16),
-                              width: MediaQuery.of(context).size.width/3,
-                              alignment: Alignment.center,
-
-                              child: provider.editTask ?
-                              TextField(
-                                controller: taskNameController,
-                                onChanged: (v) {
-                                  widget.task.task = v;
-                                },
-                                decoration: InputDecoration(
-                                  // border: InputBorder.none,
-                                  // focusedBorder: InputBorder.none,
-                                  // enabledBorder: InputBorder.none,
-                                  // errorBorder: InputBorder.none,
-                                  // disabledBorder: InputBorder.none,
-                                ),
-                              ):
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(19.0),
-                                  child: Text(
-                                    widget.task.task,
-                                    maxLines: 3,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.grey.shade700, fontSize: 18),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 10,),
-                            Container(
                               // provider.editTask
 
-                              decoration: provider.editTask ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey, width: 1),
-                              ) :BoxDecoration(
-                              ),
+                              decoration: provider.editTask
+                                  ? BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
+                                    )
+                                  : BoxDecoration(),
                               child: Padding(
-                                padding: const EdgeInsets.all(19.0),
+                                padding: const EdgeInsets.only(
+                                    top: 19.0, bottom: 19.0, right: 8, left: 8),
                                 child: GestureDetector(
-                                  onTap:(){
-
-                                    provider.editTask?
-                                    showPriorityDialog(context).then((value) => setState((){})) :"" ;
+                                  onTap: () {
+                                    provider.editTask
+                                        ? showPriorityDialog(context)
+                                            .then((value) => setState(() {}))
+                                        : "";
                                   },
                                   child: Container(
                                     height: 20,
                                     width: 20,
                                     // margin: EdgeInsets.only(left: 16),
                                     decoration: BoxDecoration(
-                                      color: widget.task.priority == 'High'
+                                      color: myTask.priority == 'High'
                                           ? Color.fromARGB(255, 223, 123, 123)
-                                          : widget.task.priority == 'Medium'
-                                          ? Color.fromARGB(255, 223, 180, 123)
-                                          : Color.fromARGB(255, 152, 224, 154),
+                                          : myTask.priority == 'Medium'
+                                              ? Color.fromARGB(
+                                                  255, 223, 180, 123)
+                                              : Color.fromARGB(
+                                                  255, 152, 224, 154),
                                       shape: BoxShape.circle,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Container(
+                              //    margin: EdgeInsets.only(left: 16),
+                              width: MediaQuery.of(context).size.width / 3,
+                              alignment: Alignment.center,
+
+                              child: provider.editTask
+                                  ? TextField(
+                                      controller: taskNameController,
+                                      onChanged: (v) {
+                                        myTask.task = v;
+                                      },
+                                      decoration: InputDecoration(
+                                          // border: InputBorder.none,
+                                          // focusedBorder: InputBorder.none,
+                                          // enabledBorder: InputBorder.none,
+                                          // errorBorder: InputBorder.none,
+                                          // disabledBorder: InputBorder.none,
+                                          ),
+                                    )
+                                  : Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(19.0),
+                                        child: Text(
+                                          myTask.task,
+                                          maxLines: 3,
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.grey.shade700,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                    ),
+                            ),
                           ],
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         GestureDetector(
-                          onTap: ()async{
-
-                            if(provider.editTask) {
+                          onTap: () async {
+                            if (provider.editTask) {
                               _selectDate();
-
                             }
                           },
                           child: Container(
                             // provider.editTask
-
-                            decoration: provider.editTask ? BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.grey, width: 1),
-                            ) :BoxDecoration(
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(19.0),
-                              child: Text(
-                                "${dateOnly}",
-                                style: TextStyle(
-                                  color: Colors.grey.shade700,
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            decoration: provider.editTask
+                                ? BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
+                                  )
+                                : BoxDecoration(),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(19.0),
+                                child: Text(
+                                  "${dateOnly}",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                  ),
                                 ),
                               ),
                             ),
@@ -329,105 +412,128 @@ class _TaskDetailState extends State<TaskDetail> {
                         ),
                       ],
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: GestureDetector(
-                        onTap:()async{
-                          if(provider.editTask){
-                            String res =  await  provider.uploadTaskImage();
-                            print("response"+res.toString());
-                            if(res != '0'){
-
+                        onTap: () async {
+                          if (provider.editTask) {
+                            String res = await provider.uploadTaskImage();
+                            print("response" + res.toString());
+                            if (res != '0') {
                               setState(() {
-                                widget.task.image = res;
+                                myTask.image = res;
                               });
                             }
-
                           }
                         },
                         child: Container(
                           height: 130,
                           width: MediaQuery.of(context).size.width * 0.4,
-                          child: provider.imageLoading ? Center(
-                            child: CircularProgressIndicator(),
-                          ):
-
-                          Image.network(widget.task.image, fit: BoxFit.cover,),
+                          child: provider.imageLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Image.network(
+                                  myTask.image,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 16,),
-
+                SizedBox(
+                  height: 16,
+                ),
                 SizedBox(
                   height: 20,
                 ),
                 Container(
                   //    margin: EdgeInsets.only(left: 16),
-                  width: MediaQuery.of(context).size.width/1.3,
+                  width: MediaQuery.of(context).size.width / 1.3,
 
-                  child: provider.editTask ?
-                  TextField(
-                    controller: taskDescriptionController,
-                    onChanged: (v) {
-                      widget.task.description = v;
-                    },
-                    decoration: InputDecoration(
-                      // border: InputBorder.none,
-                      // focusedBorder: InputBorder.none,
-                      // enabledBorder: InputBorder.none,
-                      // errorBorder: InputBorder.none,
-                      // disabledBorder: InputBorder.none,
-                    ),
-                  ):
-                  Text(
-                    widget.task.description,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
-                  )
-                  ,),
+                  child: provider.editTask
+                      ? TextField(
+                          controller: taskDescriptionController,
+                          onChanged: (v) {
+                            myTask.description = v;
+                          },
+                          decoration: InputDecoration(
+                              // border: InputBorder.none,
+                              // focusedBorder: InputBorder.none,
+                              // enabledBorder: InputBorder.none,
+                              // errorBorder: InputBorder.none,
+                              // disabledBorder: InputBorder.none,
+                              ),
+                        )
+                      : Text(
+                          myTask.description,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: Colors.grey.shade700, fontSize: 16),
+                        ),
+                ),
                 SizedBox(
                   height: 10,
                 ),
                 TextButton.icon(
                     onPressed: () {
-                      provider.updateShowSubTasks(!widget.task.showSubTasks, widget.index);
+                      if (!widget.isConpleted) {
+                        provider.updateShowSubTasks(
+                            !myTask.showSubTasks, widget.index);
+                      }
+                      if (widget.isConpleted) {
+                        setState(() {
+                          myTask.showSubTasks = !myTask.showSubTasks;
+                        });
+                      }
                       // Respond to button press
                     },
                     icon: Icon(Icons.view_list, size: 18),
-                    label:
-                    widget.task.showSubTasks ? Text(
-                      "hide subtasks",
-                      textAlign: TextAlign.center,
-                    ) :
-                    Text(
-                      "view subtasks",
-                      textAlign: TextAlign.center,
-                    )),
-                widget.task.showSubTasks? Container(
-                    margin: EdgeInsets.only(left: 50),
-                    child:
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10,),
-
-                          provider.filteredSubTasks.isEmpty ? Center(child: Text('No sub tasks'),):
-                          ListView.builder(
-                              itemCount: provider.filteredSubTasks.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index){
-                                return   Container(
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  child: Text(provider.filteredSubTasks[index].subTask, style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                  ),),
-                                );
-                              }),])): Container()
+                    label: myTask.showSubTasks
+                        ? Text(
+                            "hide subtasks",
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            "view subtasks",
+                            textAlign: TextAlign.center,
+                          )),
+                myTask.showSubTasks
+                    ? Container(
+                        margin: EdgeInsets.only(left: 50),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              provider.filteredSubTasks.isEmpty
+                                  ? Center(
+                                      child: Text('No sub tasks'),
+                                    )
+                                  : ListView.builder(
+                                      itemCount:
+                                          provider.filteredSubTasks.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          child: Text(
+                                            provider.filteredSubTasks[index]
+                                                .subTask,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                            ]))
+                    : Container()
               ],
             ),
           ),
@@ -469,13 +575,13 @@ class _TaskDetailState extends State<TaskDetail> {
   //                         onPressed: ()async {
   //
   //                           if(provider.editTask== true && provider.imageLoading== false ){
-  //                             await FirebaseFirestore.instance.collection('tasks').doc(widget.task.id).update(
+  //                             await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
   //                                 {
   //                                   'Deadline': dateTimeUpdate,
-  //                                   'description': widget.task.description,
-  //                                   'Image': widget.task.image,
-  //                                   'Task':widget.task.task,
-  //                                   'Priority':widget.task.priority
+  //                                   'description': myTask.description,
+  //                                   'Image': myTask.image,
+  //                                   'Task':myTask.task,
+  //                                   'Priority':myTask.priority
   //                                 });
   //                           }
   //
@@ -499,11 +605,11 @@ class _TaskDetailState extends State<TaskDetail> {
   //                               confirmBtnColor: Color(0xff7b39ed),
   //                               title: "Delete",
   //                               onConfirmBtnTap: () async {
-  //                                 await FirebaseFirestore.instance.collection('tasks').doc(widget.task.id).update(
+  //                                 await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
   //                                     {
   //                                       'status': 'deleted'
   //                                     });
-  //                                 // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: widget.task.category,)), (route) => false);
+  //                                 // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: myTask.category,)), (route) => false);
   //                                 Navigator.of(context).pop();
   //                                 Navigator.of(context).pop();
   //                               });
@@ -538,9 +644,9 @@ class _TaskDetailState extends State<TaskDetail> {
   //                             width: 20,
   //                             // margin: EdgeInsets.only(left: 16),
   //                             decoration: BoxDecoration(
-  //                               color: widget.task.priority == 'High'
+  //                               color: myTask.priority == 'High'
   //                                   ? Color.fromARGB(255, 223, 123, 123)
-  //                                   : widget.task.priority == 'Medium'
+  //                                   : myTask.priority == 'Medium'
   //                                       ? Color.fromARGB(255, 223, 180, 123)
   //                                       : Color.fromARGB(255, 152, 224, 154),
   //                               shape: BoxShape.circle,
@@ -558,7 +664,7 @@ class _TaskDetailState extends State<TaskDetail> {
   //                       TextField(
   //                         controller: taskNameController,
   //                         onChanged: (v) {
-  //                           widget.task.task = v;
+  //                           myTask.task = v;
   //                         },
   //                         decoration: InputDecoration(
   //                           // border: InputBorder.none,
@@ -569,7 +675,7 @@ class _TaskDetailState extends State<TaskDetail> {
   //                         ),
   //                       ):
   //                       Text(
-  //                         widget.task.task,
+  //                         myTask.task,
   //                         maxLines: 3,
   //                         overflow: TextOverflow.ellipsis,
   //                         style: TextStyle(color: Colors.grey.shade700, fontSize: 18),
@@ -613,7 +719,7 @@ class _TaskDetailState extends State<TaskDetail> {
   //                   if(res != '0'){
   //
   //                     setState(() {
-  //                       widget.task.image = res;
+  //                       myTask.image = res;
   //                     });
   //                   }
   //
@@ -626,7 +732,7 @@ class _TaskDetailState extends State<TaskDetail> {
   //                       child: CircularProgressIndicator(),
   //                     ):
   //
-  //                     Image.network(widget.task.image, fit: BoxFit.cover,),
+  //                     Image.network(myTask.image, fit: BoxFit.cover,),
   //                   ),
   //                 ),
   //                 SizedBox(
@@ -640,7 +746,7 @@ class _TaskDetailState extends State<TaskDetail> {
   //               TextField(
   //                 controller: taskDescriptionController,
   //                 onChanged: (v) {
-  //                   widget.task.description = v;
+  //                   myTask.description = v;
   //                 },
   //                 decoration: InputDecoration(
   //                   // border: InputBorder.none,
@@ -651,7 +757,7 @@ class _TaskDetailState extends State<TaskDetail> {
   //                 ),
   //               ):
   //                 Text(
-  //                   widget.task.description,
+  //                   myTask.description,
   //                   maxLines: 3,
   //                   overflow: TextOverflow.ellipsis,
   //                   style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
@@ -662,12 +768,12 @@ class _TaskDetailState extends State<TaskDetail> {
   //                 ),
   //                 TextButton.icon(
   //                     onPressed: () {
-  //                       provider.updateShowSubTasks(!widget.task.showSubTasks, widget.index);
+  //                       provider.updateShowSubTasks(!myTask.showSubTasks, widget.index);
   //                       // Respond to button press
   //                     },
   //                     icon: Icon(Icons.view_list, size: 18),
   //                     label:
-  //                     widget.task.showSubTasks ? Text(
+  //                     myTask.showSubTasks ? Text(
   //                       "hide subtasks",
   //                       textAlign: TextAlign.center,
   //                     ) :
@@ -675,7 +781,7 @@ class _TaskDetailState extends State<TaskDetail> {
   //                       "view subtasks",
   //                       textAlign: TextAlign.center,
   //                     )),
-  //                 widget.task.showSubTasks? Container(
+  //                 myTask.showSubTasks? Container(
   //                   margin: EdgeInsets.only(left: 50),
   //                   child:
   //                   Column(
@@ -705,11 +811,11 @@ class _TaskDetailState extends State<TaskDetail> {
   //     );
   // }
   Future<DateTime?> pickDate() => showDatePicker(
-    context: context,
-    initialDate: dateTimeUpdate,
-    firstDate: DateTime(1900),
-    lastDate: DateTime(1900),
-  );
+        context: context,
+        initialDate: dateTimeUpdate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(1900),
+      );
 
   _selectDate() async {
     DateTime? pickedDate = await showModalBottomSheet<DateTime>(
@@ -748,9 +854,9 @@ class _TaskDetailState extends State<TaskDetail> {
                     use24hFormat: true,
                     onDateTimeChanged: (DateTime newDateTime) {
                       setState(() {
-                      dateTimeUpdate = newDateTime;
-                      dateOnly = DateFormat('dd/MM/yyyy').format(dateTimeUpdate);
-
+                        dateTimeUpdate = newDateTime;
+                        dateOnly =
+                            DateFormat('dd/MM/yyyy').format(dateTimeUpdate);
                       });
                     },
                   ),
@@ -762,6 +868,7 @@ class _TaskDetailState extends State<TaskDetail> {
       },
     );
   }
+
   showPriorityDialog(context) {
     // AppState provider = Provider.of<AppState>(context, listen: false);
     return showDialog(
@@ -798,58 +905,21 @@ class _TaskDetailState extends State<TaskDetail> {
                                       ),
                                     )),
                               ),
-                              SizedBox(height: 20,),
-                              GestureDetector(
-                                onTap: ()async{
-                                  widget.task.priority = 'High';
-
-                                  Navigator.pop(context);
-
-
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-
-                                        children: [
-                                          Container(
-                                            height: 20,
-                                            width: 20,
-                                            // margin: EdgeInsets.only(left: 16),
-                                            decoration: BoxDecoration(
-                                              color:  Color.fromARGB(255, 223, 123, 123),
-
-
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10,),
-                                          Text('High', style: TextStyle(
-                                              fontSize: 16
-                                          ),),
-                                        ],
-                                      ),
-                                      widget.task.priority  == 'High'? Icon(Icons.done): Container(),
-
-                                    ],
-                                  ),
-                                ),
+                              SizedBox(
+                                height: 20,
                               ),
                               GestureDetector(
-                                onTap: ()async{
-                                  widget.task.priority = 'Medium';
+                                onTap: () async {
+                                  myTask.priority = 'High';
+
                                   Navigator.pop(context);
-
-
-
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 6),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
@@ -858,38 +928,38 @@ class _TaskDetailState extends State<TaskDetail> {
                                             width: 20,
                                             // margin: EdgeInsets.only(left: 16),
                                             decoration: BoxDecoration(
-                                              color:  Color.fromARGB(255, 223, 180, 123),
-
+                                              color: Color.fromARGB(
+                                                  255, 223, 123, 123),
                                               shape: BoxShape.circle,
                                             ),
                                           ),
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Text('Medium', style: TextStyle(
-                                              fontSize: 16
-                                          ),),
+                                          Text(
+                                            'High',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                         ],
                                       ),
-                                      widget.task.priority == 'Medium' ? Icon(Icons.done): Container(),
-
+                                      myTask.priority == 'High'
+                                          ? Icon(Icons.done)
+                                          : Container(),
                                     ],
                                   ),
                                 ),
-                              ), GestureDetector(
-                                onTap: ()async{
-                                  widget.task.priority = 'Low';
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  myTask.priority = 'Medium';
                                   Navigator.pop(context);
-
-
-
-
-
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 6),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
@@ -898,26 +968,70 @@ class _TaskDetailState extends State<TaskDetail> {
                                             width: 20,
                                             // margin: EdgeInsets.only(left: 16),
                                             decoration: BoxDecoration(
-                                              color:  Color.fromARGB(255, 152, 224, 154),
+                                              color: Color.fromARGB(
+                                                  255, 223, 180, 123),
                                               shape: BoxShape.circle,
                                             ),
                                           ),
-                                          SizedBox(width: 10,),
-                                          Text('Low', style: TextStyle(
-                                              fontSize: 16
-                                          ),),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            'Medium',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                         ],
                                       ),
-                                      widget.task.priority == 'Low'? Icon(Icons.done): Container(),
-
+                                      myTask.priority == 'Medium'
+                                          ? Icon(Icons.done)
+                                          : Container(),
                                     ],
                                   ),
                                 ),
                               ),
-
+                              GestureDetector(
+                                onTap: () async {
+                                  myTask.priority = 'Low';
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 6),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 20,
+                                            width: 20,
+                                            // margin: EdgeInsets.only(left: 16),
+                                            decoration: BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 152, 224, 154),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            'Low',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                      myTask.priority == 'Low'
+                                          ? Icon(Icons.done)
+                                          : Container(),
+                                    ],
+                                  ),
+                                ),
+                              ),
                               SizedBox(
                                 height:
-                                MediaQuery.of(context).size.height * 0.03,
+                                    MediaQuery.of(context).size.height * 0.03,
                               ),
                             ],
                           ),
@@ -927,5 +1041,4 @@ class _TaskDetailState extends State<TaskDetail> {
           );
         });
   }
-
 }

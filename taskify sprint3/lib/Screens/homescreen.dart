@@ -24,7 +24,7 @@ class Home_Screen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             children: [
                CategoriesScreen(),
-              TodoList(category: ''),
+               TodoList(category: ''),
               TaskScreen( category: '', list: '',),
             ],
           ),

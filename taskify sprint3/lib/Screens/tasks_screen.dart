@@ -357,6 +357,9 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             task: provider
                                                                     .tasksList[
                                                                 index],
+                                                            taskOld: provider
+                                                                    .tasksList[
+                                                                index],
                                                             index: index,
                                                           ))).then((value) {
                                                 setState(() {
@@ -555,15 +558,11 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                               10),
                                                                       child:
                                                                           Text(
-                                                                        provider
-                                                                            .filteredSubTasks[index]
-                                                                            .subTask,
+                                                                        "${index + 1} -  ${provider.filteredSubTasks[index].subTask}",
                                                                         style:
                                                                             TextStyle(
                                                                           color:
                                                                               Colors.black,
-                                                                          fontWeight:
-                                                                              FontWeight.w600,
                                                                           fontSize:
                                                                               18,
                                                                         ),
@@ -621,8 +620,9 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                     child:
                                                                         Container(
                                                                       height:
-                                                                          40,
-                                                                      width: 40,
+                                                                          50,
+                                                                      width:
+                                                                          100,
                                                                       decoration:
                                                                           BoxDecoration(
                                                                         color: Colors
@@ -638,9 +638,26 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                       alignment:
                                                                           Alignment
                                                                               .center,
-                                                                      child: Icon(
-                                                                          Icons
-                                                                              .add),
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        width:
+                                                                            100,
+                                                                        decoration: BoxDecoration(
+                                                                            color:
+                                                                                Color(0xff7b39ed),
+                                                                            borderRadius: BorderRadius.circular(10)),
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        child:
+                                                                            Text(
+                                                                          'Add',
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 18),
+                                                                        ),
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                   provider.addNewSubTask
@@ -675,13 +692,13 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                             width:
                                                                                 100,
                                                                             decoration:
-                                                                                BoxDecoration(color: subTaskController.text.length < 3 ? Colors.grey : AppColors.deepPurple, borderRadius: BorderRadius.circular(10)),
+                                                                                BoxDecoration(color: subTaskController.text.length < 3 ? Colors.grey : Color(0xff7b39ed), borderRadius: BorderRadius.circular(10)),
                                                                             alignment:
                                                                                 Alignment.center,
                                                                             child:
                                                                                 Text(
                                                                               'Save',
-                                                                              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                                                              style: TextStyle(color: Colors.white, fontSize: 18),
                                                                             ),
                                                                           ),
                                                                         )
@@ -823,8 +840,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    TaskDetails(
+                                                    TaskDetail(
+                                                      // TaskDetails(
+                                                      index: index,
+                                                      isConpleted: true,
                                                       task: provider
+                                                              .completedtasksList[
+                                                          index],
+                                                      taskOld: provider
                                                               .completedtasksList[
                                                           index],
                                                     )));
@@ -939,33 +962,36 @@ class _TaskScreenState extends State<TaskScreen> {
                                                 ? Container(
                                                     margin: EdgeInsets.only(
                                                         left: 70),
-                                                    child: ListView.builder(
-                                                        itemCount: provider
-                                                            .filteredSubTasks
-                                                            .length,
-                                                        shrinkWrap: true,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return Container(
-                                                            margin:
-                                                                EdgeInsets.only(
-                                                                    bottom: 10),
-                                                            child: Text(
-                                                              provider
-                                                                  .filteredSubTasks[
-                                                                      index]
-                                                                  .subTask,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontSize: 18,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        }),
+                                                    child: provider
+                                                                .filteredSubTasks
+                                                                .length !=
+                                                            0
+                                                        ? ListView.builder(
+                                                            itemCount: provider
+                                                                .filteredSubTasks
+                                                                .length,
+                                                            shrinkWrap: true,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return Container(
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        bottom:
+                                                                            10),
+                                                                child: Text(
+                                                                  "${index + 1} -  ${provider.filteredSubTasks[index].subTask}",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        18,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            })
+                                                        : Text('No sub tasks'),
                                                   )
                                                 : Container(),
                                           ],

@@ -247,6 +247,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               TaskDetail(
+                                                                taskOld: provider
+                                                                    .filteredTasks[
+                                                                index],
                                                                 task: provider
                                                                         .filteredTasks[
                                                                     index],
