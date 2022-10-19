@@ -172,6 +172,42 @@ Widget _buildImageRow(int imageIndex) => Row(
                       ),
                     ),
                     Text(
+                      task.task,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        //  color: Colors.grey.shade700,
+                      ),
+                      //  textAlign: TextAlign.left,
+                    ),
+                    Text(
+                      "${dateOnly}",
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20,),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+
+
+
+                    Container(
+                      height: 120,
+                      width: 120,
+                      child: Image.network(task.image, fit: BoxFit.cover,),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+
+
+                  ],
+                ),
+                    Text(
                       this.task,
                       style: TextStyle(
                         fontSize: 18,
