@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
-import 'package:taskify/screens/Add_Category.dart';
+import 'package:taskify/Screens/Add_Category.dart';
 import '../homePage.dart';
 import 'AddTask.dart';
 import 'package:taskify/util.dart';

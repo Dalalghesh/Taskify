@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/homePage.dart';
-import 'package:taskify/screens/homescreen.dart';
+import 'package:taskify/Screens/homescreen.dart';
 import '../auth/login_screen.dart';
 import '../ProfileScreen/profileScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

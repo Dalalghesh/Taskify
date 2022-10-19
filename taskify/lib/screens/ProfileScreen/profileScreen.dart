@@ -7,7 +7,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/Storing_DB.dart';
-import 'package:taskify/screens/auth/login_screen.dart';
+import '../auth/login_screen.dart';
 import 'package:taskify/util.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';

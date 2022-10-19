@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/homePage.dart';
-import 'package:taskify/screens/AddList.dart';
+import 'package:taskify/Screens/AddList.dart';
 import '../../service/local_push_notification.dart';
 import '../../util.dart';
 import '../../utils/validators.dart';
@@ -38,7 +38,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   final TextEditingController _typeAheadController = TextEditingController();
   String query = '';
   String? email;
-  String? myemail = FirebaseAuth.instance.currentUser!.email;
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   List<String> tokens = [];
@@ -56,25 +55,36 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   }
 
   Future<void> sendInviation(String recieverEmail, String listId) async {
-    // try {
-    // final senderEmail = _firebaseAuth.currentUser?.email;
-    final validate = _formKey.currentState?.validate();
+    try {
+      // final senderEmail = _firebaseAuth.currentUser?.email;
+      final validate = _formKey.currentState?.validate();
 
-    if (validate ?? false) {
+      if (validate ?? false) {
+        _formKey.currentState?.save();
+        // print(email.toString());
+        await context.read<InvitaitonProvider>().sendInvitation(
+            email!, widget.category, widget.list, widget.listId);
+
+        // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Invitation sent successfully",
+          confirmBtnColor: const Color(0xff7b39ed),
+          // onConfirmBtnTap: () => route(isChecked),
+        );
+        // showPlatformDialogue(
+        //     context: context, title: "Invitation sent successfully");
+        _formKey.currentState?.reset();
+      }
+    } catch (e) {
+      _formKey.currentState?.reset();
       CoolAlert.show(
         context: context,
-        type: CoolAlertType.success,
-        text: "Invitation sent successfully",
+        type: CoolAlertType.error,
+        text: "You can't invite yourself!",
         confirmBtnColor: const Color(0xff7b39ed),
-        // onConfirmBtnTap: () => route(isChecked),
       );
-      _formKey.currentState?.save();
-      // print(email.toString());
-      await context
-          .read<InvitaitonProvider>()
-          .sendInvitation(email!, widget.category, widget.list, widget.listId);
-
-      _formKey.currentState?.reset();
     }
     _typeAheadController.clear();
   }
@@ -116,16 +126,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Please enter email';
-                }
-                if (value == myemail) return 'You cannot invite yourself';
-
-                const p =
-                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(gmail.com)$';
-
-                final regExp = RegExp(p, caseSensitive: false);
-
-                if (!regExp.hasMatch(value.trim())) {
-                  return 'Please Enter Gmail Email Address';
                 }
               },
             ),

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/check_email/check_email_view.dart';
-import 'package:taskify/screens/auth/login_screen.dart';
+import 'package:taskify/Screens/auth/login_screen.dart';
 import 'package:taskify/util.dart';
 import 'package:cool_alert/cool_alert.dart';
 

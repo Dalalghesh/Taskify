@@ -5,13 +5,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskify/invitation/screens/received_invitations.dart';
-import 'package:taskify/screens/AddList.dart';
-import 'package:taskify/screens/AddTask.dart';
-import 'package:taskify/screens/Add_Category.dart';
-import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
-import 'package:taskify/screens/homescreen.dart';
-import 'package:taskify/screens/tasks_screen.dart';
-import 'screens/todo_list_screen.dart';
+import 'package:taskify/Screens/AddList.dart';
+import 'package:taskify/Screens/addTask.dart';
+import 'package:taskify/Screens/Add_Category.dart';
+import 'package:taskify/Screens/tasks_screen.dart';
+import 'package:taskify/Screens/homescreen.dart';
+import 'package:taskify/Screens/todo_list_screen.dart';
+import 'package:taskify/Screens/ProfileScreen/profileScreen.dart';
+
 import 'package:taskify/CalendarScreen.dart';
 
 import 'service/local_push_notification.dart';

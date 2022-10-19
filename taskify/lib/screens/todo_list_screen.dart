@@ -5,8 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
-import 'package:taskify/screens/tasks_screen.dart';
-
+import 'package:taskify/Screens/tasks_screen.dart';
 import '../controller/UserController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

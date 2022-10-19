@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskify/send_instructions/send_instructions_view.dart';
 import 'package:taskify/util.dart';
 import 'package:cool_alert/cool_alert.dart';
-import 'package:taskify/screens/auth/login_screen.dart';
+import 'package:taskify/Screens/auth/login_screen.dart';
 
 class CheckEmailView extends StatefulWidget {
   _CheckEmailView createState() => _CheckEmailView();

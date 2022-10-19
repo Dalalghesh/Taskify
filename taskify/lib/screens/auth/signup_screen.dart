@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:taskify/screens/auth/login_screen.dart';
+import 'package:taskify/Screens/auth/login_screen.dart';
 import 'package:taskify/util.dart';
 import 'package:taskify/utils/validators.dart';
 import 'package:taskify/widgets/primary_button.dart';

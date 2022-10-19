@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskify/homePage.dart';
 
-import '../screens/auth/login_screen.dart';
-import '../screens/ProfileScreen/profileScreen.dart';
+import 'package:taskify/Screens/auth/login_screen.dart';
+import 'package:taskify/Screens/ProfileScreen/profileScreen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
