@@ -30,6 +30,7 @@ class _HomeScreen extends State<HomeScreen> {
   late String namee;
 
   Future pickImage(ImageSource source) async {
+    
     final image = await ImagePicker().pickImage(source: source);
     if (image == null) return;
 
@@ -140,6 +141,11 @@ class _HomeScreen extends State<HomeScreen> {
                     right: 15,
                   ),
                   onPressed: () async {
+                      final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+                    final currentid = _firebaseAuth.currentUser?.uid;
+print(FirebaseAuth.instance.currentUser!.email);
+print(currentid);
                     CoolAlert.show(
                         context: context,
                         type: CoolAlertType.confirm,
@@ -413,46 +419,26 @@ class _HomeScreen extends State<HomeScreen> {
                             height: 55,
                             width: 320,
                             child: ElevatedButton(
-                              onPressed: () async {
-                                CoolAlert.show(
-                                    context: context,
-                                    type: CoolAlertType.confirm,
-                                    text: 'Do you want to delete your account?',
-                                    confirmBtnText: 'Yes',
-                                    cancelBtnText: 'No',
-                                    title: "Delete Account",
-                                    confirmBtnColor: Color(0xff7b39ed),
-                                    onConfirmBtnTap: () async {
-                                      try {
-                                        await FirebaseAuth.instance.currentUser!
-                                            .delete();
-                                        Util.routeToWidget(
-                                            context, LoginScreen());
-                                      } on FirebaseAuthException catch (e) {
-                                        if (e.code == 'requires-recent-login') {
-                                          print(
-                                              'The user must reauthenticate before this operation can be executed.');
-                                          // Prompt the user to enter their email and password
-                                          String email =
-                                              'barry.allen@example.com';
-                                          String password =
-                                              'SuperSecretPassword!';
+                                onPressed: () {
+                                  CoolAlert.show(
+                        context: context,
+                        type: CoolAlertType.confirm,
+                        text: 'Do you want to delete your account?',
+                        confirmBtnText: 'Yes',
+                        cancelBtnText: 'No',
+                        title: "Delete My Account",
+                        confirmBtnColor: Color(0xff7b39ed),
+                        onConfirmBtnTap: () async {
 
-// Create a credential
-                                          AuthCredential credential =
-                                              EmailAuthProvider.credential(
-                                                  email: email,
-                                                  password: password);
+                          print("InsideDelete");
+                          DeleteUserAccount();
 
-// Reauthenticate
-                                          await FirebaseAuth
-                                              .instance.currentUser!
-                                              .reauthenticateWithCredential(
-                                                  credential);
-                                        }
-                                      }
-                                    });
-                              },
+                          await FirebaseAuth.instance.signOut();
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
+                        }); },
                               child: Center(
                                   child: Text("Delete Account",
                                       style: TextStyle(
@@ -588,6 +574,20 @@ class HeaderCurvedContainer extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
+
+Future<void> DeleteUserAccount()async{
+print("inside delete");
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+final currentid = _firebaseAuth.currentUser?.uid;
+print(FirebaseAuth.instance.currentUser!.email);
+print(currentid);
+FirebaseFirestore.instance.collection('users1').doc(currentid).delete();
+await FirebaseAuth.instance.currentUser!.delete();
+}
+
+
 
 Delete() async {
   print("Dalal");
