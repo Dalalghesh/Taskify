@@ -222,6 +222,7 @@ class _TaskScreenState extends State<TaskScreen> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
               widget.list,
@@ -634,19 +635,22 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                     child:
                                                                         Container(
                                                                       height:
-                                                                          50,
+                                                                          30,
                                                                       width:
                                                                           100,
                                                                       decoration:
                                                                           BoxDecoration(
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: Color.fromARGB(
+                                                                            0,
+                                                                            255,
+                                                                            255,
+                                                                            255),
                                                                         shape: BoxShape
                                                                             .circle,
                                                                         boxShadow: [
                                                                           BoxShadow(
                                                                               blurRadius: 3,
-                                                                              color: Colors.grey),
+                                                                              color: Color.fromARGB(0, 158, 158, 158)),
                                                                         ],
                                                                       ),
                                                                       alignment:
@@ -655,7 +659,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                       child:
                                                                           Container(
                                                                         height:
-                                                                            50,
+                                                                            30,
                                                                         width:
                                                                             100,
                                                                         decoration: BoxDecoration(
@@ -666,10 +670,10 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                             Alignment.center,
                                                                         child:
                                                                             Text(
-                                                                          'Add',
+                                                                          'Add Subtask',
                                                                           style: TextStyle(
                                                                               color: Colors.white,
-                                                                              fontSize: 18),
+                                                                              fontSize: 15),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -702,7 +706,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                           child:
                                                                               Container(
                                                                             height:
-                                                                                50,
+                                                                                30,
                                                                             width:
                                                                                 100,
                                                                             decoration:
@@ -712,7 +716,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                             child:
                                                                                 Text(
                                                                               'Save',
-                                                                              style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                              style: TextStyle(color: Colors.white, fontSize: 15),
                                                                             ),
                                                                           ),
                                                                         )
