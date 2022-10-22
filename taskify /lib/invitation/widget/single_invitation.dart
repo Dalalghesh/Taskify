@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/received_invitations.dart';
-// import '../../Util.dart';
+import '../../util.dart';
 import '../../homePage.dart';
 import '../../utils/app_colors.dart';
 import '../models/invitation.dart';
@@ -37,6 +37,14 @@ class SingleInvitaionItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // const Text(
+              //   "New Invitation",
+              //   style: TextStyle(
+              //     color: Colors.black,
+              //     fontSize: 15,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               Text(
                 " " + "$FullName" + " invites you",
                 style: TextStyle(
@@ -50,7 +58,7 @@ class SingleInvitaionItem extends StatelessWidget {
                     invitationModel.list +
                     ' list \n In ' +
                     invitationModel.category +
-                    'category',
+                    ' category',
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 17,

@@ -38,6 +38,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   final TextEditingController _typeAheadController = TextEditingController();
   String query = '';
   String? email;
+  String? myemail = FirebaseAuth.instance.currentUser!.email;
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   List<String> tokens = [];
@@ -55,37 +56,25 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
   }
 
   Future<void> sendInviation(String recieverEmail, String listId) async {
-    try {
-      // final senderEmail = _firebaseAuth.currentUser?.email;
-      final validate = _formKey.currentState?.validate();
+    // try {
+    // final senderEmail = _firebaseAuth.currentUser?.email;
+    final validate = _formKey.currentState?.validate();
 
-
-      if (validate ?? false) {
-        _formKey.currentState?.save();
-        // print(email.toString());
-        await context.read<InvitaitonProvider>().sendInvitation(
-            email!, widget.category, widget.list, widget.listId);
-          
-        // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.success,
-          text: "Invitation sent successfully",
-          confirmBtnColor: const Color(0xff7b39ed),
-          // onConfirmBtnTap: () => route(isChecked),
-        );
-        // showPlatformDialogue(
-        //     context: context, title: "Invitation sent successfully");
-        _formKey.currentState?.reset();
-      }
-    } catch (e) {
-      _formKey.currentState?.reset();
+    if (validate ?? false) {
       CoolAlert.show(
         context: context,
-        type: CoolAlertType.error,
-        text: "You can't invite yourself!",
+        type: CoolAlertType.success,
+        text: "Invitation sent successfully",
         confirmBtnColor: const Color(0xff7b39ed),
+        // onConfirmBtnTap: () => route(isChecked),
       );
+      _formKey.currentState?.save();
+      // print(email.toString());
+      await context
+          .read<InvitaitonProvider>()
+          .sendInvitation(email!, widget.category, widget.list, widget.listId);
+
+      _formKey.currentState?.reset();
     }
     _typeAheadController.clear();
   }
@@ -128,6 +117,16 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                 if (value!.isEmpty) {
                   return 'Please enter email';
                 }
+                if (value == myemail) return 'You cannot invite yourself';
+
+                const p =
+                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(gmail.com)$';
+
+                final regExp = RegExp(p, caseSensitive: false);
+
+                if (!regExp.hasMatch(value.trim())) {
+                  return 'Please Enter Gmail Email Address';
+                }
               },
             ),
           ),
@@ -136,32 +135,31 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
           ),
           ElevatedButton(
             onPressed: () async {
-             String recieverEmail=email.toString() ;
-             final _firebaseFirestore = FirebaseFirestore.instance;
-      final senderEmail = _firebaseAuth.currentUser?.email;
+              String recieverEmail = email.toString();
+              final _firebaseFirestore = FirebaseFirestore.instance;
+              final senderEmail = _firebaseAuth.currentUser?.email;
 
               final res = await _firebaseFirestore
-        .collection('invitations')
-        .where("recieverEmail", isEqualTo: recieverEmail).where("senderEmail", isEqualTo: senderEmail).where("listId", isEqualTo: widget.listId)
-        .get();
+                  .collection('invitations')
+                  .where("recieverEmail", isEqualTo: recieverEmail)
+                  .where("senderEmail", isEqualTo: senderEmail)
+                  .where("listId", isEqualTo: widget.listId)
+                  .get();
 
-        if (res.docs.isNotEmpty) {
-      print("helloooooooo");
-       print("dublicate00");
-    CoolAlert.show(
-         context: context,
-         type: CoolAlertType.error,
-         text: "The invitation has already been sent ",
-         confirmBtnColor: const Color(0xff7b39ed),
-       );
-         _typeAheadController.clear();
-       }
-       else{
-        await sendInviation(query, widget.listId);
-         getUsersToken(email.toString());   
-       }
-          
-      
+              if (res.docs.isNotEmpty) {
+                print("helloooooooo");
+                print("dublicate00");
+                CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.error,
+                  text: "The invitation has already been sent ",
+                  confirmBtnColor: const Color(0xff7b39ed),
+                );
+                _typeAheadController.clear();
+              } else {
+                await sendInviation(query, widget.listId);
+                getUsersToken(email.toString());
+              }
             },
             child: const Text(
               'Invite',
@@ -280,33 +278,31 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     }
   }
 
-    checkNotDub (String recieverEmail ,String listId) async {
-      final _firebaseFirestore = FirebaseFirestore.instance;
-      final senderEmail = _firebaseAuth.currentUser?.email;
-      
-      print(recieverEmail);
-      print(listId);
+  checkNotDub(String recieverEmail, String listId) async {
+    final _firebaseFirestore = FirebaseFirestore.instance;
+    final senderEmail = _firebaseAuth.currentUser?.email;
+
+    print(recieverEmail);
+    print(listId);
 
     final res = await _firebaseFirestore
         .collection('invitations')
-        .where("recieverEmail", isEqualTo: recieverEmail).where("senderEmail", isEqualTo: senderEmail).where("listId", isEqualTo: listId)
+        .where("recieverEmail", isEqualTo: recieverEmail)
+        .where("senderEmail", isEqualTo: senderEmail)
+        .where("listId", isEqualTo: listId)
         .get();
-        
+
     if (res.docs.isNotEmpty) {
       print("helloooooooo");
-       print("dublicate00");
-    CoolAlert.show(
-         context: context,
-         type: CoolAlertType.error,
-         text: "You can't send same invitation twice!",
-         confirmBtnColor: const Color(0xff7b39ed),
-       );
-       }
-       else{
-        return false;
-       }
+      print("dublicate00");
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "You can't send same invitation twice!",
+        confirmBtnColor: const Color(0xff7b39ed),
+      );
+    } else {
+      return false;
     }
   }
-
-  
-
+}

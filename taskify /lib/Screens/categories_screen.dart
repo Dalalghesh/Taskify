@@ -45,7 +45,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     getCategories();
   }
 
-
   //static const _scopes =  [CalendarApi.CalendarScope];
 
   var _credentials;
@@ -318,9 +317,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         builder: (context) {
           return WillPopScope(
             onWillPop: () async {
-
-              return true ;
-            } ,
+              return true;
+            },
             child: Scaffold(
                 backgroundColor: Colors.transparent,
                 body: Column(
@@ -403,22 +401,24 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                               TaskDetail(
                                                                 task: provider
                                                                         .filteredTasks[
-                                                                    index], taskOld: provider
+                                                                    index],
+                                                                taskOld: provider
                                                                         .filteredTasks[
                                                                     index],
                                                                 index: index,
                                                               ))).then((value) {
-                                                               // provider.filteredTasks.clear() ;
-                                                               setState(() {
-                                                                 print("ffffffff");
-                                                                 Navigator.of(context).pop();
-                                                                 getCategories();
-                                                               });
-                                                              // setState(() {
-                                                              //   print("ffffffff");
-                                                              //   getCategories();
-                                                              // });
-                                                      });
+                                                    // provider.filteredTasks.clear() ;
+                                                    setState(() {
+                                                      print("ffffffff");
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      getCategories();
+                                                    });
+                                                    // setState(() {
+                                                    //   print("ffffffff");
+                                                    //   getCategories();
+                                                    // });
+                                                  });
                                                   //    DateTime date = provider.completedtasksList[index].deadline.toDate();
                                                   // var date1 =   DateFormat("yyyy-MM-dd").format(date);
                                                   //   print(date1);

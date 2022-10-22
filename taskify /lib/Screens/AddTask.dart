@@ -96,16 +96,26 @@ class _AddTask extends State<AddTask> {
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context, listen: true);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    var imageLink = 'https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg';
+    var imageLink =
+        'https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg';
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Add Task",
+            style: TextStyle(
+              fontSize: 25,
+              color: Color.fromARGB(255, 0, 0, 0),
+              //fontWeight: FontWeight.w600,
+            ),
+          ),
           leadingWidth: 40,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Util.routeToWidget(context, NavBar(tabs: 0));
+              Navigator.pop(context);
             },
           ),
           actions: [
@@ -126,20 +136,20 @@ class _AddTask extends State<AddTask> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Add Task',
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
+                      // Text(
+                      //   'Add Task',
+                      //   style: Theme.of(context).textTheme.headline4,
+                      // ),
                       SizedBox(
-                        height: 0,
+                        height: 2,
                       ),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            "assets/AddTasks.png",
-                            height: 250,
-                            width: 250,
-                          )),
+                      // Align(
+                      //     alignment: Alignment.center,
+                      //     child: Image.asset(
+                      //       "assets/AddTasks.png",
+                      //       height: 250,
+                      //       width: 250,
+                      //     )),
 
                       Text(
                         'Add picture:',
@@ -148,11 +158,10 @@ class _AddTask extends State<AddTask> {
                       SizedBox(
                         height: 10,
                       ),
-                      
-                      GestureDetector(
-                        onTap: (){
-                          provider.uploadTaskImage();
 
+                      GestureDetector(
+                        onTap: () {
+                          provider.uploadTaskImage();
                         },
                         child: Center(
                           child: Stack(
@@ -160,12 +169,14 @@ class _AddTask extends State<AddTask> {
                               Container(
                                 height: 120,
                                 width: 120,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle
-                                ),
+                                decoration:
+                                    BoxDecoration(shape: BoxShape.circle),
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(120),
-                                    child: Image.network(provider.url, fit: BoxFit.fill,)),
+                                    child: Image.network(
+                                      provider.url,
+                                      fit: BoxFit.fill,
+                                    )),
                               ),
                               Positioned(
                                   bottom: 2,
@@ -175,14 +186,16 @@ class _AddTask extends State<AddTask> {
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
 
-                                          color: AppColors.deepPurple,
+                                        color: AppColors.deepPurple,
 
-                                         // width: 2
+                                        // width: 2
 
-                                       // )
+                                        // )
                                       ),
-                                      child: Icon(Icons.camera_alt_outlined, color: Colors.white
-                                        ,)))
+                                      child: Icon(
+                                        Icons.camera_alt_outlined,
+                                        color: Colors.white,
+                                      )))
                             ],
                           ),
                         ),
@@ -190,7 +203,6 @@ class _AddTask extends State<AddTask> {
                       SizedBox(
                         height: 10,
                       ),
-
 
                       //picture
 

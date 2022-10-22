@@ -248,14 +248,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                           builder: (context) =>
                                                               TaskDetail(
                                                                 taskOld: provider
-                                                                    .filteredTasks[
-                                                                index],
+                                                                        .filteredTasks[
+                                                                    index],
                                                                 task: provider
                                                                         .filteredTasks[
                                                                     index],
                                                                 index: index,
                                                               ))).then((value) {
-                                                          getTask();
+                                                    getTask();
                                                   });
                                                 },
                                                 child: Container(
@@ -379,6 +379,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           );
         });
   }
+
   getTask() async {
     // await Future.delayed(Duration(milliseconds: 100));
     // // Provider.of<AppState>(context, listen: false).updateShowSubTasks(false);

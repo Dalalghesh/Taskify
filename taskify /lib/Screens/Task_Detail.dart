@@ -134,7 +134,7 @@ class _TaskDetailState extends State<TaskDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      "Task Detail:",
+                      "Task Details:",
                       maxLines: 1,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
@@ -263,46 +263,12 @@ class _TaskDetailState extends State<TaskDetail> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Container(
-                        //   // provider.editTask
-                        //
-                        //   decoration: provider.editTask ? BoxDecoration(
-                        //     borderRadius: BorderRadius.circular(10),
-                        //     border: Border.all(color: Colors.grey, width: 1),
-                        //   ) :BoxDecoration(
-                        //   ),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(19.0),
-                        //     child: GestureDetector(
-                        //       onTap:(){
-                        //
-                        //         provider.editTask?
-                        //         showPriorityDialog(context).then((value) => setState((){})) :"" ;
-                        //       },
-                        //       child: Container(
-                        //         height: 20,
-                        //         width: 20,
-                        //         // margin: EdgeInsets.only(left: 16),
-                        //         decoration: BoxDecoration(
-                        //           color: myTask.priority == 'High'
-                        //               ? Color.fromARGB(255, 223, 123, 123)
-                        //               : myTask.priority == 'Medium'
-                        //               ? Color.fromARGB(255, 223, 180, 123)
-                        //               : Color.fromARGB(255, 152, 224, 154),
-                        //           shape: BoxShape.circle,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                         SizedBox(
                           height: 10,
                         ),
                         Row(
                           children: [
                             Container(
-                              // provider.editTask
-
                               decoration: provider.editTask
                                   ? BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class SubTasks{
+class SubTasks {
   String id;
   String task;
   String uid;
@@ -10,5 +10,5 @@ class SubTasks{
     required this.uid,
     required this.task,
     required this.subTask,
-});
+  });
 }

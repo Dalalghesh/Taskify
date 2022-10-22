@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   TextFormField(
-                    maxLength: 15,
+                    maxLength: 10,
                     // title: "First Name",
                     decoration: InputDecoration(
                       hintText: "John",
@@ -110,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   TextFormField(
-                    maxLength: 15,
+                    maxLength: 10,
                     decoration: InputDecoration(
                       hintText: "Adam",
                       contentPadding: EdgeInsets.symmetric(
@@ -256,6 +256,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       final userData = {
         'email': email.toLowerCase(),
+        'photo':
+            'https://firebasestorage.googleapis.com/v0/b/taskify-e4ca5.appspot.com/o/images%2Fimage_picker6844504952285532027.png?alt=media&token=33c9972d-e44f-4339-8454-253b95e1a06f',
         'firstName': firstname,
         'lastName': lastName,
         'gender': gender,

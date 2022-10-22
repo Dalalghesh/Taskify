@@ -82,7 +82,7 @@ class AppState extends ChangeNotifier {
         .where('status', isEqualTo: 'pending')
         .get();
     for (int i = 0; i < res.docs.length; i++) {
-      try{
+      try {
         Tasksss taskss = Tasksss(
             id: res.docs[i].id,
             image: res.docs[i]['Image'],
@@ -97,7 +97,7 @@ class AppState extends ChangeNotifier {
             deadline: res.docs[i]['Deadline']);
 
         tasksList.add(taskss);
-      } catch (e){
+      } catch (e) {
         Tasksss taskss = Tasksss(
             id: res.docs[i].id,
             status: res.docs[i]['status'],
@@ -114,10 +114,9 @@ class AppState extends ChangeNotifier {
         tasksList.add(taskss);
       }
 
-
       // tasks.add(res.docs[i]['Task']);
     }
-    tasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
+    tasksList.sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
 
     // print(tasks.length);
     tasksLoading = false;
@@ -142,7 +141,7 @@ class AppState extends ChangeNotifier {
         .where('status', isEqualTo: 'completed')
         .get();
     for (int i = 0; i < res.docs.length; i++) {
-      try{
+      try {
         Tasksss taskss = Tasksss(
             id: res.docs[i].id,
             task: res.docs[i]['Task'],
@@ -157,7 +156,7 @@ class AppState extends ChangeNotifier {
             deadline: res.docs[i]['Deadline']);
 
         completedtasksList.add(taskss);
-      }catch(e){
+      } catch (e) {
         Tasksss taskss = Tasksss(
             id: res.docs[i].id,
             task: res.docs[i]['Task'],
@@ -189,7 +188,8 @@ class AppState extends ChangeNotifier {
 
       // tasks.add(res.docs[i]['Task']);
     }
-    completedtasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
+    completedtasksList
+        .sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
     // print(tasks.length);
     completedtasksLoading = false;
     notifyListeners();
@@ -243,8 +243,6 @@ class AppState extends ChangeNotifier {
   }
 
   updateCheckboxValue(bool v, int index) async {
-
-
     tasksList[index].value = v;
     // notifyListeners();
     completedtasksList.add(tasksList[index]);
@@ -276,7 +274,7 @@ class AppState extends ChangeNotifier {
       toHighlight.add(date);
       // print("date1 ${res.docs[i]['Task']}");
 
-      try{
+      try {
         Tasksss tasks = Tasksss(
             id: res.docs[i].id,
             task: res.docs[i]['Task'],
@@ -289,21 +287,21 @@ class AppState extends ChangeNotifier {
             value: false,
             showSubTasks: false,
             deadline: date1);
-           allTasks.add(tasks);
-      } catch (e){
+        allTasks.add(tasks);
+      } catch (e) {
         Tasksss tasks = Tasksss(
             id: res.docs[i].id,
             task: res.docs[i]['Task'],
             priority: res.docs[i]['Priority'],
             category: res.docs[i]['CategoryName'],
-            image:  "",
+            image: "",
             list: res.docs[i]['ListName'],
             status: res.docs[i]['status'],
             description: res.docs[i]['description'],
             value: false,
             showSubTasks: false,
             deadline: date1);
-           allTasks.add(tasks);
+        allTasks.add(tasks);
       }
 
       // allTasks.add(tasks);
@@ -318,36 +316,27 @@ class AppState extends ChangeNotifier {
 
   List<Tasksss> filteredTasks = [];
 
-
   filterTasksByDate(date) {
     // print(date);
     // print('tasksk' + TasksModel.tasks.length.toString());
     filteredTasks.clear();
     notifyListeners();
     filteredTasks = TasksModel.tasks.where((element) {
-      String dateOnly = '' ;
-      if(element.deadline.runtimeType == Timestamp){
+      String dateOnly = '';
+      if (element.deadline.runtimeType == Timestamp) {
         Timestamp timestamp = element.deadline;
-          DateTime dateTime =
-        timestamp.toDate();
-        dateOnly =
-            DateFormat('yyyy-MM-dd')
-                .format(dateTime);
-
-      }
-      else{
-
-        DateTime convertedDateTime = DateTime.parse(element.deadline.toString());
+        DateTime dateTime = timestamp.toDate();
+        dateOnly = DateFormat('yyyy-MM-dd').format(dateTime);
+      } else {
+        DateTime convertedDateTime =
+            DateTime.parse(element.deadline.toString());
         Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
-        DateTime dateTime =
-        timestamp.toDate();
-        dateOnly =
-            DateFormat('yyyy-MM-dd')
-                .format(dateTime);
-
+        DateTime dateTime = timestamp.toDate();
+        dateOnly = DateFormat('yyyy-MM-dd').format(dateTime);
       }
-    return  dateOnly.toString() == date.toString() && element.status != "deleted";
-    // return  element.deadline.toString() == date.toString();
+      return dateOnly.toString() == date.toString() &&
+          element.status != "deleted";
+      // return  element.deadline.toString() == date.toString();
     }).toList();
     print('filteredTasks ${filteredTasks.length}');
     notifyListeners();
@@ -378,113 +367,97 @@ class AppState extends ChangeNotifier {
   /*=======================================Sub tasks=====================================================*/
 
 //bool showSubTasks = false;
-updateShowSubTasks(val, i){
+  updateShowSubTasks(val, i) {
+    // task.showSubTasks = val;
+    tasksList[i].showSubTasks = val;
 
-  // task.showSubTasks = val;
-  tasksList[i].showSubTasks = val;
+    notifyListeners();
+  }
 
-
-  notifyListeners();
-}
-
-  updateShowCompletedSubTasks(val, i){
-
+  updateShowCompletedSubTasks(val, i) {
     completedtasksList[i].showSubTasks = val;
     notifyListeners();
   }
-List<SubTasks> subTasks = [];
 
-getSubTasks()async{
-  subTasks.clear();
-  var res = await FirebaseFirestore.instance.collection('sub-tasks').where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
+  List<SubTasks> subTasks = [];
 
-  for(int i = 0; i< res.docs.length; i++){
-    SubTasks subTask = SubTasks(
-        id: res.docs[i].id,
-        uid: res.docs[i]['SubTask'],
-        task: res.docs[i]['Task'],
-        subTask: res.docs[i]['SubTask']);
+  getSubTasks() async {
+    subTasks.clear();
+    var res = await FirebaseFirestore.instance
+        .collection('sub-tasks')
+        .where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email)
+        .get();
 
-    subTasks.add(subTask);
+    for (int i = 0; i < res.docs.length; i++) {
+      SubTasks subTask = SubTasks(
+          id: res.docs[i].id,
+          uid: res.docs[i]['SubTask'],
+          task: res.docs[i]['Task'],
+          subTask: res.docs[i]['SubTask']);
+
+      subTasks.add(subTask);
+    }
+
+    notifyListeners();
   }
-
-  notifyListeners();
-
-
-}
 
   List<SubTasks> filteredSubTasks = [];
 
-
-fiterSubTask(task){
-  filteredSubTasks.clear();
-  filteredSubTasks = subTasks.where((element) => element.task == task ).toList();
-  notifyListeners();
-}
-
-
-
-bool addNewSubTask = false;
-updateAddNewTaskValue(value){
-  addNewSubTask = value;
-  notifyListeners();
-}
-
-
-
-bool editTask = false;
-updateEditTask(v){
-  editTask = v;
-  notifyListeners();
-}
-
-
-
-bool imageLoading = false;
-ImagePicker picker = ImagePicker();
-  var url = "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg";
-uploadTaskImage()async{
-  FirebaseStorage storage = FirebaseStorage.instance;
-
-  XFile? image;
-  try {
-
-    image = await picker.pickImage(source: ImageSource.gallery);
-
-  }  catch (e) {
-    print(e.toString());
-
-    return '0'
-
-      ;
-  }
-  if( image != null){
-imageLoading = true;
-  notifyListeners();
-  //Create a reference to the location you want to upload to in firebase
-  Reference reference =
-  storage.ref().child("tasks");
-  File file = File(image.path);
-
-  //Upload the file to firebase
-  UploadTask uploadTask = reference.putFile(file);
-
-  TaskSnapshot taskSnapshot = await uploadTask.whenComplete(()async {
-    url =await  reference.getDownloadURL();
-  }).catchError((onError) {
-    print(onError);
-  });
-  imageLoading = false;
-  notifyListeners();
-  print(url);
-  return url;
-
-
-}else{
-    return '0';
+  fiterSubTask(task) {
+    filteredSubTasks.clear();
+    filteredSubTasks =
+        subTasks.where((element) => element.task == task).toList();
+    notifyListeners();
   }
 
-}
+  bool addNewSubTask = false;
+  updateAddNewTaskValue(value) {
+    addNewSubTask = value;
+    notifyListeners();
+  }
 
+  bool editTask = false;
+  updateEditTask(v) {
+    editTask = v;
+    notifyListeners();
+  }
 
+  bool imageLoading = false;
+  ImagePicker picker = ImagePicker();
+  var url =
+      "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg";
+  uploadTaskImage() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    XFile? image;
+    try {
+      image = await picker.pickImage(source: ImageSource.gallery);
+    } catch (e) {
+      print(e.toString());
+
+      return '0';
+    }
+    if (image != null) {
+      imageLoading = true;
+      notifyListeners();
+      //Create a reference to the location you want to upload to in firebase
+      Reference reference = storage.ref().child("tasks");
+      File file = File(image.path);
+
+      //Upload the file to firebase
+      UploadTask uploadTask = reference.putFile(file);
+
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() async {
+        url = await reference.getDownloadURL();
+      }).catchError((onError) {
+        print(onError);
+      });
+      imageLoading = false;
+      notifyListeners();
+      print(url);
+      return url;
+    } else {
+      return '0';
+    }
+  }
 }

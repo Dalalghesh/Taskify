@@ -13,8 +13,17 @@ import '../controller/UserController.dart';
 import '../models/sub_tasks.dart';
 import '../models/tasks.dart';
 import 'Task_Detail.dart';
+import 'dart:convert';
+import 'package:taskify/service/local_push_notification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
+import 'package:taskify/models/users.dart';
 
 class TaskScreen extends StatefulWidget {
+  static String id = "Taskscompleted";
+  List<dynamic> UIDS = [];
   final String category;
   final String list;
 
@@ -32,6 +41,11 @@ class _TaskScreenState extends State<TaskScreen> {
     super.initState();
 
     getTask();
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((event) {
+      LocalNotificationService.display(event);
+    });
+    FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
 
   getTask() async {
@@ -208,6 +222,7 @@ class _TaskScreenState extends State<TaskScreen> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
               widget.list,
@@ -225,7 +240,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   const PopupMenuItem(
                     value: 1,
                     // row has two child icon and text.
-                    child: Text("Sort By DeadLine"),
+                    child: Text("Sort By Deadline"),
                   ),
                   // popupmenu item 2
                   const PopupMenuItem(
@@ -620,19 +635,22 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                     child:
                                                                         Container(
                                                                       height:
-                                                                          50,
+                                                                          30,
                                                                       width:
                                                                           100,
                                                                       decoration:
                                                                           BoxDecoration(
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: Color.fromARGB(
+                                                                            0,
+                                                                            255,
+                                                                            255,
+                                                                            255),
                                                                         shape: BoxShape
                                                                             .circle,
                                                                         boxShadow: [
                                                                           BoxShadow(
                                                                               blurRadius: 3,
-                                                                              color: Colors.grey),
+                                                                              color: Color.fromARGB(0, 158, 158, 158)),
                                                                         ],
                                                                       ),
                                                                       alignment:
@@ -641,7 +659,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                       child:
                                                                           Container(
                                                                         height:
-                                                                            50,
+                                                                            30,
                                                                         width:
                                                                             100,
                                                                         decoration: BoxDecoration(
@@ -652,10 +670,10 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                             Alignment.center,
                                                                         child:
                                                                             Text(
-                                                                          'Add',
+                                                                          'Add Subtask',
                                                                           style: TextStyle(
                                                                               color: Colors.white,
-                                                                              fontSize: 18),
+                                                                              fontSize: 15),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -688,7 +706,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                           child:
                                                                               Container(
                                                                             height:
-                                                                                50,
+                                                                                30,
                                                                             width:
                                                                                 100,
                                                                             decoration:
@@ -698,7 +716,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                             child:
                                                                                 Text(
                                                                               'Save',
-                                                                              style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                              style: TextStyle(color: Colors.white, fontSize: 15),
                                                                             ),
                                                                           ),
                                                                         )
@@ -758,6 +776,9 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                 0xff7b39ed),
                                                         onConfirmBtnTap:
                                                             () async {
+                                                          getUsers(
+                                                              widget.category,
+                                                              widget.list);
                                                           tasks.forEach(
                                                               (element) {
                                                             provider.updateCheckboxValue(
@@ -1089,4 +1110,96 @@ class TasksCn {
   int first;
   bool? second;
   TasksCn(this.first, this.second);
+}
+
+sendNotification(String title, String token) async {
+  print(token);
+  print('dalal');
+  print('raghad');
+
+  final data = {
+    'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+    'id': '1',
+    'status': 'done',
+    'message': title,
+  };
+
+  try {
+    http.Response response =
+        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Authorization':
+                  'key=AAAArqJFQfk:APA91bFyFdlX-dk-72NHyaoN0hb4xsp8wuDUhr63ZgI7vroxRSBX1mXbd2pASgdzoYKA_8A0ZYRw61GzRaIH_6eakiVtyr_X8FJrlax-HwJdSUzbk022EGjfVjkDo7dlgYZNXaMfJS4T'
+            },
+            body: jsonEncode(<String, dynamic>{
+              'notification': <String, dynamic>{
+                'title': title,
+                'body': 'Your friend has completed some tasks!'
+              },
+              'priority': 'high',
+              'data': data,
+              'to': '$token'
+            }));
+
+    if (response.statusCode == 200) {
+      print("Yeh notificatin is sended");
+    } else {
+      print("Error");
+    }
+  } catch (e) {}
+}
+
+getUsers(String CategoryName, String ListName) async {
+  print('1');
+  List<dynamic> UIDS = [];
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  print(CategoryName);
+  print(ListName);
+  final res = await _firebaseFirestore
+      .collection('List')
+      .where("CategoryName", isEqualTo: CategoryName)
+      .where("List", isEqualTo: ListName)
+      .get();
+
+  print('after bring collection');
+  if (res.docs.isNotEmpty) {
+    for (int i = 0; i < res.docs.length; i++) {
+      if (res.docs[i]['List'] == ListName) {
+        UIDS = res.docs[i]['UID'];
+        for (int i = 0; i < UIDS.length; i++) {
+          print('Inside loop+i');
+          final String useremail = UIDS[i];
+          print(useremail);
+          getUsersToken(useremail);
+        }
+      }
+    }
+  }
+}
+
+Future getUsersToken(String receiver) async {
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+  print(receiver);
+  print('hello');
+  final currentUserEmail = _firebaseAuth.currentUser?.email;
+  final sendEmail = '';
+  print('hello2');
+  final res = await _firebaseFirestore
+      .collection('users1')
+      .where("email", isEqualTo: receiver)
+      .get();
+  print('hello3');
+  if (res.docs.isNotEmpty) {
+    for (int i = 0; i < res.docs.length; i++) {
+      if (res.docs[i]['email'] == receiver) {
+        print('dalll');
+        // print(res.docs[i]['token']);
+        print('alll');
+        final String receivertoken = res.docs[i]['token'];
+        sendNotification('New task completed', receivertoken);
+      }
+    }
+  }
 }
