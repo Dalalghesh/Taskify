@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<<<<<<< HEAD:taskify sprint3/ios/Runner/Info.plist
+=======
+<key>NSCameraUsageDescription</key>
+<string>To capture profile photo please grant camera access</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Allow access to photo library?</string>
+>>>>>>> main:taskify/ios/Runner/Info.plist
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
