@@ -75,6 +75,22 @@ class TaskDetails extends StatelessWidget {
                       ),
                       textAlign: TextAlign.left,
                     ),
+                     child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 10, color: Colors.black38),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+        ),
+        margin: const EdgeInsets.all(4),
+        child: Image.asset('images/pic$imageIndex.jpg'),
+      ),
+    );
+
+Widget _buildImageRow(int imageIndex) => Row(
+      children: [
+        _buildDecoratedImage(imageIndex),
+        _buildDecoratedImage(imageIndex + 1),
+      ],
+    );
 
                     /*Text(
                       tasks.deadline,
@@ -102,6 +118,105 @@ class TaskDetails extends StatelessWidget {
               ],
             ),
           )
+           return showDialog(
+        context: context,
+        builder: (context) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.white,
+                          ),
+                          margin: EdgeInsets.only(
+                              top: 10, left: 10, right: 10, bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        top: 14, left: 10, right: 10),
+                                    child: Text(
+                                      'Priority',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
+                              ),
+           child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 20,
+                      // margin: EdgeInsets.only(left: 16),
+                      decoration: BoxDecoration(
+                        color: this.priority == 'High'
+                            ? Color.fromARGB(255, 223, 123, 123)
+                            : this.priority == 'Medium'
+                                ? Color.fromARGB(255, 223, 180, 123)
+                                : Color.fromARGB(255, 152, 224, 154),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    Text(
+                      task.task,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        //  color: Colors.grey.shade700,
+                      ),
+                      //  textAlign: TextAlign.left,
+                    ),
+                    Text(
+                      "${dateOnly}",
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20,),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+
+
+
+                    Container(
+                      height: 120,
+                      width: 120,
+                      child: Image.network(task.image, fit: BoxFit.cover,),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+
+
+                  ],
+                ),
+                    Text(
+                      this.task,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        //  color: Colors.grey.shade700,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+
         ]));
   }
 }
