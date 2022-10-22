@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
 import 'package:taskify/screens/Add_Category.dart';
-
 import '../homePage.dart';
 import 'AddTask.dart';
 import 'package:taskify/util.dart';
@@ -54,6 +53,7 @@ class _AddList extends State<AddList> {
     if (categoriesList.length == 0)
       CoolAlert.show(
         context: context,
+        title: "",
         type: CoolAlertType.error,
         text: "You don't have categories, create category first!",
         confirmBtnColor: const Color(0xff7b39ed),
@@ -96,11 +96,20 @@ class _AddList extends State<AddList> {
     getCategoryy();
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Add List",
+            style: TextStyle(
+              fontSize: 25,
+              color: Color.fromARGB(255, 0, 0, 0),
+              //fontWeight: FontWeight.w600,
+            ),
+          ),
           leadingWidth: 50,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Util.routeToWidget(context, NavBar(tabs: 0));
+              Navigator.pop(context);
             }, // home page
           ),
           actions: [
@@ -117,10 +126,10 @@ class _AddList extends State<AddList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Add List',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
+                  // Text(
+                  //   'Add List',
+                  //   style: Theme.of(context).textTheme.headline4,
+                  // ),
                   SizedBox(
                     height: 10,
                   ),
@@ -263,6 +272,7 @@ class _AddList extends State<AddList> {
                             ListController.clear();
 
                             CoolAlert.show(
+                              title: "Success",
                               context: context,
                               type: CoolAlertType.success,
                               text: "List Added successfuly!",

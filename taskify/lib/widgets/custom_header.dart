@@ -1,5 +1,5 @@
-// import 'package:taskify/utils/app_colors.dart';
-// import 'package:taskify/utils/text_styles.dart';
+import 'package:taskify/utils/app_colors.dart';
+import 'package:taskify/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomHeader extends StatelessWidget {
@@ -30,7 +30,7 @@ class CustomHeader extends StatelessWidget {
           ],
           Text(
             text,
-            // style: KTextStyle.headerTextStyle,
+            style: KTextStyle.headerTextStyle,
           )
         ],
       ),
