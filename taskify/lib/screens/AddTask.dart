@@ -115,7 +115,7 @@ class _AddTask extends State<AddTask> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Util.routeToWidget(context, NavBar(tabs: 0));
+              Navigator.pop(context);
             },
           ),
           actions: [
