@@ -247,10 +247,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               TaskDetail(
+                                                                taskOld: provider
+                                                                        .filteredTasks[
+                                                                    index],
                                                                 task: provider
                                                                         .filteredTasks[
                                                                     index],
-                                                              )));
+                                                                index: index,
+                                                              ))).then((value) {
+                                                    getTask();
+                                                  });
                                                 },
                                                 child: Container(
                                                   height: 50,
@@ -372,5 +378,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ])),
           );
         });
+  }
+
+  getTask() async {
+    // await Future.delayed(Duration(milliseconds: 100));
+    // // Provider.of<AppState>(context, listen: false).updateShowSubTasks(false);
+    // Provider.of<AppState>(context, listen: false).clearTask();
+    //
+    // Provider.of<AppState>(context, listen: false).getTasks(widget.category, widget.list);
+    // Provider.of<AppState>(context, listen: false)
+    //     .getCompletedTasks(widget.category, widget.list);
+    // Provider.of<AppState>(context, listen: false).getSubTasks();
   }
 }

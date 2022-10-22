@@ -1,10 +1,16 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:taskify/models/sub_tasks.dart';
 import 'package:taskify/models/task_list.dart';
 
 import 'models/tasks.dart';
@@ -76,21 +82,41 @@ class AppState extends ChangeNotifier {
         .where('status', isEqualTo: 'pending')
         .get();
     for (int i = 0; i < res.docs.length; i++) {
-      Tasksss taskss = Tasksss(
-          id: res.docs[i].id,
-          task: res.docs[i]['Task'],
-          priority: res.docs[i]['Priority'],
-          category: res.docs[i]['CategoryName'],
-          list: res.docs[i]['ListName'],
-          description: res.docs[i]['description'],
-          value: false,
-          deadline: res.docs[i]['Deadline']);
+      try {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            image: res.docs[i]['Image'],
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            status: res.docs[i]['status'],
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
 
-      tasksList.add(taskss);
+        tasksList.add(taskss);
+      } catch (e) {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            status: res.docs[i]['status'],
+            image: "",
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        tasksList.add(taskss);
+      }
 
       // tasks.add(res.docs[i]['Task']);
     }
-    tasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
+    tasksList.sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
 
     // print(tasks.length);
     tasksLoading = false;
@@ -115,21 +141,55 @@ class AppState extends ChangeNotifier {
         .where('status', isEqualTo: 'completed')
         .get();
     for (int i = 0; i < res.docs.length; i++) {
-      Tasksss taskss = Tasksss(
-          id: res.docs[i].id,
-          task: res.docs[i]['Task'],
-          priority: res.docs[i]['Priority'],
-          category: res.docs[i]['CategoryName'],
-          list: res.docs[i]['ListName'],
-          description: res.docs[i]['description'],
-          value: false,
-          deadline: res.docs[i]['Deadline']);
+      try {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            image: res.docs[i]['Image'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            status: res.docs[i]['status'],
+            deadline: res.docs[i]['Deadline']);
 
-      completedtasksList.add(taskss);
+        completedtasksList.add(taskss);
+      } catch (e) {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            image: "",
+            status: res.docs[i]['status'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        completedtasksList.add(taskss);
+      }
+      // Tasksss taskss = Tasksss(
+      //     id: res.docs[i].id,
+      //     task: res.docs[i]['Task'],
+      //     image: res.docs[i]['Image'],
+      //     priority: res.docs[i]['Priority'],
+      //     category: res.docs[i]['CategoryName'],
+      //     list: res.docs[i]['ListName'],
+      //     description: res.docs[i]['description'],
+      //     value: false,
+      //     showSubTasks: false,
+      //     deadline: res.docs[i]['Deadline']);
+      //
+      // completedtasksList.add(taskss);
 
       // tasks.add(res.docs[i]['Task']);
     }
-    completedtasksList.sort((Tasksss a,Tasksss b) => a.deadline.compareTo(b.deadline));
+    completedtasksList
+        .sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
     // print(tasks.length);
     completedtasksLoading = false;
     notifyListeners();
@@ -183,8 +243,6 @@ class AppState extends ChangeNotifier {
   }
 
   updateCheckboxValue(bool v, int index) async {
-
-
     tasksList[index].value = v;
     // notifyListeners();
     completedtasksList.add(tasksList[index]);
@@ -214,19 +272,39 @@ class AppState extends ChangeNotifier {
       DateTime date = res.docs[i]['Deadline'].toDate();
       var date1 = DateFormat("yyyy-MM-dd").format(date);
       toHighlight.add(date);
-      //print(date1);
+      // print("date1 ${res.docs[i]['Task']}");
 
-      Tasksss tasks = Tasksss(
-          id: res.docs[i].id,
-          task: res.docs[i]['Task'],
-          priority: res.docs[i]['Priority'],
-          category: res.docs[i]['CategoryName'],
-          list: res.docs[i]['ListName'],
-          description: res.docs[i]['description'],
-          value: false,
-          deadline: date1);
+      try {
+        Tasksss tasks = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            image: res.docs[i]['Image'] ?? "",
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            status: res.docs[i]['status'],
+            value: false,
+            showSubTasks: false,
+            deadline: date1);
+        allTasks.add(tasks);
+      } catch (e) {
+        Tasksss tasks = Tasksss(
+            id: res.docs[i].id,
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            image: "",
+            list: res.docs[i]['ListName'],
+            status: res.docs[i]['status'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: date1);
+        allTasks.add(tasks);
+      }
 
-      allTasks.add(tasks);
+      // allTasks.add(tasks);
 
       // tasks.add(res.docs[i]['Task']);
     }
@@ -238,39 +316,27 @@ class AppState extends ChangeNotifier {
 
   List<Tasksss> filteredTasks = [];
 
-
   filterTasksByDate(date) {
-    print(date);
-    print('tasksk' + TasksModel.tasks.length.toString());
+    // print(date);
+    // print('tasksk' + TasksModel.tasks.length.toString());
     filteredTasks.clear();
     notifyListeners();
-    // print('filteredTasks ${element.deadline.toString()}');
-    print('filteredTasks ${date.toString()}');
     filteredTasks = TasksModel.tasks.where((element) {
-      String dateOnly = '' ;
-      if(element.deadline.runtimeType == Timestamp){
+      String dateOnly = '';
+      if (element.deadline.runtimeType == Timestamp) {
         Timestamp timestamp = element.deadline;
-          DateTime dateTime =
-        timestamp.toDate();
-        dateOnly =
-            DateFormat('yyyy-MM-dd')
-                .format(dateTime);
-
-      }
-      else{
-        DateTime convertedDateTime = DateTime.parse(element.deadline.toString());
+        DateTime dateTime = timestamp.toDate();
+        dateOnly = DateFormat('yyyy-MM-dd').format(dateTime);
+      } else {
+        DateTime convertedDateTime =
+            DateTime.parse(element.deadline.toString());
         Timestamp timestamp = Timestamp.fromDate(convertedDateTime);
-        DateTime dateTime =
-        timestamp.toDate();
-        dateOnly =
-            DateFormat('yyyy-MM-dd')
-                .format(dateTime);
-
+        DateTime dateTime = timestamp.toDate();
+        dateOnly = DateFormat('yyyy-MM-dd').format(dateTime);
       }
-      print('filteredTasks ${dateOnly.toString()}');
-      print('filteredTasks ${date.toString()}');
-    return  dateOnly.toString() == date.toString();
-    // return  element.deadline.toString() == date.toString();
+      return dateOnly.toString() == date.toString() &&
+          element.status != "deleted";
+      // return  element.deadline.toString() == date.toString();
     }).toList();
     print('filteredTasks ${filteredTasks.length}');
     notifyListeners();
@@ -296,6 +362,102 @@ class AppState extends ChangeNotifier {
       } else {
         return 'Low';
       }
+    }
+  }
+  /*=======================================Sub tasks=====================================================*/
+
+//bool showSubTasks = false;
+  updateShowSubTasks(val, i) {
+    // task.showSubTasks = val;
+    tasksList[i].showSubTasks = val;
+
+    notifyListeners();
+  }
+
+  updateShowCompletedSubTasks(val, i) {
+    completedtasksList[i].showSubTasks = val;
+    notifyListeners();
+  }
+
+  List<SubTasks> subTasks = [];
+
+  getSubTasks() async {
+    subTasks.clear();
+    var res = await FirebaseFirestore.instance
+        .collection('sub-tasks')
+        .where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.email)
+        .get();
+
+    for (int i = 0; i < res.docs.length; i++) {
+      SubTasks subTask = SubTasks(
+          id: res.docs[i].id,
+          uid: res.docs[i]['SubTask'],
+          task: res.docs[i]['Task'],
+          subTask: res.docs[i]['SubTask']);
+
+      subTasks.add(subTask);
+    }
+
+    notifyListeners();
+  }
+
+  List<SubTasks> filteredSubTasks = [];
+
+  fiterSubTask(task) {
+    filteredSubTasks.clear();
+    filteredSubTasks =
+        subTasks.where((element) => element.task == task).toList();
+    notifyListeners();
+  }
+
+  bool addNewSubTask = false;
+  updateAddNewTaskValue(value) {
+    addNewSubTask = value;
+    notifyListeners();
+  }
+
+  bool editTask = false;
+  updateEditTask(v) {
+    editTask = v;
+    notifyListeners();
+  }
+
+  bool imageLoading = false;
+  ImagePicker picker = ImagePicker();
+  var url =
+      "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg";
+  uploadTaskImage() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    XFile? image;
+    try {
+      image = await picker.pickImage(source: ImageSource.gallery);
+    } catch (e) {
+      print(e.toString());
+
+      return '0';
+    }
+    if (image != null) {
+      imageLoading = true;
+      notifyListeners();
+      //Create a reference to the location you want to upload to in firebase
+      Reference reference = storage.ref().child("tasks");
+      File file = File(image.path);
+
+      //Upload the file to firebase
+      UploadTask uploadTask = reference.putFile(file);
+
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() async {
+        url = await reference.getDownloadURL();
+      }).catchError((onError) {
+        print(onError);
+      });
+      imageLoading = false;
+      notifyListeners();
+      print(url);
+      return url;
+    } else {
+      return '0';
     }
   }
 }

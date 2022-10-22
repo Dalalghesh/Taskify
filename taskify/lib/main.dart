@@ -65,7 +65,21 @@ class MyApp extends StatelessWidget {
     900: Color(0xff7b39ed),
   });
 
+  initNotification() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print("onMessage:$message");
+    }); 
+                
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print("onMessageOpenedApp: $message");
+      // Navigator.of(context).pushNamed("ReceivedInvitation");
+      //Util.routeToWidget(context, NavBar(tabs: 0));
+      
+    });
+  }
+  
   void initState() {
+    initNotification();
     // TODO: implement initState
     FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((event) {
@@ -165,3 +179,4 @@ modify({
 
 // For deleting a calendar event
 Future<void> delete(String eventId, bool shouldNotify) async {}
+

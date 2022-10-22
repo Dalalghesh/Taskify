@@ -3,16 +3,17 @@ import 'package:curved_nav_bar/fab_bar/fab_bottom_app_bar_item.dart';
 import 'package:curved_nav_bar/flutter_curved_bottom_nav_bar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:taskify/invitation/screens/received_invitations.dart';
-import 'package:taskify/Screens/AddList.dart';
-import 'package:taskify/Screens/addTask.dart';
-import 'package:taskify/Screens/Add_Category.dart';
-import 'package:taskify/Screens/tasks_screen.dart';
-import 'package:taskify/Screens/homescreen.dart';
-import 'package:taskify/Screens/todo_list_screen.dart';
-import 'package:taskify/Screens/ProfileScreen/profileScreen.dart';
-
+import 'package:taskify/screens/AddList.dart';
+import 'package:taskify/screens/AddTask.dart';
+import 'package:taskify/screens/Add_Category.dart';
+import 'package:taskify/screens/ProfileScreen/profileScreen.dart';
+import 'package:taskify/screens/homescreen.dart';
+import 'package:taskify/screens/tasks_screen.dart';
+import 'package:taskify/util.dart';
+import 'screens/todo_list_screen.dart';
 import 'package:taskify/CalendarScreen.dart';
 
 import 'service/local_push_notification.dart';
@@ -24,6 +25,7 @@ class NavBar extends StatefulWidget {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print("onMessage:$message");
     });
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print("onMessageOpenedApp: $message");
       // Navigator.of(context).pushNamed("ReceivedInvitation");
@@ -32,6 +34,7 @@ class NavBar extends StatefulWidget {
   }
 
   void initState() {
+    //initNotifications();
     // TODO: implement initState
     initNotification();
     FirebaseMessaging.instance.getInitialMessage();
@@ -65,6 +68,18 @@ Widget GetTab(int index) {
 }
 
 class NavBarState extends State<NavBar> {
+  initNotification() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print("onMessage:$message");
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print("onMessageOpenedApp: $message");
+      Navigator.of(context).pushNamed("Taskscompleted");
+      //Util.routeToWidget(context, TaskScreen as Widget);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> tabs = [
@@ -167,7 +182,7 @@ class NavBarState extends State<NavBar> {
                         builder: (context) => Add_Category()));
                   },
                   child: const Text(
-                    'ADD CATEGORY',
+                    'Add category',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -189,7 +204,7 @@ class NavBarState extends State<NavBar> {
                       .push(MaterialPageRoute(builder: (context) => AddList()));
                 },
                 child: const Text(
-                  'ADD LIST',
+                  'Add list',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -212,7 +227,7 @@ class NavBarState extends State<NavBar> {
                       .push(MaterialPageRoute(builder: (context) => AddTask()));
                 },
                 child: const Text(
-                  'ADD TASK',
+                  'Add task',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -227,3 +242,14 @@ class NavBarState extends State<NavBar> {
     );
   }
 }
+
+/*initNotifications(){
+FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
+  print("onMessage:$message");
+ });
+ FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  print("onMessageOpenedApp: $message");
+   Navigator.of(context).pushNamed("Taskscompleted");
+    Util.routeToWidget(context, );
+ });
+ }*/

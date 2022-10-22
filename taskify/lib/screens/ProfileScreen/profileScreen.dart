@@ -488,35 +488,88 @@ class _HomeScreen extends State<HomeScreen> {
                                                 ))),
                                       ),
                                     ),
-                                    // Row(
-                                    //   children: [
-                                    //     Expanded(
-                                    //       child: TextButton(
-                                    //         style: TextButton.styleFrom(
-                                    //           primary: Colors.grey.shade600,
-                                    //           textStyle:
-                                    //               const TextStyle(fontSize: 18),
-                                    //         ),
-                                    //         onPressed: () {
-                                    //           setState(() {
-                                    //             pressGeoON = !pressGeoON;
-                                    //             _editMode = !_editMode;
-                                    //             _isInvalid = false;
-                                    //             //_isInvalid = !_isInvalid;
-                                    //             print(_editMode);
-                                    //           });
-                                    //         },
-                                    //         child: const Text(
-                                    //           'Cancel',
-                                    //           style: TextStyle(
-                                    //             decoration:
-                                    //                 TextDecoration.underline,
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          height: 55,
+                                          width: 320,
+                                          child: SizedBox(
+                                            child: ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Color.fromARGB(
+                                                    255, 216, 58, 47),
+                                                padding: EdgeInsets.fromLTRB(
+                                                    10, 10, 10, 10),
+                                                minimumSize: Size(2000000, 15),
+                                              ),
+                                              onPressed: () async {
+                                                CoolAlert.show(
+                                                    context: context,
+                                                    type: CoolAlertType.confirm,
+                                                    text:
+                                                        'Do you want to delete your account?',
+                                                    confirmBtnText: 'Yes',
+                                                    cancelBtnText: 'No',
+                                                    title: "Delete My Account",
+                                                    confirmBtnColor:
+                                                        Color(0xff7b39ed),
+                                                    onConfirmBtnTap: () async {
+                                                      print("InsideDelete");
+                                                      DeleteUserAccount();
+
+                                                      await FirebaseAuth
+                                                          .instance
+                                                          .signOut();
+                                                      Navigator.of(context)
+                                                          .pushReplacement(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const LoginScreen()),
+                                                      );
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.delete_forever_rounded,
+                                                size: 25,
+                                              ),
+                                              //  color: Color.fromARGB(255, 240, 96, 86),
+                                              label: Text(
+                                                'Delete my account',
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          // child: ElevatedButton(
+                                          //   style: ElevatedButton.styleFrom(
+                                          //     backgroundColor: Color.fromARGB(
+                                          //         255, 216, 58, 47),
+                                          //   ),
+                                          //   onPressed: () {
+                                          //     setState(() {
+                                          //       pressGeoON = !pressGeoON;
+                                          //       _editMode = !_editMode;
+                                          //       _isInvalid = false;
+                                          //       //_isInvalid = !_isInvalid;
+                                          //       print(_editMode);
+                                          //     });
+                                          //   },
+                                          //   child: const Text(
+                                          //     'Delete my account',
+                                          //     style: TextStyle(
+                                          //       fontSize: 20,
+                                          //       color: Colors.white,
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                         ],
@@ -587,4 +640,16 @@ Delete() async {
                  onError: (e) => print("Error updating document $e"),
 
     );  */
+}
+
+Future<void> DeleteUserAccount() async {
+  print("inside delete");
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  final currentid = _firebaseAuth.currentUser?.uid;
+  print(FirebaseAuth.instance.currentUser!.email);
+  print(currentid);
+  FirebaseFirestore.instance.collection('users1').doc(currentid).delete();
+  await FirebaseAuth.instance.currentUser!.delete();
 }

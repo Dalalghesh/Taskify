@@ -51,6 +51,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // getCategories();
     AppState provider = Provider.of<AppState>(context, listen: true);
 
     final config = CalendarDatePicker2Config(
@@ -242,7 +243,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                         category: provider
                                                             .categories[index]
                                                             .toString(),
-                                                      )));
+                                                      ))).then((value) {
+                                            setState(() {
+                                              print("ffffffff");
+                                              // Navigator.of(context).pop();
+                                              getCategories();
+                                            });
+                                          });
                                         },
                                         child: Container(
                                           child: Column(
@@ -309,7 +316,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         context: context,
         builder: (context) {
           return WillPopScope(
-            onWillPop: () async => false,
+            onWillPop: () async {
+              return true;
+            },
             child: Scaffold(
                 backgroundColor: Colors.transparent,
                 body: Column(
@@ -393,7 +402,23 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                                 task: provider
                                                                         .filteredTasks[
                                                                     index],
-                                                              )));
+                                                                taskOld: provider
+                                                                        .filteredTasks[
+                                                                    index],
+                                                                index: index,
+                                                              ))).then((value) {
+                                                    // provider.filteredTasks.clear() ;
+                                                    setState(() {
+                                                      print("ffffffff");
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      getCategories();
+                                                    });
+                                                    // setState(() {
+                                                    //   print("ffffffff");
+                                                    //   getCategories();
+                                                    // });
+                                                  });
                                                   //    DateTime date = provider.completedtasksList[index].deadline.toDate();
                                                   // var date1 =   DateFormat("yyyy-MM-dd").format(date);
                                                   //   print(date1);
