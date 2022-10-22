@@ -58,7 +58,7 @@ class SingleInvitaionItem extends StatelessWidget {
                     invitationModel.list +
                     ' list \n In ' +
                     invitationModel.category +
-                    'category',
+                    ' category',
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 17,

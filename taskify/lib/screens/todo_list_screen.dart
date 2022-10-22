@@ -78,7 +78,7 @@ class _TodoListState extends State<TodoList> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: const Text('Hmm..'),
+                                  title: const Text('Delete list'),
                                   content: provider.list[index].private
                                       ? const Text(
                                           'Are you sure you want to delete this list?')

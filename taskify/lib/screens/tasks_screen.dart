@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +8,10 @@ import 'package:taskify/Screens/TaskDetails.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:intl/intl.dart';
+import 'package:taskify/utils/app_colors.dart';
 import '../controller/UserController.dart';
+import '../models/sub_tasks.dart';
+import '../models/tasks.dart';
 import 'Task_Detail.dart';
 import 'dart:convert';
 import 'package:taskify/service/local_push_notification.dart';
@@ -20,7 +23,7 @@ import 'package:taskify/models/users.dart';
 
 class TaskScreen extends StatefulWidget {
   static String id = "Taskscompleted";
-   List<dynamic> UIDS = [];
+  List<dynamic> UIDS = [];
   final String category;
   final String list;
 
@@ -36,29 +39,33 @@ class _TaskScreenState extends State<TaskScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<AppState>(context, listen: false).clearTask();
+
     getTask();
-        FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.instance.getInitialMessage();
     FirebaseMessaging.onMessage.listen((event) {
       LocalNotificationService.display(event);
     });
-      FirebaseMessaging.instance.subscribeToTopic('subscription');
+    FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
 
   getTask() async {
     print(widget.category);
     await Future.delayed(Duration(milliseconds: 100));
+    // Provider.of<AppState>(context, listen: false).updateShowSubTasks(false);
+    Provider.of<AppState>(context, listen: false).clearTask();
 
     Provider.of<AppState>(context, listen: false)
         .getTasks(widget.category, widget.list);
     Provider.of<AppState>(context, listen: false)
         .getCompletedTasks(widget.category, widget.list);
+    Provider.of<AppState>(context, listen: false).getSubTasks();
   }
+
+  TextEditingController subTaskController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context);
-    
     // TODO: implement build
 
     return buildColumnNew(context, provider);
@@ -215,6 +222,7 @@ class _TaskScreenState extends State<TaskScreen> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
               widget.list,
@@ -224,6 +232,51 @@ class _TaskScreenState extends State<TaskScreen> {
             centerTitle: true,
             backgroundColor: Color(0xff7b39ed),
             elevation: 0,
+            actions: [
+              PopupMenuButton<int>(
+                color: Colors.white,
+                itemBuilder: (context) => [
+                  // popupmenu item 1
+                  const PopupMenuItem(
+                    value: 1,
+                    // row has two child icon and text.
+                    child: Text("Sort By Deadline"),
+                  ),
+                  // popupmenu item 2
+                  const PopupMenuItem(
+                    value: 2,
+                    // row has two child icon and text
+                    child: Text("Sort By priority"),
+                  ),
+                ],
+                onSelected: (value) {
+                  if (value == 1) {
+                    /// dead line
+                    setState(() {
+                      sortDeadLine(provider);
+                    });
+                  } else if (value == 2) {
+                    /// Propriety
+                    sortPropriety(provider);
+                    sortProprietyCompleted(provider);
+                  }
+                },
+                offset: const Offset(0, 50),
+                elevation: 2,
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 12.0, left: 12),
+                  child: Icon(
+                    Icons.filter_list,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              // IconButton(
+              //   icon: Icon(Icons.filter_list),
+              //   onPressed: () {},
+              //   color: Colors.white,
+              // )
+            ],
           ),
           body: Column(
             children: <Widget>[
@@ -309,6 +362,8 @@ class _TaskScreenState extends State<TaskScreen> {
                                           return GestureDetector(
                                             onTap: () {
                                               // Navigator.pop(context);
+                                              provider.fiterSubTask(provider
+                                                  .tasksList[index].task);
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -317,14 +372,23 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             task: provider
                                                                     .tasksList[
                                                                 index],
-                                                          )));
+                                                            taskOld: provider
+                                                                    .tasksList[
+                                                                index],
+                                                            index: index,
+                                                          ))).then((value) {
+                                                setState(() {
+                                                  getTask();
+                                                  // getTaskWithoutClear();
+                                                });
+                                              });
                                             },
                                             child: Container(
-                                              height: 65,
+                                              //height: 65,
                                               width: MediaQuery.of(context)
                                                   .size
                                                   .width,
-                                              margin: EdgeInsets.only(
+                                              margin: const EdgeInsets.only(
                                                   left: 20,
                                                   right: 20,
                                                   top: 5,
@@ -340,95 +404,332 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(8)),
                                               //alignment: Alignment.center,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Container(
-                                                    height: 20,
-                                                    width: 20,
-                                                    margin: EdgeInsets.only(
-                                                        left: 16),
-                                                    decoration: BoxDecoration(
-                                                      color: provider
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: 30,
+                                                        child: IconButton(
+                                                          icon: Icon(provider
                                                                   .tasksList[
                                                                       index]
-                                                                  .priority ==
-                                                              'High'
-                                                          ? Color.fromARGB(255,
-                                                              223, 123, 123)
-                                                          : provider
+                                                                  .showSubTasks
+                                                              ? Icons
+                                                                  .arrow_drop_down
+                                                              : Icons
+                                                                  .arrow_right),
+                                                          iconSize: 35,
+                                                          onPressed: () {
+                                                            provider
+                                                                .updateAddNewTaskValue(
+                                                                    false);
+                                                            provider.fiterSubTask(
+                                                                provider
+                                                                    .tasksList[
+                                                                        index]
+                                                                    .task);
+                                                            provider.updateShowSubTasks(
+                                                                !provider
+                                                                    .tasksList[
+                                                                        index]
+                                                                    .showSubTasks,
+                                                                index);
+                                                          },
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 20,
+                                                        width: 20,
+                                                        margin: EdgeInsets.only(
+                                                            left: 16),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: provider
                                                                       .tasksList[
                                                                           index]
                                                                       .priority ==
-                                                                  'Medium'
+                                                                  'High'
                                                               ? Color.fromARGB(
                                                                   255,
                                                                   223,
-                                                                  180,
+                                                                  123,
                                                                   123)
-                                                              : Color.fromARGB(
-                                                                  255,
-                                                                  152,
-                                                                  224,
-                                                                  154),
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        provider
-                                                            .tasksList[index]
-                                                            .task,
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                      Text(
-                                                        '${dateOnly} ${isAfterDeadLine ? " - ${timeAgo(dateTime)}" : ""}',
-                                                        style: TextStyle(
-                                                          color: isAfterDeadLine
-                                                              ? Colors.red
-                                                              : Colors.black,
-                                                          fontWeight:
-                                                              isAfterDeadLine
-                                                                  ? FontWeight
-                                                                      .bold
-                                                                  : FontWeight
-                                                                      .normal,
+                                                              : provider
+                                                                          .tasksList[
+                                                                              index]
+                                                                          .priority ==
+                                                                      'Medium'
+                                                                  ? Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          223,
+                                                                          180,
+                                                                          123)
+                                                                  : Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          152,
+                                                                          224,
+                                                                          154),
+                                                          shape:
+                                                              BoxShape.circle,
                                                         ),
                                                       ),
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            provider
+                                                                .tasksList[
+                                                                    index]
+                                                                .task,
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                          ),
+                                                          Text(
+                                                            '${dateOnly} ${isAfterDeadLine ? " - ${timeAgo(dateTime)}" : ""}',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  isAfterDeadLine
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Colors
+                                                                          .black,
+                                                              fontWeight:
+                                                                  isAfterDeadLine
+                                                                      ? FontWeight
+                                                                          .bold
+                                                                      : FontWeight
+                                                                          .normal,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Checkbox(
+                                                          value: provider
+                                                              .tasksList[index]
+                                                              .value,
+                                                          onChanged: (v) {
+                                                            // provider.updateCheckboxValue(v!, index);
+                                                            setState(() {
+                                                              provider
+                                                                  .tasksList[
+                                                                      index]
+                                                                  .value = v!;
+                                                            });
+                                                            if (v! == true) {
+                                                              tasks.add(TasksCn(
+                                                                  index, v));
+                                                            } else {
+                                                              tasks.removeWhere(
+                                                                  (element) =>
+                                                                      element
+                                                                          .first ==
+                                                                      index);
+                                                            }
+
+                                                            print(tasks.length);
+                                                            print(v!);
+                                                          })
                                                     ],
                                                   ),
-                                                  Checkbox(
-                                                      value: provider
-                                                          .tasksList[index]
-                                                          .value,
-                                                      onChanged: (v) {
-                                                        // provider.updateCheckboxValue(v!, index);
-                                                        setState(() {
-                                                          provider
-                                                              .tasksList[index]
-                                                              .value = v!;
-                                                        });
-                                                        if (v! == true) {
-                                                          tasks.add(TasksCn(
-                                                              index, v));
-                                                        } else {
-                                                          tasks.removeWhere(
-                                                              (element) =>
-                                                                  element
-                                                                      .first ==
-                                                                  index);
-                                                        }
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  provider.tasksList[index]
+                                                          .showSubTasks
+                                                      ? Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 50),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              ListView.builder(
+                                                                  itemCount: provider
+                                                                      .filteredSubTasks
+                                                                      .length,
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    return Container(
+                                                                      margin: EdgeInsets.only(
+                                                                          bottom:
+                                                                              10),
+                                                                      child:
+                                                                          Text(
+                                                                        "${index + 1} -  ${provider.filteredSubTasks[index].subTask}",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontSize:
+                                                                              18,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              provider.addNewSubTask
+                                                                  ? Container(
+                                                                      height:
+                                                                          40,
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2,
+                                                                      //  padding: EdgeInsets.only(bottom: 10),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                      ),
+                                                                      child:
+                                                                          TextFormField(
+                                                                        controller:
+                                                                            subTaskController,
+                                                                        onChanged:
+                                                                            (v) {
+                                                                          setState(
+                                                                              () {});
+                                                                        },
+                                                                        decoration: InputDecoration(
+                                                                            // border: InputBorder.none,
+                                                                            ),
+                                                                      ),
+                                                                    )
+                                                                  : Container(),
+                                                              provider.addNewSubTask
+                                                                  ? SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    )
+                                                                  : Container(),
+                                                              Row(
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      provider.updateAddNewTaskValue(
+                                                                          true);
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          30,
+                                                                      width:
+                                                                          100,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Color.fromARGB(
+                                                                            0,
+                                                                            255,
+                                                                            255,
+                                                                            255),
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                              blurRadius: 3,
+                                                                              color: Color.fromARGB(0, 158, 158, 158)),
+                                                                        ],
+                                                                      ),
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            30,
+                                                                        width:
+                                                                            100,
+                                                                        decoration: BoxDecoration(
+                                                                            color:
+                                                                                Color(0xff7b39ed),
+                                                                            borderRadius: BorderRadius.circular(10)),
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        child:
+                                                                            Text(
+                                                                          'Add Subtask',
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 15),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  provider.addNewSubTask
+                                                                      ? SizedBox(
+                                                                          width:
+                                                                              10,
+                                                                        )
+                                                                      : Container(),
+                                                                  provider.addNewSubTask
+                                                                      ? GestureDetector(
+                                                                          onTap:
+                                                                              () async {
+                                                                            if (subTaskController.text.length >
+                                                                                2) {
+                                                                              SubTasks task = SubTasks(id: '', uid: FirebaseAuth.instance.currentUser!.email.toString(), task: provider.tasksList[index].task, subTask: subTaskController.text);
 
-                                                        print(tasks.length);
-                                                        print(v!);
-                                                      })
+                                                                              provider.subTasks.add(task);
+                                                                              provider.fiterSubTask(provider.tasksList[index].task);
+                                                                              provider.updateAddNewTaskValue(false);
+                                                                              await FirebaseFirestore.instance.collection('sub-tasks').add({
+                                                                                'SubTask': subTaskController.text,
+                                                                                'Task': provider.tasksList[index].task,
+                                                                                'UID': FirebaseAuth.instance.currentUser!.email,
+                                                                              });
+                                                                              subTaskController.clear();
+                                                                            }
+                                                                          },
+                                                                          child:
+                                                                              Container(
+                                                                            height:
+                                                                                30,
+                                                                            width:
+                                                                                100,
+                                                                            decoration:
+                                                                                BoxDecoration(color: subTaskController.text.length < 3 ? Colors.grey : Color(0xff7b39ed), borderRadius: BorderRadius.circular(10)),
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            child:
+                                                                                Text(
+                                                                              'Save',
+                                                                              style: TextStyle(color: Colors.white, fontSize: 15),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                      : Container()
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : Container(),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -462,7 +763,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   onCancelBtnTap: () {
                                                     Navigator.of(context).pop();
                                                   },
-                                                  onConfirmBtnTap: () async {
+                                                  onConfirmBtnTap: () {
                                                     CoolAlert.show(
                                                         title: "Successful",
                                                         context: context,
@@ -473,8 +774,11 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         confirmBtnColor:
                                                             const Color(
                                                                 0xff7b39ed),
-                                                        onConfirmBtnTap: () {
-                                                               getUsers(widget.category , widget.list);
+                                                        onConfirmBtnTap:
+                                                            () async {
+                                                          getUsers(
+                                                              widget.category,
+                                                              widget.list);
                                                           tasks.forEach(
                                                               (element) {
                                                             provider.updateCheckboxValue(
@@ -483,30 +787,20 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                     element));
                                                           });
                                                           tasks.clear();
+                                                          provider.tasksList
+                                                              .forEach(
+                                                                  (element) {
+                                                            element.value =
+                                                                false;
+                                                          });
+
+                                                          await getTask();
+                                                          setState(() {});
                                                           Navigator.of(context)
                                                               .pop();
                                                           Navigator.of(context)
                                                               .pop();
                                                         });
-                                                      print('befor calling');
-                                                        getUsers(widget.category , widget.list);
-                                                        print('after calling');
-                                                        /////////////////////////////////
-                                                       /* final res1 = await FirebaseFirestore.instance
-                                                               .collection('tasks')
-                                                              .where('CategoryName', isEqualTo: widget.category).where("ListName", isEqualTo: widget.list)
-                                                               .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
-                                                               .get();*/
-
-                                                                //List<dynamic> UIDS = [];
-                                                              
-
-                                                        /////// send notifaiction for all users on the list 
-                                                        /* final _firebaseFirestore = FirebaseFirestore.instance;
-                                                          final res = await _firebaseFirestore
-                                                          .collection('tasks').where("CategoryName", isEqualTo:widget.category )
-                                                          .where("ListName", isEqualTo: widget.list).get(); */
-                                               
                                                   },
                                                   confirmBtnColor:
                                                       Color(0xff7b39ed),
@@ -560,20 +854,27 @@ class _TaskScreenState extends State<TaskScreen> {
                                         .format(dateTime);
                                     return GestureDetector(
                                       onTap: () {
-
                                         // Navigator.pop(context);
+                                        provider.fiterSubTask(provider
+                                            .completedtasksList[index].task);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     TaskDetail(
+                                                      // TaskDetails(
+                                                      index: index,
+                                                      isConpleted: true,
                                                       task: provider
+                                                              .completedtasksList[
+                                                          index],
+                                                      taskOld: provider
                                                               .completedtasksList[
                                                           index],
                                                     )));
                                       },
                                       child: Container(
-                                        height: 50,
+                                        // height: 50,
                                         width:
                                             MediaQuery.of(context).size.width,
                                         margin: EdgeInsets.only(
@@ -592,47 +893,128 @@ class _TaskScreenState extends State<TaskScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(8)),
                                         //alignment: Alignment.center,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                        child: Column(
                                           children: [
-                                            Container(
-                                              height: 20,
-                                              width: 20,
-                                              margin: EdgeInsets.only(left: 16),
-                                              decoration: BoxDecoration(
-                                                color: provider
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  width: 30,
+                                                  child: IconButton(
+                                                    icon: Icon(provider
                                                             .completedtasksList[
                                                                 index]
-                                                            .priority ==
-                                                        'High'
-                                                    ? Color.fromARGB(
-                                                        255, 223, 123, 123)
-                                                    : provider
+                                                            .showSubTasks
+                                                        ? Icons.arrow_drop_down
+                                                        : Icons.arrow_right),
+                                                    iconSize: 35,
+                                                    onPressed: () {
+                                                      provider
+                                                          .updateAddNewTaskValue(
+                                                              false);
+                                                      provider.fiterSubTask(
+                                                          provider
+                                                              .completedtasksList[
+                                                                  index]
+                                                              .task);
+                                                      provider.updateShowCompletedSubTasks(
+                                                          !provider
+                                                              .completedtasksList[
+                                                                  index]
+                                                              .showSubTasks,
+                                                          index);
+                                                    },
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                  margin:
+                                                      EdgeInsets.only(left: 16),
+                                                  decoration: BoxDecoration(
+                                                    color: provider
                                                                 .completedtasksList[
                                                                     index]
                                                                 .priority ==
-                                                            'Medium'
+                                                            'High'
                                                         ? Color.fromARGB(
-                                                            255, 223, 180, 123)
-                                                        : Color.fromARGB(
-                                                            255, 152, 224, 154),
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                            Text(
-                                              provider.completedtasksList[index]
-                                                  .task,
-                                              textAlign: TextAlign.left,
-                                            ),
-                                            Text(
-                                              '${dateOnly}',
-                                            ),
-                                            Container(),
+                                                            255, 223, 123, 123)
+                                                        : provider
+                                                                    .completedtasksList[
+                                                                        index]
+                                                                    .priority ==
+                                                                'Medium'
+                                                            ? Color.fromARGB(
+                                                                255,
+                                                                223,
+                                                                180,
+                                                                123)
+                                                            : Color.fromARGB(
+                                                                255,
+                                                                152,
+                                                                224,
+                                                                154),
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  provider
+                                                      .completedtasksList[index]
+                                                      .task,
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                                Text(
+                                                  '${dateOnly}',
+                                                ),
+                                                Container(),
 
-                                            // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
-                                            //   provider.updateCheckboxValue(v!, index);
-                                            // })
+                                                // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
+                                                //   provider.updateCheckboxValue(v!, index);
+                                                // })
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            provider.completedtasksList[index]
+                                                    .showSubTasks
+                                                ? Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 70),
+                                                    child: provider
+                                                                .filteredSubTasks
+                                                                .length !=
+                                                            0
+                                                        ? ListView.builder(
+                                                            itemCount: provider
+                                                                .filteredSubTasks
+                                                                .length,
+                                                            shrinkWrap: true,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return Container(
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        bottom:
+                                                                            10),
+                                                                child: Text(
+                                                                  "${index + 1} -  ${provider.filteredSubTasks[index].subTask}",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        18,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            })
+                                                        : Text('No sub tasks'),
+                                                  )
+                                                : Container(),
                                           ],
                                         ),
                                       ),
@@ -645,6 +1027,65 @@ class _TaskScreenState extends State<TaskScreen> {
             ],
           ),
         ));
+  }
+
+  void sortDeadLine(AppState provider) {
+    provider.tasksList
+        .sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
+    provider.completedtasksList
+        .sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
+  }
+
+  void sortPropriety(AppState provider) {
+    // provider.tasksList.sort((Tasksss a,Tasksss b) => a.id.compareTo(b.id));
+    List<Tasksss> tempTask = provider.tasksList;
+    List<Tasksss> tempTask_L = [];
+    List<Tasksss> tempTask_M = [];
+    List<Tasksss> tempTask_H = [];
+    tempTask.forEach((element) {
+      if (element.priority == "Low") {
+        tempTask_L.add(element);
+      } else if (element.priority == "Medium") {
+        tempTask_M.add(element);
+      } else if (element.priority == "High") {
+        tempTask_H.add(element);
+      }
+    });
+    tempTask.clear();
+    tempTask.addAll(tempTask_H);
+    tempTask.addAll(tempTask_M);
+    tempTask.addAll(tempTask_L);
+
+    // provider.tasksList.clear() ;
+    setState(() {
+      provider.tasksList = tempTask;
+    });
+  }
+
+  void sortProprietyCompleted(AppState provider) {
+    // provider.tasksList.sort((Tasksss a,Tasksss b) => a.id.compareTo(b.id));
+    List<Tasksss> tempTask = provider.completedtasksList;
+    List<Tasksss> tempTask_L = [];
+    List<Tasksss> tempTask_M = [];
+    List<Tasksss> tempTask_H = [];
+    tempTask.forEach((element) {
+      if (element.priority == "Low") {
+        tempTask_L.add(element);
+      } else if (element.priority == "Medium") {
+        tempTask_M.add(element);
+      } else if (element.priority == "High") {
+        tempTask_H.add(element);
+      }
+    });
+    tempTask.clear();
+    tempTask.addAll(tempTask_H);
+    tempTask.addAll(tempTask_M);
+    tempTask.addAll(tempTask_L);
+
+    // provider.tasksList.clear() ;
+    setState(() {
+      provider.completedtasksList = tempTask;
+    });
   }
 
   String timeAgo(DateTime d) {
@@ -671,95 +1112,94 @@ class TasksCn {
   TasksCn(this.first, this.second);
 }
 
+sendNotification(String title, String token) async {
+  print(token);
+  print('dalal');
+  print('raghad');
 
-  sendNotification(String title, String token) async {
-    print(token);
-    print('dalal');
-    print('raghad');
+  final data = {
+    'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+    'id': '1',
+    'status': 'done',
+    'message': title,
+  };
 
-    final data = {
-      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-      'id': '1',
-      'status': 'done',
-      'message': title,
-    };
-
-    try {
-      http.Response response =
-          await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
-              headers: <String, String>{
-                'Content-Type': 'application/json',
-                'Authorization':
-                    'key=AAAArqJFQfk:APA91bFyFdlX-dk-72NHyaoN0hb4xsp8wuDUhr63ZgI7vroxRSBX1mXbd2pASgdzoYKA_8A0ZYRw61GzRaIH_6eakiVtyr_X8FJrlax-HwJdSUzbk022EGjfVjkDo7dlgYZNXaMfJS4T'
+  try {
+    http.Response response =
+        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Authorization':
+                  'key=AAAArqJFQfk:APA91bFyFdlX-dk-72NHyaoN0hb4xsp8wuDUhr63ZgI7vroxRSBX1mXbd2pASgdzoYKA_8A0ZYRw61GzRaIH_6eakiVtyr_X8FJrlax-HwJdSUzbk022EGjfVjkDo7dlgYZNXaMfJS4T'
+            },
+            body: jsonEncode(<String, dynamic>{
+              'notification': <String, dynamic>{
+                'title': title,
+                'body': 'Your friend has completed some tasks!'
               },
-              body: jsonEncode(<String, dynamic>{
-                'notification': <String, dynamic>{
-                  'title': title,
-                  'body': 'Your friend has completed some tasks!'
-                },
-                'priority': 'high',
-                'data': data,
-                'to': '$token'
-              }));
+              'priority': 'high',
+              'data': data,
+              'to': '$token'
+            }));
 
-      if (response.statusCode == 200) {
-        print("Yeh notificatin is sended");
-      } else {
-        print("Error");
-      }
-    } catch (e) {}
-  }
+    if (response.statusCode == 200) {
+      print("Yeh notificatin is sended");
+    } else {
+      print("Error");
+    }
+  } catch (e) {}
+}
 
-  getUsers(String CategoryName , String ListName) async {
-    print('1');
-     List<dynamic> UIDS = [];
+getUsers(String CategoryName, String ListName) async {
+  print('1');
+  List<dynamic> UIDS = [];
   final _firebaseFirestore = FirebaseFirestore.instance;
-print(CategoryName);
-print(ListName);
-    final res = await _firebaseFirestore
-        .collection('List')
-        .where("CategoryName", isEqualTo: CategoryName).where("List", isEqualTo: ListName).get(); 
+  print(CategoryName);
+  print(ListName);
+  final res = await _firebaseFirestore
+      .collection('List')
+      .where("CategoryName", isEqualTo: CategoryName)
+      .where("List", isEqualTo: ListName)
+      .get();
 
-        print('after bring collection');
-    if (res.docs.isNotEmpty) {
-      for (int i = 0; i < res.docs.length; i++) {
-        if (res.docs[i]['List'] == ListName) {
-          UIDS = res.docs[i]['UID'];
-           for (int i = 0; i < UIDS.length; i++){
-            print('Inside loop+i' );
-            final String useremail = UIDS[i];
-            print(useremail);
-            getUsersToken(useremail);
-           }
-        }
-      }
-    }  
-  }
-
- Future getUsersToken(String receiver) async {
-    final _firebaseFirestore = FirebaseFirestore.instance;
-      final _firebaseAuth = FirebaseAuth.instance;
-      print(receiver);
-    print('hello');
-    final currentUserEmail = _firebaseAuth.currentUser?.email;
-    final sendEmail = '';
- print('hello2');
-    final res = await _firebaseFirestore
-        .collection('users1').where("email", isEqualTo: receiver)
-        .get();
-     print('hello3');
-    if (res.docs.isNotEmpty) {
-      for (int i = 0; i < res.docs.length; i++) {
-        if (res.docs[i]['email'] == receiver ) {
-        
-          print('dalll');
-         // print(res.docs[i]['token']);
-          print('alll');
-          final String receivertoken = res.docs[i]['token'];
-          sendNotification('New task completed', receivertoken);
-          
+  print('after bring collection');
+  if (res.docs.isNotEmpty) {
+    for (int i = 0; i < res.docs.length; i++) {
+      if (res.docs[i]['List'] == ListName) {
+        UIDS = res.docs[i]['UID'];
+        for (int i = 0; i < UIDS.length; i++) {
+          print('Inside loop+i');
+          final String useremail = UIDS[i];
+          print(useremail);
+          getUsersToken(useremail);
         }
       }
     }
   }
+}
 
+Future getUsersToken(String receiver) async {
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+  print(receiver);
+  print('hello');
+  final currentUserEmail = _firebaseAuth.currentUser?.email;
+  final sendEmail = '';
+  print('hello2');
+  final res = await _firebaseFirestore
+      .collection('users1')
+      .where("email", isEqualTo: receiver)
+      .get();
+  print('hello3');
+  if (res.docs.isNotEmpty) {
+    for (int i = 0; i < res.docs.length; i++) {
+      if (res.docs[i]['email'] == receiver) {
+        print('dalll');
+        // print(res.docs[i]['token']);
+        print('alll');
+        final String receivertoken = res.docs[i]['token'];
+        sendNotification('New task completed', receivertoken);
+      }
+    }
+  }
+}

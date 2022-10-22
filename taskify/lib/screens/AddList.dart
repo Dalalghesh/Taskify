@@ -96,6 +96,15 @@ class _AddList extends State<AddList> {
     getCategoryy();
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Add List",
+            style: TextStyle(
+              fontSize: 25,
+              color: Color.fromARGB(255, 0, 0, 0),
+              //fontWeight: FontWeight.w600,
+            ),
+          ),
           leadingWidth: 50,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -117,10 +126,10 @@ class _AddList extends State<AddList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Add List',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
+                  // Text(
+                  //   'Add List',
+                  //   style: Theme.of(context).textTheme.headline4,
+                  // ),
                   SizedBox(
                     height: 10,
                   ),

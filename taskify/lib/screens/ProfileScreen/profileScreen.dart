@@ -25,12 +25,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getName();
+  }
+
   File? image;
 
   late String namee;
 
   Future pickImage(ImageSource source) async {
-    
     final image = await ImagePicker().pickImage(source: source);
     if (image == null) return;
 
@@ -114,13 +120,12 @@ class _HomeScreen extends State<HomeScreen> {
                   _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
           onPressed: () {
             _editMode
-                ? setState(() {
+                ? print('')
+                : setState(() {
                     pressGeoON = !pressGeoON;
                     _editMode = !_editMode;
                     _isInvalid = false;
-                  })
-                : print('');
-            ;
+                  });
           }, // home page
         ),
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
@@ -141,11 +146,6 @@ class _HomeScreen extends State<HomeScreen> {
                     right: 15,
                   ),
                   onPressed: () async {
-                      final _firebaseFirestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-                    final currentid = _firebaseAuth.currentUser?.uid;
-print(FirebaseAuth.instance.currentUser!.email);
-print(currentid);
                     CoolAlert.show(
                         context: context,
                         type: CoolAlertType.confirm,
@@ -376,13 +376,21 @@ print(currentid);
                                                 setState(() {
                                                   _isInvalid = true;
                                                 });
-                                                return 'You cannot enter numbers and special characters !@#\%^&*()';
-                                              } else if (spaceIndex! > 10 ||
+                                                return 'You cannot enter numbers and special characters';
+                                              } else if (spaceIndex! > 10) {
+                                                setState(() {
+                                                  _isInvalid = true;
+                                                });
+                                                return 'First name must be maximum 10 characters';
+                                              } else if ((value.length -
+                                                          spaceIndex +
+                                                          1) >
+                                                      10 ||
                                                   value.length > 21) {
                                                 setState(() {
                                                   _isInvalid = true;
                                                 });
-                                                return 'Name must be maximum 10 characters';
+                                                return 'Last name must be maximum 10 characters';
                                               } else {
                                                 firstName = value.substring(
                                                     0, spaceIndex);
@@ -412,41 +420,6 @@ print(currentid);
                                         )
                                       ])
                           ]),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            height: 55,
-                            width: 320,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  CoolAlert.show(
-                        context: context,
-                        type: CoolAlertType.confirm,
-                        text: 'Do you want to delete your account?',
-                        confirmBtnText: 'Yes',
-                        cancelBtnText: 'No',
-                        title: "Delete My Account",
-                        confirmBtnColor: Color(0xff7b39ed),
-                        onConfirmBtnTap: () async {
-
-                          print("InsideDelete");
-                          DeleteUserAccount();
-
-                          await FirebaseAuth.instance.signOut();
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                          );
-                        }); },
-                              child: Center(
-                                  child: Text("Delete Account",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white,
-                                      ))),
-                            ),
-                          ),
                           SizedBox(
                             height: 20,
                           ),
@@ -483,14 +456,15 @@ print(currentid);
                                               _editMode = !_editMode;
                                               pressGeoON = !pressGeoON;
                                             });
-                                            // CoolAlert.show(
-                                            //   title: "Success",
-                                            //   context: context,
-                                            //   type: CoolAlertType.success,
-                                            //   text: "List Added successfuly!",
-                                            //   confirmBtnColor:
-                                            //       const Color(0xff7b39ed),
-                                            // );
+                                            CoolAlert.show(
+                                              title: "Success",
+                                              context: context,
+                                              type: CoolAlertType.success,
+                                              text:
+                                                  "Profile updated successfuly!",
+                                              confirmBtnColor:
+                                                  const Color(0xff7b39ed),
+                                            );
 
                                             FirebaseFirestore.instance
                                                 .collection('users1')
@@ -514,35 +488,88 @@ print(currentid);
                                                 ))),
                                       ),
                                     ),
-                                    // Row(
-                                    //   children: [
-                                    //     Expanded(
-                                    //       child: TextButton(
-                                    //         style: TextButton.styleFrom(
-                                    //           primary: Colors.grey.shade600,
-                                    //           textStyle:
-                                    //               const TextStyle(fontSize: 18),
-                                    //         ),
-                                    //         onPressed: () {
-                                    //           setState(() {
-                                    //             pressGeoON = !pressGeoON;
-                                    //             _editMode = !_editMode;
-                                    //             _isInvalid = false;
-                                    //             //_isInvalid = !_isInvalid;
-                                    //             print(_editMode);
-                                    //           });
-                                    //         },
-                                    //         child: const Text(
-                                    //           'Cancel',
-                                    //           style: TextStyle(
-                                    //             decoration:
-                                    //                 TextDecoration.underline,
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          height: 55,
+                                          width: 320,
+                                          child: SizedBox(
+                                            child: ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Color.fromARGB(
+                                                    255, 216, 58, 47),
+                                                padding: EdgeInsets.fromLTRB(
+                                                    10, 10, 10, 10),
+                                                minimumSize: Size(2000000, 15),
+                                              ),
+                                              onPressed: () async {
+                                                CoolAlert.show(
+                                                    context: context,
+                                                    type: CoolAlertType.confirm,
+                                                    text:
+                                                        'Do you want to delete your account?',
+                                                    confirmBtnText: 'Yes',
+                                                    cancelBtnText: 'No',
+                                                    title: "Delete My Account",
+                                                    confirmBtnColor:
+                                                        Color(0xff7b39ed),
+                                                    onConfirmBtnTap: () async {
+                                                      print("InsideDelete");
+                                                      DeleteUserAccount();
+
+                                                      await FirebaseAuth
+                                                          .instance
+                                                          .signOut();
+                                                      Navigator.of(context)
+                                                          .pushReplacement(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const LoginScreen()),
+                                                      );
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.delete_forever_rounded,
+                                                size: 25,
+                                              ),
+                                              //  color: Color.fromARGB(255, 240, 96, 86),
+                                              label: Text(
+                                                'Delete my account',
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          // child: ElevatedButton(
+                                          //   style: ElevatedButton.styleFrom(
+                                          //     backgroundColor: Color.fromARGB(
+                                          //         255, 216, 58, 47),
+                                          //   ),
+                                          //   onPressed: () {
+                                          //     setState(() {
+                                          //       pressGeoON = !pressGeoON;
+                                          //       _editMode = !_editMode;
+                                          //       _isInvalid = false;
+                                          //       //_isInvalid = !_isInvalid;
+                                          //       print(_editMode);
+                                          //     });
+                                          //   },
+                                          //   child: const Text(
+                                          //     'Delete my account',
+                                          //     style: TextStyle(
+                                          //       fontSize: 20,
+                                          //       color: Colors.white,
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                         ],
@@ -574,20 +601,6 @@ class HeaderCurvedContainer extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
-
-Future<void> DeleteUserAccount()async{
-print("inside delete");
-  final _firebaseFirestore = FirebaseFirestore.instance;
-  final _firebaseAuth = FirebaseAuth.instance;
-
-final currentid = _firebaseAuth.currentUser?.uid;
-print(FirebaseAuth.instance.currentUser!.email);
-print(currentid);
-FirebaseFirestore.instance.collection('users1').doc(currentid).delete();
-await FirebaseAuth.instance.currentUser!.delete();
-}
-
-
 
 Delete() async {
   print("Dalal");
@@ -627,4 +640,16 @@ Delete() async {
                  onError: (e) => print("Error updating document $e"),
 
     );  */
+}
+
+Future<void> DeleteUserAccount() async {
+  print("inside delete");
+  final _firebaseFirestore = FirebaseFirestore.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  final currentid = _firebaseAuth.currentUser?.uid;
+  print(FirebaseAuth.instance.currentUser!.email);
+  print(currentid);
+  FirebaseFirestore.instance.collection('users1').doc(currentid).delete();
+  await FirebaseAuth.instance.currentUser!.delete();
 }

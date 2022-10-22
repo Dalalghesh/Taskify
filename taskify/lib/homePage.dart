@@ -24,18 +24,16 @@ class NavBar extends StatefulWidget {
   initNotification() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print("onMessage:$message");
-    }); 
-                
+    });
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print("onMessageOpenedApp: $message");
-      //Navigator.of(context).pushNamed("Taskscompleted");
+      // Navigator.of(context).pushNamed("ReceivedInvitation");
       //Util.routeToWidget(context, NavBar(tabs: 0));
-      
     });
   }
 
   void initState() {
-    
     //initNotifications();
     // TODO: implement initState
     initNotification();
@@ -46,6 +44,7 @@ class NavBar extends StatefulWidget {
 
     FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
+
   final int tabs;
 
   @override
@@ -53,7 +52,6 @@ class NavBar extends StatefulWidget {
 }
 
 Widget GetTab(int index) {
-  
   print(index);
   if (index == 0) {
     return Home_Screen();
@@ -70,20 +68,18 @@ Widget GetTab(int index) {
 }
 
 class NavBarState extends State<NavBar> {
-  
   initNotification() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print("onMessage:$message");
-    }); 
-                
+    });
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print("onMessageOpenedApp: $message");
       Navigator.of(context).pushNamed("Taskscompleted");
-      Util.routeToWidget(context, TaskScreen as Widget);
-      
+      //Util.routeToWidget(context, TaskScreen as Widget);
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     List<Widget> tabs = [
@@ -186,7 +182,7 @@ class NavBarState extends State<NavBar> {
                         builder: (context) => Add_Category()));
                   },
                   child: const Text(
-                    'ADD CATEGORY',
+                    'Add category',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -208,7 +204,7 @@ class NavBarState extends State<NavBar> {
                       .push(MaterialPageRoute(builder: (context) => AddList()));
                 },
                 child: const Text(
-                  'ADD LIST',
+                  'Add list',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -231,7 +227,7 @@ class NavBarState extends State<NavBar> {
                       .push(MaterialPageRoute(builder: (context) => AddTask()));
                 },
                 child: const Text(
-                  'ADD TASK',
+                  'Add task',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
