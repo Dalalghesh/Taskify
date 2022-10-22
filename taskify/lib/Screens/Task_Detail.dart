@@ -217,6 +217,7 @@ class _TaskDetailState extends State<TaskDetail> {
                         Container(
                           child: IconButton(
                             icon: const Icon(Icons.delete_rounded),
+                            color: Colors.red,
                             onPressed: () {
                               CoolAlert.show(
                                   context: context,

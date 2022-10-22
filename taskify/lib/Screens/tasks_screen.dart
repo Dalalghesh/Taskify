@@ -9,6 +9,7 @@ import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:intl/intl.dart';
 import 'package:taskify/utils/app_colors.dart';
+import 'package:taskify/utils/validators.dart';
 import '../controller/UserController.dart';
 import '../models/sub_tasks.dart';
 import '../models/tasks.dart';
@@ -701,6 +702,10 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                                 'UID': FirebaseAuth.instance.currentUser!.email,
                                                                               });
                                                                               subTaskController.clear();
+                                                                            }
+                                                                            if (subTaskController.text.length >
+                                                                                15) {
+                                                                              Validators.lengthVal(subTaskController.text);
                                                                             }
                                                                           },
                                                                           child:
