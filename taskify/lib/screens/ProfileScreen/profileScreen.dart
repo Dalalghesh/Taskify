@@ -146,6 +146,7 @@ class _HomeScreen extends State<HomeScreen> {
                     right: 15,
                   ),
                   onPressed: () async {
+                    showAlertDialog(context);
                     CoolAlert.show(
                         context: context,
                         type: CoolAlertType.confirm,
@@ -506,6 +507,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                 minimumSize: Size(2000000, 15),
                                               ),
                                               onPressed: () async {
+// deleteacc(context);
+                                                
                                                 CoolAlert.show(
                                                     context: context,
                                                     type: CoolAlertType.confirm,
@@ -652,4 +655,78 @@ Future<void> DeleteUserAccount() async {
   print(currentid);
   FirebaseFirestore.instance.collection('users1').doc(currentid).delete();
   await FirebaseAuth.instance.currentUser!.delete();
+}
+showAlertDialog(BuildContext context) {
+
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text("Yes"),
+    onPressed:  () async {
+         await FirebaseAuth.instance.signOut();
+
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
+    },
+  );
+  Widget continueButton = TextButton(
+    child: Text("Cancel"),
+    onPressed:  () {},
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Logout"),
+    content: Text("Do you want to logout?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+deleteacc(BuildContext context) {
+
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text("Cancel"),
+    onPressed:  () async {
+         await FirebaseAuth.instance.signOut();
+
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
+    },
+  );
+  Widget continueButton = TextButton(
+    child: Text("Continue"),
+    onPressed:  () {},
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete My Account"),
+    content: Text('Do you want to delete your account?'),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
