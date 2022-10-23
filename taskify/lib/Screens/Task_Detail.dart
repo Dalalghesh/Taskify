@@ -167,12 +167,13 @@ class _TaskDetailState extends State<TaskDetail> {
                                   //       'Task':myTask.task,
                                   //       'Priority':myTask.priority
                                   //     });
+                                  //edit alert
                                   CoolAlert.show(
                                       context: context,
                                       type: CoolAlertType.confirm,
                                       text: 'Do you want to edit this task?',
                                       confirmBtnText: 'Yes',
-                                      cancelBtnText: 'No & Back',
+                                      cancelBtnText: 'No',
                                       confirmBtnColor: const Color(0xff7b39ed),
                                       title: "Edit",
                                       onCancelBtnTap: () {
@@ -507,6 +508,14 @@ class _TaskDetailState extends State<TaskDetail> {
       ),
     );
   }
+  // await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
+  //     {
+  //       'Deadline': dateTimeUpdate,
+  //       'description': myTask.description,
+  //       'Image': myTask.image,
+  //       'Task':myTask.task,
+  //       'Priority':myTask.priority
+  //     });
 
   // SingleChildScrollView buildSingleChildScrollViewOld(BuildContext context, AppState provider)  {
   //   return SingleChildScrollView(
