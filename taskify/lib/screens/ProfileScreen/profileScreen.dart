@@ -545,28 +545,6 @@ class _HomeScreen extends State<HomeScreen> {
                                               ),
                                             ),
                                           ),
-                                          // child: ElevatedButton(
-                                          //   style: ElevatedButton.styleFrom(
-                                          //     backgroundColor: Color.fromARGB(
-                                          //         255, 216, 58, 47),
-                                          //   ),
-                                          //   onPressed: () {
-                                          //     setState(() {
-                                          //       pressGeoON = !pressGeoON;
-                                          //       _editMode = !_editMode;
-                                          //       _isInvalid = false;
-                                          //       //_isInvalid = !_isInvalid;
-                                          //       print(_editMode);
-                                          //     });
-                                          //   },
-                                          //   child: const Text(
-                                          //     'Delete my account',
-                                          //     style: TextStyle(
-                                          //       fontSize: 20,
-                                          //       color: Colors.white,
-                                          //     ),
-                                          //   ),
-                                          // ),
                                         ),
                                       ],
                                     ),
@@ -577,7 +555,7 @@ class _HomeScreen extends State<HomeScreen> {
                     )
                   ],
                 ),
-              ]), //key for form
+              ]),
             ),
           ),
         ],
@@ -629,17 +607,6 @@ Delete() async {
 // Reauthenticate
   await FirebaseAuth.instance.currentUser!
       .reauthenticateWithCredential(credential);
-
-  /*final res1 = await _firebaseFirestore
-                  .collection('users1')
-                  .where("email", isEqualTo: useremail).get(); 
-                  FirebaseFirestore.instance.collection("users1").where("email", isEqualTo: useremail).get();*/
-
-  /*_firebaseFirestore.collection("users1").doc(userdocid).delete().then(
-                (doc) => print("Account deleted"),
-                 onError: (e) => print("Error updating document $e"),
-
-    );  */
 }
 
 Future<void> DeleteUserAccount() async {
