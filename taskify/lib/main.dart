@@ -21,6 +21,8 @@ import 'package:taskify/onboarding/onboarding_screen.dart';
 
 import 'homePage.dart';
 import 'util.dart';
+import 'package:cron/cron.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 // #7b39ed - primary color
 
 Future<void> main() async {
@@ -33,6 +35,22 @@ Future<void> main() async {
   // await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
   //    CalendarClient.calendar = cal.CalendarApi(client);
   //  });
+
+   AwesomeNotifications().initialize(
+      null, // icon for your app notification
+      [
+        NotificationChannel(
+          channelKey: 'key1',
+          channelName: 'Proto Coders Point',
+          channelDescription: "Notification example",
+          defaultColor: Color(0xff7b39ed),
+          ledColor: Colors.white,
+          playSound: true,
+          enableLights:true,
+          enableVibration: true
+        )
+      ]
+  );
   runApp(MyApp());
 }
 
@@ -183,3 +201,13 @@ modify({
 // For deleting a calendar event
 Future<void> delete(String eventId, bool shouldNotify) async {}
 
+void Notify()async{
+   await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'key1',
+          title:'Deadline Coming soon!',
+          body: 'body text/ content, i will come later'
+        )
+    );
+}

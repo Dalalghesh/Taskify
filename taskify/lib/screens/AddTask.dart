@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  AwesomeNotifications().initialize(
+      null, // icon for your app notification
+      [
+        NotificationChannel(
+          channelKey: 'key1',
+          channelName: 'Proto Coders Point',
+          channelDescription: "Notification example",
+          defaultColor: Color(0xff7b39ed),
+          ledColor: Colors.white,
+          playSound: true,
+          enableLights:true,
+          enableVibration: true
+        )
+      ]
+  );
 
   runApp(AddTask());
 }
@@ -507,11 +524,15 @@ class _AddTask extends State<AddTask> {
                                 final snackBar = SnackBar(
                                     content: Text("Created successfully"));
 
+                                    //call deadline notifaiction
+                                    print(taskk);
+                                    Notify(taskk);
+
                                 CoolAlert.show(
                                   title: "Success",
                                   context: context,
                                   type: CoolAlertType.success,
-                                  text: "List created successfuly!",
+                                  text: "Task created successfuly!",
                                   confirmBtnColor: const Color(0xff7b39ed),
                                   onConfirmBtnTap: () => route(),
                                 );
@@ -679,4 +700,19 @@ class _DatePickerItem extends StatelessWidget {
       ),
     );
   }
+}
+
+
+void Notify(String Taskname)async{
+
+  print("inside notfiy method");
+  print(Taskname);
+   await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'key1',
+          title:'Deadline Coming soon!',
+          body: 'body text/ content, i will come later'
+        )
+    );
 }
