@@ -526,7 +526,7 @@ class _AddTask extends State<AddTask> {
 
                                     //call deadline notifaiction
                                     print(taskk);
-                                    Notify(taskk);
+                                   // Notify(taskk, dateTime);
 
                                 CoolAlert.show(
                                   title: "Success",
@@ -703,16 +703,21 @@ class _DatePickerItem extends StatelessWidget {
 }
 
 
-void Notify(String Taskname)async{
+void Notify(String Taskname, DateTime dateTime)async{
+
+   String timezom = await AwesomeNotifications().getLocalTimeZoneIdentifier(); //get time zone you are in
 
   print("inside notfiy method");
   print(Taskname);
+  print(dateTime);
    await AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 1,
           channelKey: 'key1',
           title:'Deadline Coming soon!',
           body: 'body text/ content, i will come later'
-        )
+        ),
+          schedule: NotificationInterval(interval: 5,timeZone: timezom,repeats: true),
+
     );
 }
