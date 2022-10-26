@@ -62,7 +62,7 @@ Widget GetTab(int index) {
   } else {
     return TaskScreen(
       category: '',
-      list: '',
+      list: ' ',
     );
   }
 }

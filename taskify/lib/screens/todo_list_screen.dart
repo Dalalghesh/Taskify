@@ -52,6 +52,13 @@ class _TodoListState extends State<TodoList> {
           widget.category,
           style: TextStyle(color: Colors.white),
         ),
+        leading: IconButton(
+          icon:
+              Icon(Icons.arrow_back, color: Color.fromARGB(255, 255, 255, 255)),
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+        ),
         backgroundColor: Color(0xff7b39ed),
       ),
       body: provider.listLoading
@@ -114,23 +121,6 @@ class _TodoListState extends State<TodoList> {
                                   [FirebaseAuth.instance.currentUser?.email])
                             });
                           }
-
-                          // DocumentSnapshot doc = await docRef.get();
-                          // List uid = doc.data['UID'];
-                          // await FirebaseFirestore.instance
-                          //     .collection('List')
-                          //     .doc(provider.list[index].docId)
-                          //     .update({
-                          //   'UID': FieldValue.arrayRemove(),
-                          // });
-                          //  Uids = provider.list[index].email;
-                          // for (int i = 0; i < Uids.length; i++) {
-                          //   // if (Uids[i] == FirebaseAuth.instance.currentUser)
-                          //   // if (Uids[i] == FirebaseAuth.instance.currentUser)
-                          //     // Uids.removeWhere((item) =>
-                          //     //     Uids[i] == FirebaseAuth.instance.currentUser);
-
-                          // }
                         },
                         background: slideLeftBackground(),
                         child: InkWell(
@@ -139,8 +129,10 @@ class _TodoListState extends State<TodoList> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => TaskScreen(
-                                        category: widget.category,
-                                        list: provider.list[index].list)));
+                                          category: widget.category,
+                                          list: provider.list[index].list,
+                                          // listId: provider.list[index].docId,
+                                        )));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

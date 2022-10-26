@@ -147,22 +147,22 @@ class _HomeScreen extends State<HomeScreen> {
                   ),
                   onPressed: () async {
                     showAlertDialog(context);
-                    CoolAlert.show(
-                        context: context,
-                        type: CoolAlertType.confirm,
-                        text: 'Do you want to logout?',
-                        confirmBtnText: 'Yes',
-                        cancelBtnText: 'No',
-                        title: "Logout",
-                        confirmBtnColor: Color(0xff7b39ed),
-                        onConfirmBtnTap: () async {
-                          await FirebaseAuth.instance.signOut();
+                    // CoolAlert.show(
+                    //     context: context,
+                    //     type: CoolAlertType.confirm,
+                    //     text: 'Do you want to logout?',
+                    //     confirmBtnText: 'Yes',
+                    //     cancelBtnText: 'No',
+                    //     title: "Logout",
+                    //     confirmBtnColor: Color(0xff7b39ed),
+                    //     onConfirmBtnTap: () async {
+                    //       await FirebaseAuth.instance.signOut();
 
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                          );
-                        });
+                    //       Navigator.of(context).pushReplacement(
+                    //         MaterialPageRoute(
+                    //             builder: (context) => const LoginScreen()),
+                    //       );
+                    //     });
                   },
                   icon: Icon(
                     Icons.logout_outlined,
@@ -508,7 +508,7 @@ class _HomeScreen extends State<HomeScreen> {
                                               ),
                                               onPressed: () async {
 // deleteacc(context);
-                                                
+
                                                 CoolAlert.show(
                                                     context: context,
                                                     type: CoolAlertType.confirm,
@@ -623,23 +623,24 @@ Future<void> DeleteUserAccount() async {
   FirebaseFirestore.instance.collection('users1').doc(currentid).delete();
   await FirebaseAuth.instance.currentUser!.delete();
 }
-showAlertDialog(BuildContext context) {
 
+showAlertDialog(BuildContext context) {
   // set up the buttons
   Widget cancelButton = TextButton(
     child: Text("Yes"),
-    onPressed:  () async {
-         await FirebaseAuth.instance.signOut();
+    onPressed: () async {
+      await FirebaseAuth.instance.signOut();
 
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                          );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
     },
   );
   Widget continueButton = TextButton(
     child: Text("Cancel"),
-    onPressed:  () {},
+    onPressed: () {
+      Navigator.of(context).pop(true);
+    },
   );
 
   // set up the AlertDialog
@@ -660,23 +661,22 @@ showAlertDialog(BuildContext context) {
     },
   );
 }
-deleteacc(BuildContext context) {
 
+deleteacc(BuildContext context) {
   // set up the buttons
   Widget cancelButton = TextButton(
     child: Text("Cancel"),
-    onPressed:  () async {
-         await FirebaseAuth.instance.signOut();
+    onPressed: () async {
+      await FirebaseAuth.instance.signOut();
 
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                          );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
     },
   );
   Widget continueButton = TextButton(
     child: Text("Continue"),
-    onPressed:  () {},
+    onPressed: () {},
   );
 
   // set up the AlertDialog

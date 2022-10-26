@@ -16,6 +16,8 @@ import 'package:taskify/models/task_list.dart';
 import 'models/tasks.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'models/userInfo.dart';
+
 class AppState extends ChangeNotifier {
   List<dynamic> categories = [];
   bool categoriesLoading = true;
@@ -37,6 +39,7 @@ class AppState extends ChangeNotifier {
   }
 
   List<TaskListModel> list = [];
+  List<UserInfoModel> membersInfo = [];
   bool listLoading = true;
   getList(cat) async {
     listLoading = true;
@@ -59,6 +62,67 @@ class AppState extends ChangeNotifier {
       list.add(task);
     }
     print(list.length);
+    listLoading = false;
+    notifyListeners();
+  }
+
+  List members = [];
+
+  getMembers(cat, list) async {
+    listLoading = true;
+    notifyListeners();
+    membersInfo.clear();
+    print(cat);
+
+    final res = await FirebaseFirestore.instance
+        .collection('List')
+        .where('CategoryName', isEqualTo: cat)
+        .where('List', isEqualTo: list)
+        .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+        .get();
+
+    for (int i = 0; i < res.docs.length; i++) {
+      TaskListModel task = TaskListModel(
+          docId: res.docs[i].id,
+          email: res.docs[i]['UID'],
+          category: res.docs[i]['CategoryName'],
+          list: res.docs[i]['List'],
+          private: res.docs[i]['isPrivate']);
+      print(task.email);
+      members = task.email;
+      // members.add(task.email);
+    }
+
+    print(members);
+
+    for (int i = 0; i < members.length; i++) {
+      final rrrr = await FirebaseFirestore.instance
+          .collection('users1')
+          .where('email', isEqualTo: members[i])
+          .get();
+      UserInfoModel info = UserInfoModel(
+          categories: rrrr.docs[0]['categories'],
+          docId: rrrr.docs[0]['uid'],
+          email: rrrr.docs[0]['email'],
+          fullname: rrrr.docs[0]['firstName'] + " " + rrrr.docs[0]['lastName'],
+          photo: rrrr.docs[0]['photo']);
+      print('-------------------------------------');
+      print(info);
+
+      print('-------------------------------------');
+      membersInfo.add(info);
+      print('-------------------------------------');
+      print(membersInfo);
+      print(membersInfo[0].email);
+      print('-------------------------------------');
+      // print("infooooo");
+      // print(rrrr.docs[0]['firstName'] + " " + rrrr.docs[0]['lastName']);
+      // print(rrrr.docs[0]['email']);
+      // print(rrrr.docs[0]['categories']);
+      // print(rrrr.docs[0]['uid']);
+      // print("infooooo");
+    }
+
     listLoading = false;
     notifyListeners();
   }
