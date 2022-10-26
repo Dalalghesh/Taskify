@@ -500,7 +500,30 @@ class _TaskDetailState extends State<TaskDetail> {
                                         );
                                       }),
                             ]))
-                    : Container()
+                    : Container(),
+                /* TextButton.icon(
+                       onPressed: () {
+                      //if (!widget.isConpleted) {
+                        provider.updateShowSubTasks(
+                            !myTask.showMembers, widget.index);
+                      }
+                      //if (widget.isConpleted) {
+                        setState(() {
+                          myTask.showMembers = !myTask.showMembers;
+                        });
+                      }
+                      // Respond to button press
+                    },
+                         icon: Icon(Icons.view_list, size: 18),
+                    label: myTask.showSubTasks
+                        ? Text(
+                            "Assigned to",
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            "Assign to",
+                            textAlign: TextAlign.center,
+                          )),*/
               ],
             ),
           ),
