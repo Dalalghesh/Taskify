@@ -703,10 +703,6 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                               });
                                                                               subTaskController.clear();
                                                                             }
-                                                                            if (subTaskController.text.length >
-                                                                                15) {
-                                                                              Validators.lengthVal(subTaskController.text);
-                                                                            }
                                                                           },
                                                                           child:
                                                                               Container(

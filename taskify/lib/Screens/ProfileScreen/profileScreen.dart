@@ -1,10 +1,14 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:provider/provider.dart';
 import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/Storing_DB.dart';
 import 'package:taskify/screens/auth/login_screen.dart';
@@ -12,6 +16,10 @@ import 'package:taskify/util.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../appstate.dart';
+import '../../models/tasks.dart';
+import '../../screens/tasks_screen.dart';
+import '../../screens/todo_list_screen.dart';
 import '../../utils/validators.dart';
 import 'UpdateProfile.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -30,11 +38,21 @@ class _HomeScreen extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     getName();
+    getList();
   }
 
   File? image;
 
   late String namee;
+
+  getList() async {
+    // print(widget.category);
+    await Future.delayed(Duration(milliseconds: 100));
+    await Provider.of<AppState>(this.context, listen: false).getListAll();
+    await Provider.of<AppState>(this.context, listen: false)
+        .getAllTasksProfile();
+    await Provider.of<AppState>(this.context, listen: false).linkData();
+  }
 
   Future pickImage(ImageSource source) async {
     final image = await ImagePicker().pickImage(source: source);
@@ -99,46 +117,77 @@ class _HomeScreen extends State<HomeScreen> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     setState(() {
-      photo = res['photo'];
+      try {
+        photo = res['photo'];
+      } catch (e) {
+        photo = "";
+      }
       nameee = res['firstName'] + ' ' + res['lastName'];
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    //AppState provider = Provider.of<AppState>(context);
     getName();
     TextEditingController email = TextEditingController(
         text: '${FirebaseAuth.instance.currentUser!.email}');
+    AppState provider = Provider.of<AppState>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              size: 30,
-              color:
-                  _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
-          onPressed: () {
-            _editMode
-                ? print('')
-                : setState(() {
-                    pressGeoON = !pressGeoON;
-                    _editMode = !_editMode;
-                    _isInvalid = false;
-                  });
-          }, // home page
+        leading: Container(
+          height: 55,
+          width: 320,
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _editMode = !_editMode;
+                pressGeoON = !pressGeoON;
+              });
+              // Util.routeToWidget(context, UpdateProfile());
+            },
+            child: Center(child: Icon(!_editMode ? Icons.save : Icons.edit)
+
+                // Text("Update",
+                //     style: TextStyle(
+                //       fontSize: 12,
+                //       color: Colors.white,
+                //     ))
+
+                ),
+          ),
         ),
+
+        ///
+        // IconButton(
+        //   icon: Icon(Icons.arrow_back,
+        //       size: 30,
+        //       color:
+        //           _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
+        //   onPressed: () {
+        //     _editMode
+        //         ? print('')
+        //         : setState(() {
+        //             pressGeoON = !pressGeoON;
+        //             _editMode = !_editMode;
+        //             _isInvalid = false;
+        //           });
+        //   }, // home page
+        // ),
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
         elevation: 0.0,
         centerTitle: true,
-        title: Text(
-          "My profile",
+        title: const Text(
+          "My Profile",
           style: TextStyle(
             fontSize: 30,
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
+
         actions: [
           _editMode
               ? IconButton(
@@ -172,32 +221,42 @@ class _HomeScreen extends State<HomeScreen> {
               : Container(),
         ],
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomPaint(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+      body: buildColumn(context, provider),
+      // body: buildColumnOld(context, provider),
+    );
+  }
+
+  Widget buildColumn(BuildContext context, AppState provider) {
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned.fill(
+              child: SizedBox(
+                height: 400,
+                child: CustomPaint(
+                  painter: HeaderCurvedContainer(),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    // height: 400,
+                  ),
+                ),
+              ),
             ),
-            painter: HeaderCurvedContainer(),
-          ),
-          Container(
-            child: Form(
+            Form(
               key: formKey,
               child: Column(children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
-                        "",
-                        style: TextStyle(
-                          fontSize: 35,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    Text(
+                      "",
+                      style: TextStyle(
+                        fontSize: 35,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -230,7 +289,15 @@ class _HomeScreen extends State<HomeScreen> {
                                               size: Size.fromRadius(
                                                   48), // Image radius
                                               child: Image.network(photo,
-                                                  fit: BoxFit.cover),
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (
+                                                BuildContext context,
+                                                Object error,
+                                                StackTrace? stackTrace,
+                                              ) {
+                                                return Image.network(
+                                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+                                              }),
                                             ),
                                           ),
                                           decoration: BoxDecoration(
@@ -293,7 +360,19 @@ class _HomeScreen extends State<HomeScreen> {
                                                               child: Image.network(
                                                                   photo,
                                                                   fit: BoxFit
-                                                                      .cover),
+                                                                      .cover,
+                                                                  errorBuilder:
+                                                                      (
+                                                                BuildContext
+                                                                    context,
+                                                                Object error,
+                                                                StackTrace?
+                                                                    stackTrace,
+                                                              ) {
+                                                                return Image
+                                                                    .network(
+                                                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+                                                              }),
                                                             ),
                                                           ),
                                                         )
@@ -424,25 +503,7 @@ class _HomeScreen extends State<HomeScreen> {
                             height: 20,
                           ),
                           pressGeoON
-                              ? Container(
-                                  height: 55,
-                                  width: 320,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _editMode = !_editMode;
-                                        pressGeoON = !pressGeoON;
-                                      });
-                                      // Util.routeToWidget(context, UpdateProfile());
-                                    },
-                                    child: Center(
-                                        child: Text("Update",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                            ))),
-                                  ),
-                                )
+                              ? SizedBox()
                               : Column(
                                   children: [
                                     Container(
@@ -450,6 +511,7 @@ class _HomeScreen extends State<HomeScreen> {
                                       width: 320,
                                       child: ElevatedButton(
                                         onPressed: () async {
+                                          print("ddddd");
                                           if (formKey.currentState!
                                               .validate()) {
                                             setState(() {
@@ -572,6 +634,8 @@ class _HomeScreen extends State<HomeScreen> {
                                     ),
                                   ],
                                 ),
+
+                          // buildColumn(provider),
                         ],
                       ),
                     )
@@ -579,7 +643,135 @@ class _HomeScreen extends State<HomeScreen> {
                 ),
               ]), //key for form
             ),
+          ],
+        ),
+        if (_editMode)
+          SizedBox(
+            height: 20,
           ),
+        if (_editMode)
+          Text(
+            "My Lists:",
+            style: TextStyle(
+              fontSize: 22,
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        if (_editMode)
+          SizedBox(
+            height: 20,
+          ),
+        if (_editMode) Expanded(child: buildColumnList(provider)),
+        if (_editMode)
+          SizedBox(
+            height: 30,
+          ),
+      ],
+    );
+  }
+
+  Widget buildColumnList(AppState provider) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          provider.listLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : provider.myList.isEmpty
+                  ? const Center(
+                      child: Text(
+                      'There are no lists yet',
+                      style: TextStyle(color: Colors.black, fontSize: 18),
+                    ))
+                  : ListView.builder(
+                      itemCount: provider.myList.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final item = provider.myList[index].docId;
+
+                        return InkWell(
+                          onTap: () {
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => TaskScreen(
+                            //             category: widget.category,
+                            //             list: provider.list[index].list)));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Card(
+                                  //alignment: Alignment.center,
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "List: ${provider.myList[index].list}",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                          // Row(
+                                          //   mainAxisAlignment:
+                                          //       MainAxisAlignment.center,
+                                          //   children: [
+                                          //     Container(
+                                          //       padding: EdgeInsets.all(10),
+                                          //       child: LinearPercentIndicator(
+                                          //         width: 220.0,
+                                          //         lineHeight: 15,
+                                          //         percent: (provider
+                                          //                 .myList[index]
+                                          //                 .completedTask) *
+                                          //             1.0 /
+                                          //             (provider.myList[index]
+                                          //                     .completedTask +
+                                          //                 provider.myList[index]
+                                          //                     .pendingTask) *
+                                          //             1.0,
+                                          //         animation: true,
+                                          //         animationDuration: 2000,
+                                          //         linearStrokeCap:
+                                          //             LinearStrokeCap.round,
+                                          //         progressColor:
+                                          //             Color(0xff7b39ed),
+                                          //         center: Text(""),
+                                          //       ),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                          Text(
+                                            "You have completed ${provider.myList[index].completedTask}/${provider.myList[index].completedTask + provider.myList[index].pendingTask} Tasks",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
         ],
       ),
     );
@@ -591,8 +783,8 @@ class HeaderCurvedContainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Color(0xff7b39ed);
     Path path = Path()
-      ..relativeLineTo(0, 150)
-      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
+      ..relativeLineTo(0, 100)
+      ..quadraticBezierTo(size.width / 2, 175, size.width, 100)
       ..relativeLineTo(0, -150)
       ..close();
     canvas.drawPath(path, paint);

@@ -36,7 +36,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<TaskListModel> list = [];
+
   bool listLoading = true;
   getList(cat) async {
     listLoading = true;
@@ -63,10 +63,115 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  getListAll() async {
+    listLoading = true;
+    notifyListeners();
+    myList.clear();
+
+    final res = await FirebaseFirestore.instance
+        .collection('List')
+        // .where('CategoryName', isEqualTo: cat)
+        .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+        .get();
+    for (int i = 0; i < res.docs.length; i++) {
+      TaskListModelProfile task = TaskListModelProfile(
+          docId: res.docs[i].id,
+          email: res.docs[i]['UID'],
+          category: res.docs[i]['CategoryName'],
+          list: res.docs[i]['List'],
+          private: res.docs[i]['isPrivate']);
+      myList.add(task);
+    }
+    print("list.length ${myList.length}");
+    listLoading = false;
+    notifyListeners();
+  }
+
   // List<dynamic> tasks = [];
   List<Tasksss> tasksList = [];
+  List<Tasksss> myTasksList = [];
+  List<TaskListModelProfile> myList = [];
+  List<TaskListModel> list = [];
 
   bool tasksLoading = true;
+
+  getAllTasksProfile() async {
+
+    tasksLoading = true;
+    notifyListeners();
+    //   tasks.clear();
+    myTasksList.clear();
+
+    final res = await FirebaseFirestore.instance
+        .collection('tasks')
+        // .where('CategoryName', isEqualTo: cat)
+        // .where('ListName', isEqualTo: list)
+        .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+        // .where('status', isEqualTo: 'pending')
+        .get();
+    for (int i = 0; i < res.docs.length; i++) {
+      try {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            image: res.docs[i]['Image'],
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            status: res.docs[i]['status'],
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        myTasksList.add(taskss);
+      } catch (e) {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            status: res.docs[i]['status'],
+            image: "",
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        myTasksList.add(taskss);
+      }
+
+      // tasks.add(res.docs[i]['Task']);
+    }
+    myTasksList.sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
+
+    // print(tasks.length);
+    tasksLoading = false;
+    notifyListeners();
+    // return myTasksList ;
+  }
+
+  linkData() async{
+    myTasksList.forEach((element) {
+      if(element.status == "pending"){
+        for (var listElement in myList) {
+          if(listElement.list.toString() == element.list.toString()){
+            listElement.pendingTask++ ;
+          }
+        }
+      } else if(element.status == "completed") {
+        for (var listElement in myList) {
+          if(listElement.list.toString() == element.list.toString()){
+            listElement.completedTask++ ;
+          }
+        }
+      }
+
+    });
+
+  }
+
   getTasks(cat, list) async {
     tasksLoading = true;
     notifyListeners();

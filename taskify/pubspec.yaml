@@ -61,6 +61,7 @@ dependencies:
   firebase_storage: "^10.0.2"
   image_picker: ^0.8.6
   permission_handler: ^10.1.0
+  percent_indicator: ^4.0.1
 
 dev_dependencies:
   flutter_test:
