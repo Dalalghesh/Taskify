@@ -23,10 +23,22 @@ import 'homePage.dart';
 import 'util.dart';
 import 'package:cron/cron.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+
+import 'package:workmanager/workmanager.dart';
 // #7b39ed - primary color
+
+/*void callbackDispatcher(){
+Workmanager().executeTask((taskName, inputData){
+print("inside callbackDispatcher main");
+return Future.value(true);
+});
+}*/
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+/*print("inside main befor calling");
+  Workmanager().initialize(callbackDispatcher);
+  print("inside main after calling");*/
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   var _clientID = new ClientId(Secret.getId(), "");
