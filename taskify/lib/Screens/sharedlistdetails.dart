@@ -133,27 +133,7 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                             color: Color.fromARGB(
                                                 0, 117, 117, 117)))
                                     : IconButton(
-                                        onPressed: () async {
-                                          print(provider.list[index].docId);
-
-                                          if (provider.list[index].email
-                                              .contains(
-                                            provider.membersInfo[index].email,
-                                          )) {
-                                            DocumentReference docRef =
-                                                await FirebaseFirestore.instance
-                                                    .collection('List')
-                                                    .doc(provider
-                                                        .list[index].docId);
-
-                                            docRef.update({
-                                              'UID': FieldValue.arrayRemove([
-                                                provider
-                                                    .membersInfo[index].email,
-                                              ])
-                                            });
-                                          }
-                                        },
+                                        onPressed: () async {},
                                         icon: Icon(Icons.close,
                                             color: Color.fromARGB(
                                                 0, 117, 117, 117)),
@@ -168,3 +148,35 @@ class _sharedlistdetails extends State<sharedlistdetails> {
     );
   }
 }
+
+// showAlertDialog(BuildContext context) {
+//   // set up the buttons
+//   Widget cancelButton = TextButton(
+//     child: Text("Yes"),
+//     onPressed: () async {},
+//   );
+//   Widget continueButton = TextButton(
+//     child: Text("Cancel"),
+//     onPressed: () {
+//       Navigator.of(context).pop(true);
+//     },
+//   );
+
+//   // set up the AlertDialog
+//   AlertDialog alert = AlertDialog(
+//     title: Text("Logout"),
+//     content: Text("Do you want to logout?"),
+//     actions: [
+//       cancelButton,
+//       continueButton,
+//     ],
+//   );
+
+//   // show the dialog
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return alert;
+//     },
+//   );
+// }
