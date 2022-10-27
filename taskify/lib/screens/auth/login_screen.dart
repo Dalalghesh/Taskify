@@ -207,11 +207,11 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {});
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-              print("loged in1");
+            /*  print("loged in1");
             Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
             var time = DateTime.now().second.toString();
             Workmanager().registerPeriodicTask(time,'firstTask' , frequency: const Duration(minutes: 15));
-            print("loged in2");
+            print("loged in2");*/
         return NavBar(tabs: 0);
               
       }));

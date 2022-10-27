@@ -704,13 +704,24 @@ class _DatePickerItem extends StatelessWidget {
 }
 
 
-void Notify(String Taskname, DateTime dateTime)async{
+void Notify(String Taskname, DateTime TaskdateTime)async{
 
  String timezom = await AwesomeNotifications().getLocalTimeZoneIdentifier(); //get time zone you are in
 
   print("inside notfiy method");
   print(Taskname);
-  print(dateTime);
+  print(TaskdateTime);
+  DateTime currentdate =DateTime.now();
+  print(currentdate);
+   final difference = TaskdateTime.difference(currentdate).inDays;
+   print(difference);
+   ////
+  int differenceONSECONDS =  daysBetween(currentdate, TaskdateTime) -1 ;
+ 
+  differenceONSECONDS= 86400 * differenceONSECONDS;
+   if (differenceONSECONDS ==0 ){
+    differenceONSECONDS =5;
+   }
  AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 1,
@@ -718,7 +729,7 @@ void Notify(String Taskname, DateTime dateTime)async{
           title:'Reminder for task deadline',
           body: 'One day left to reach -$Taskname- task deadline!'
         ),
-        schedule: NotificationInterval(interval: 5 , timeZone: timezom, repeats: false),
+        schedule: NotificationInterval(interval: differenceONSECONDS , timeZone: timezom, repeats: false),
     );
 
    /*AwesomeNotifications().actionStream.listen((receivedNotifiction)
@@ -728,4 +739,12 @@ void Notify(String Taskname, DateTime dateTime)async{
                   );
 });*/
 
+}
+
+int daysBetween(DateTime from, DateTime to) {
+  from = DateTime(from.year, from.month, from.day);
+  to = DateTime(to.year, to.month, to.day);
+  print("daysBetween");
+  print((to.difference(from).inHours / 24).round());
+  return (to.difference(from).inHours / 24).round();
 }
