@@ -716,20 +716,23 @@ void Notify(String Taskname, DateTime TaskdateTime)async{
    final difference = TaskdateTime.difference(currentdate).inDays;
    print(difference);
    ////
-  int differenceONSECONDS =  daysBetween(currentdate, TaskdateTime) -1 ;
- 
-  differenceONSECONDS= 86400 * differenceONSECONDS;
+  int differenceOnDay =  daysBetween(currentdate, TaskdateTime) -1 ;
+
+  int differenceONSECONDS= 86400 * differenceOnDay;
+  
    if (differenceONSECONDS ==0 ){
     differenceONSECONDS =5;
    }
+   print(differenceONSECONDS);
+
  AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 1,
           channelKey: 'key1',
           title:'Reminder for task deadline',
-          body: 'One day left to reach -$Taskname- task deadline!'
+          body:  'One day left to reach "$Taskname" task deadline!'
         ),
-        schedule: NotificationInterval(interval: differenceONSECONDS , timeZone: timezom, repeats: false),
+        schedule: NotificationInterval(interval: 5 , timeZone: timezom, repeats: false),
     );
 
    /*AwesomeNotifications().actionStream.listen((receivedNotifiction)
@@ -738,12 +741,11 @@ void Notify(String Taskname, DateTime TaskdateTime)async{
                     '/navigationPage',
                   );
 });*/
-
 }
 
 int daysBetween(DateTime from, DateTime to) {
-  from = DateTime(from.year, from.month, from.day);
-  to = DateTime(to.year, to.month, to.day);
+  from = DateTime(from.year, from.month, from.day );
+  to = DateTime(to.year, to.month, to.day );
   print("daysBetween");
   print((to.difference(from).inHours / 24).round());
   return (to.difference(from).inHours / 24).round();
