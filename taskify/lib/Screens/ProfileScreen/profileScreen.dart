@@ -651,7 +651,7 @@ class _HomeScreen extends State<HomeScreen> {
           ),
         if (_editMode)
           Text(
-            "My Lists:",
+            "Progress:",
             style: TextStyle(
               fontSize: 22,
               color: Colors.black,
@@ -695,11 +695,11 @@ class _HomeScreen extends State<HomeScreen> {
                         return InkWell(
                           onTap: () {
                             // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => TaskScreen(
-                            //             category: widget.category,
-                            //             list: provider.list[index].list)));
+                            //   context,
+                            //  MaterialPageRoute(
+                            //      builder: (context) => TaskScreen(
+                            //            category: widget.category,
+                            //            list: provider.list[index].list)));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -718,7 +718,7 @@ class _HomeScreen extends State<HomeScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                "List: ${provider.myList[index].list}",
+                                                "${provider.myList[index].list}",
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.black,
@@ -727,35 +727,35 @@ class _HomeScreen extends State<HomeScreen> {
                                               ),
                                             ],
                                           ),
-                                          // Row(
-                                          //   mainAxisAlignment:
-                                          //       MainAxisAlignment.center,
-                                          //   children: [
-                                          //     Container(
-                                          //       padding: EdgeInsets.all(10),
-                                          //       child: LinearPercentIndicator(
-                                          //         width: 220.0,
-                                          //         lineHeight: 15,
-                                          //         percent: (provider
-                                          //                 .myList[index]
-                                          //                 .completedTask) *
-                                          //             1.0 /
-                                          //             (provider.myList[index]
-                                          //                     .completedTask +
-                                          //                 provider.myList[index]
-                                          //                     .pendingTask) *
-                                          //             1.0,
-                                          //         animation: true,
-                                          //         animationDuration: 2000,
-                                          //         linearStrokeCap:
-                                          //             LinearStrokeCap.round,
-                                          //         progressColor:
-                                          //             Color(0xff7b39ed),
-                                          //         center: Text(""),
-                                          //       ),
-                                          //     ),
-                                          //   ],
-                                          // ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.all(10),
+                                                child: LinearPercentIndicator(
+                                                  width: 220.0,
+                                                  lineHeight: 15,
+                                                  percent: (provider
+                                                          .myList[index]
+                                                          .completedTask) *
+                                                      1.0 /
+                                                      (provider.myList[index]
+                                                              .completedTask +
+                                                          provider.myList[index]
+                                                              .pendingTask) *
+                                                      1.0,
+                                                  animation: true,
+                                                  animationDuration: 2000,
+                                                  linearStrokeCap:
+                                                      LinearStrokeCap.round,
+                                                  progressColor:
+                                                      Color(0xff7b39ed),
+                                                  center: Text(""),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                           Text(
                                             "You have completed ${provider.myList[index].completedTask}/${provider.myList[index].completedTask + provider.myList[index].pendingTask} Tasks",
                                             style: TextStyle(
