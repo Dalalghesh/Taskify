@@ -8,11 +8,13 @@ class InvitationModel {
   String list;
   String listId;
   String status;
+  String x;
   InvitationModel(
       {required this.recivereEmail,
       required this.senderEmail,
       this.id,
       required this.status,
+      required this.x,
       required this.category,
       required this.list,
       required this.listId});
@@ -24,8 +26,10 @@ class InvitationModel {
         "status": 'pending',
         "category": category,
         "list": list,
-        "listId": listId
+        "listId": listId,
+        "x": x
       };
+
   static List<InvitationModel> firebaseToObject(
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
     List<InvitationModel> invitations = [];
@@ -33,14 +37,14 @@ class InvitationModel {
       print(doc.id);
       invitations.add(
         InvitationModel(
-          id: doc.id,
-          senderEmail: doc.data()["senderEmail"].toLowerCase(),
-          recivereEmail: doc.data()["recieverEmail"].toLowerCase(),
-          status: doc.data()["status"],
-          category: doc.data()["category"],
-          list: doc.data()["list"],
-          listId: doc.data()["listId"],
-        ),
+            id: doc.id,
+            senderEmail: doc.data()["senderEmail"].toLowerCase(),
+            recivereEmail: doc.data()["recieverEmail"].toLowerCase(),
+            status: doc.data()["status"],
+            category: doc.data()["category"],
+            list: doc.data()["list"],
+            listId: doc.data()["listId"],
+            x: "s"),
       );
     }
     return [...invitations];

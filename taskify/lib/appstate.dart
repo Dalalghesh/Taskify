@@ -110,6 +110,7 @@ class AppState extends ChangeNotifier {
           .collection('users1')
           .where('email', isEqualTo: members[i])
           .get();
+
       UserInfoModel info = UserInfoModel(
           categories: rrrr.docs[0]['categories'],
           docId: rrrr.docs[0]['uid'],

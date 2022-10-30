@@ -94,6 +94,7 @@ class InvitaitonProvider with ChangeNotifier {
         status: 'pending',
         category: category,
         list: list,
+        x: "s",
         listId: listId);
     _firebaseFirestore
         .collection(InvitationModel.collectionName)

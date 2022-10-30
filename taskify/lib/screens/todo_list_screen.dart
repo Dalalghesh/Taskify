@@ -112,6 +112,7 @@ class _TodoListState extends State<TodoList> {
                         onDismissed: (direction) async {
                           if (provider.list[index].email.contains(
                               FirebaseAuth.instance.currentUser?.email)) {
+                            //1: delete list
                             DocumentReference docRef = await FirebaseFirestore
                                 .instance
                                 .collection('List')
@@ -121,6 +122,41 @@ class _TodoListState extends State<TodoList> {
                               'UID': FieldValue.arrayRemove(
                                   [FirebaseAuth.instance.currentUser?.email])
                             });
+
+                            //2: delete tasks
+                            print("Ssss");
+                            print(widget.category);
+                            print(provider.list[index].list);
+
+                            final res = await FirebaseFirestore.instance
+                                .collection('tasks')
+                                .where('CategoryName',
+                                    isEqualTo: widget.category)
+                                .where('ListName',
+                                    isEqualTo: provider.list[index].list)
+                                .where('UID',
+                                    arrayContains: FirebaseAuth
+                                        .instance.currentUser!.email)
+                                .get();
+
+                            print("Sssjjjjss");
+                            if (res.docs.length != 0)
+                              for (int i = 0; i < res.docs.length; i++) {
+                                print("111Ssss");
+                                print(res.docs[i].id);
+                                print(res.docs[i]['Task']);
+
+                                DocumentReference docRef2 =
+                                    await FirebaseFirestore.instance
+                                        .collection('tasks')
+                                        .doc(res.docs[i].id);
+
+                                docRef2.update({
+                                  'UID': FieldValue.arrayRemove([
+                                    FirebaseAuth.instance.currentUser?.email
+                                  ])
+                                });
+                              }
                             // Provider.of<AppState>(context, listen: false)
                             //     .removeMemberrsFromtasks(
                             //         widget.category, provider.list[index].list);
@@ -179,20 +215,13 @@ class _TodoListState extends State<TodoList> {
                                           )
                                         : IconButton(
                                             onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          sharedlistdetails(
-                                                            list: (provider
-                                                                .list[index]
-                                                                .list),
-                                                            category:
-                                                                widget.category,
-                                                          )));
+                                              //////////////////////////////////////////////////////////////////////////////////////////
+
+                                              //////////////////////////////////////////////////////////////////////////////////////////
                                             },
                                             icon: Icon(Icons.share,
-                                                color: Colors.grey.shade600),
+                                                color: Color.fromARGB(
+                                                    255, 126, 14, 14)),
                                           )
                                   ],
                                 ),
