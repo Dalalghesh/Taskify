@@ -87,7 +87,7 @@ class _TaskScreenState extends State<TaskScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
-              widget.list,
+              widget.list + ' tasks',
               style: TextStyle(
                   color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
             ),

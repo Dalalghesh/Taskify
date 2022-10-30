@@ -498,7 +498,7 @@ class _HomeScreen extends State<HomeScreen> {
                                           height: 55,
                                           width: 320,
                                           child: SizedBox(
-                                            child: ElevatedButton.icon(
+                                            child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Color.fromARGB(
                                                     255, 216, 58, 47),
@@ -534,12 +534,9 @@ class _HomeScreen extends State<HomeScreen> {
                                                       );
                                                     });
                                               },
-                                              icon: Icon(
-                                                Icons.delete_forever_rounded,
-                                                size: 25,
-                                              ),
+
                                               //  color: Color.fromARGB(255, 240, 96, 86),
-                                              label: Text(
+                                              child: Text(
                                                 'Delete my account',
                                                 style: TextStyle(
                                                   fontSize: 20,

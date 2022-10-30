@@ -50,110 +50,260 @@ class _sharedlistdetails extends State<sharedlistdetails> {
     print(widget.list);
     await Future.delayed(Duration(milliseconds: 100));
     Provider.of<AppState>(context, listen: false)
-        .getMembers(widget.category, widget.list);
+        .getMembers(widget.category, widget.list); // getTaskWithoutClear();
   }
 
   late List members;
-
+  String x = '';
+  var userEmail = '';
+  var name = '';
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context);
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          widget.list + ' Members',
-          style: TextStyle(color: Colors.white),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            widget.list + ' members',
+            style: TextStyle(color: Colors.white),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back,
+                color: Color.fromARGB(255, 255, 255, 255)),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
+          backgroundColor: Color(0xff7b39ed),
         ),
-        leading: IconButton(
-          icon:
-              Icon(Icons.arrow_back, color: Color.fromARGB(255, 255, 255, 255)),
-          onPressed: () {
-            Navigator.of(context).pop(true);
-          },
-        ),
-        backgroundColor: Color(0xff7b39ed),
-      ),
-      body: provider.listLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : provider.membersInfo.isEmpty
-              ? Center(
-                  child: Text(
-                  'There are no members yet',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ))
-              : ListView.builder(
-                  itemCount: provider.membersInfo.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 70,
-                            width: MediaQuery.of(context).size.width / 1.1,
-                            margin: EdgeInsets.only(
-                                left: 20, right: 0, top: 6, bottom: 5),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8)),
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+        body: Column(
+          children: [
+            provider.listLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : provider.membersInfo.isEmpty
+                    ? Center(
+                        child: Text(
+                        'There are no members yet',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ))
+                    : ListView.builder(
+                        itemCount: provider.membersInfo.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {},
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  radius: 25, // Image radius
-                                  backgroundImage: NetworkImage(
-                                      provider.membersInfo[index].photo),
-                                ),
-                                Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                Container(
+                                  height: 70,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.1,
+                                  margin: EdgeInsets.only(
+                                      left: 20, right: 0, top: 6, bottom: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8)),
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        provider.membersInfo[index].fullname,
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.black),
+                                      CircleAvatar(
+                                        radius: 25, // Image radius
+                                        backgroundImage: NetworkImage(
+                                            provider.membersInfo[index].photo),
                                       ),
-                                      Text(
-                                        provider.membersInfo[index].email,
-                                        style: TextStyle(
-                                            fontSize: 13, color: Colors.black),
-                                      )
-                                    ]),
-                                FirebaseAuth.instance.currentUser!.email ==
-                                        provider.membersInfo[index].email
-                                    ? IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.delete,
-                                            color: Color.fromARGB(
-                                                0, 117, 117, 117)))
-                                    : IconButton(
-                                        onPressed: () async {},
-                                        icon: Icon(Icons.close,
-                                            color: Color.fromARGB(
-                                                0, 117, 117, 117)),
-                                      ),
+                                      Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              provider
+                                                  .membersInfo[index].fullname,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black),
+                                            ),
+                                            Text(
+                                              provider.membersInfo[index].email,
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                            )
+                                          ]),
+                                      FirebaseAuth.instance.currentUser!
+                                                  .email ==
+                                              provider.membersInfo[index].email
+                                          ? IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(Icons.delete,
+                                                  color: Color.fromARGB(
+                                                      0, 233, 15, 15)))
+                                          : FirebaseAuth.instance.currentUser!
+                                                      .email ==
+                                                  provider.membersInfo[0].email
+                                              ? IconButton(
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      x = provider
+                                                          .membersInfo[index]
+                                                          .fullname;
+                                                    });
+                                                    Widget cancelButton =
+                                                        TextButton(
+                                                      child: Text("Yes"),
+                                                      onPressed: () async {
+                                                        DocumentReference
+                                                            docRef =
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'List')
+                                                                .doc(provider
+                                                                    .docid);
+                                                        docRef.update({
+                                                          'UID': FieldValue
+                                                              .arrayRemove([
+                                                            provider
+                                                                .membersInfo[
+                                                                    index]
+                                                                .email
+                                                          ])
+                                                        });
+
+                                                        setState(() {
+                                                          provider.membersInfo
+                                                              .removeWhere((item) =>
+                                                                  item.email ==
+                                                                  provider
+                                                                      .membersInfo[
+                                                                          index]
+                                                                      .email);
+
+                                                          provider.membersInfo
+                                                              .length;
+                                                        });
+                                                        Navigator.of(context)
+                                                            .pop(true);
+                                                      },
+                                                    );
+                                                    Widget continueButton =
+                                                        TextButton(
+                                                      child: Text("Cancel"),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(true);
+                                                      },
+                                                    );
+
+                                                    // set up the AlertDialog
+                                                    AlertDialog alert =
+                                                        AlertDialog(
+                                                      title:
+                                                          Text("Remove member"),
+                                                      content: Text(
+                                                          "Are you sure you want to remove ($x) member?"),
+                                                      actions: [
+                                                        cancelButton,
+                                                        continueButton,
+                                                      ],
+                                                    );
+
+                                                    // show the dialog
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return alert;
+                                                      },
+                                                    );
+                                                  },
+                                                  icon: Icon(Icons.close,
+                                                      color: Color.fromARGB(
+                                                          255, 117, 117, 117)),
+                                                )
+                                              : IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(Icons.delete,
+                                                      color: Color.fromARGB(
+                                                          0, 117, 117, 117))),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                        ],
+                          );
+                        }),
+            Column(
+              children: [
+                Container(
+                  height: 55,
+                  width: 280,
+                  child: SizedBox(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        minimumSize: Size(2000000, 15),
                       ),
-                    );
-                  }),
-    );
+                      onPressed: () async {
+                        print('||||||||||||||||||||||||||||||||');
+                        print(widget.category);
+                        print(widget.list);
+                        // print(widget.listid);
+                        print('||||||||||||||||||||||||||||||||');
+
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SendInvitation(
+                                    category: widget.category,
+                                    list: widget.list,
+                                    listId: provider.docid)));
+                      },
+
+                      //  color: Color.fromARGB(255, 240, 96, 86),
+                      child: Text(
+                        'Invite Friend',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ));
   }
 }
 
-// showAlertDialog(BuildContext context) {
+// showAlertDialog(
+//     BuildContext context, DocumentReference<Object?> docRef, String email) {
 //   // set up the buttons
+//   print('....................................');
+//   print('....................................');
+//   print('....................................');
+//   print('....................................');
+//   print('....................................');
+//   print(email);
+//   print(docRef);
+//   print('....................................');
+//   print('....................................');
+//   print('....................................');
 //   Widget cancelButton = TextButton(
 //     child: Text("Yes"),
-//     onPressed: () async {},
+//     onPressed: () async {
+//       // docRef.update({
+//       //   'UID': FieldValue.arrayRemove([
+//       //     email,
+//       //   ])
+//       // });
+//     },
 //   );
 //   Widget continueButton = TextButton(
 //     child: Text("Cancel"),
@@ -164,8 +314,8 @@ class _sharedlistdetails extends State<sharedlistdetails> {
 
 //   // set up the AlertDialog
 //   AlertDialog alert = AlertDialog(
-//     title: Text("Logout"),
-//     content: Text("Do you want to logout?"),
+//     title: Text("Remove member"),
+//     content: Text("Are you sure you want to remove this member?"),
 //     actions: [
 //       cancelButton,
 //       continueButton,
@@ -180,3 +330,50 @@ class _sharedlistdetails extends State<sharedlistdetails> {
 //     },
 //   );
 // }
+
+showAlertDialog2(BuildContext context, String name) {
+  print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text("Yes"),
+    onPressed: () async {
+      // if (provider.list[index].email.contains(
+      //   provider.membersInfo[index].email,
+      // )) {
+      //   DocumentReference docRef = await FirebaseFirestore.instance
+      //       .collection('List')
+      //       .doc(provider.docid);
+
+      //   docRef.update({
+      //     'UID': FieldValue.arrayRemove([
+      //       provider.membersInfo[index].email,
+      //     ])
+      //   });
+      // }
+    },
+  );
+  Widget continueButton = TextButton(
+    child: Text("Cancel"),
+    onPressed: () {
+      Navigator.of(context).pop(true);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Remove member"),
+    content: Text("Are you sure you want to remove ($name) member?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}

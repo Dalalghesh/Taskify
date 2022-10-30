@@ -15,7 +15,6 @@ import 'package:taskify/screens/tasks_screen.dart';
 import 'package:taskify/util.dart';
 import 'screens/todo_list_screen.dart';
 import 'package:taskify/CalendarScreen.dart';
-
 import 'service/local_push_notification.dart';
 
 class NavBar extends StatefulWidget {

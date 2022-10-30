@@ -2,6 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:taskify/Screens/sharedlistdetails.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:taskify/invitation/screens/send_invitation.dart';
@@ -49,7 +50,7 @@ class _TodoListState extends State<TodoList> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          widget.category,
+          widget.category + ' lists',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -120,6 +121,9 @@ class _TodoListState extends State<TodoList> {
                               'UID': FieldValue.arrayRemove(
                                   [FirebaseAuth.instance.currentUser?.email])
                             });
+                            // Provider.of<AppState>(context, listen: false)
+                            //     .removeMemberrsFromtasks(
+                            //         widget.category, provider.list[index].list);
                           }
                         },
                         background: slideLeftBackground(),
@@ -179,15 +183,12 @@ class _TodoListState extends State<TodoList> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          SendInvitation(
+                                                          sharedlistdetails(
                                                             list: (provider
                                                                 .list[index]
                                                                 .list),
                                                             category:
                                                                 widget.category,
-                                                            listId: provider
-                                                                .list[index]
-                                                                .docId,
                                                           )));
                                             },
                                             icon: Icon(Icons.share,

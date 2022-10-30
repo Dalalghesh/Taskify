@@ -40,6 +40,7 @@ class AppState extends ChangeNotifier {
 
   List<TaskListModel> list = [];
   List<UserInfoModel> membersInfo = [];
+  String docid = '';
   bool listLoading = true;
   getList(cat) async {
     listLoading = true;
@@ -66,13 +67,23 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  removeMemberrsFromtasks(cat, list1) async {
+    listLoading = true;
+    notifyListeners();
+    list.clear();
+    print(cat);
+
+    print(list.length);
+    listLoading = false;
+    notifyListeners();
+  }
+
   List members = [];
 
   getMembers(cat, list) async {
     listLoading = true;
     notifyListeners();
     membersInfo.clear();
-    print(cat);
 
     final res = await FirebaseFirestore.instance
         .collection('List')
@@ -81,6 +92,8 @@ class AppState extends ChangeNotifier {
         .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
         .get();
 
+    docid = res.docs[0].id;
+
     for (int i = 0; i < res.docs.length; i++) {
       TaskListModel task = TaskListModel(
           docId: res.docs[i].id,
@@ -88,12 +101,9 @@ class AppState extends ChangeNotifier {
           category: res.docs[i]['CategoryName'],
           list: res.docs[i]['List'],
           private: res.docs[i]['isPrivate']);
-      print(task.email);
       members = task.email;
       // members.add(task.email);
     }
-
-    print(members);
 
     for (int i = 0; i < members.length; i++) {
       final rrrr = await FirebaseFirestore.instance
@@ -106,21 +116,9 @@ class AppState extends ChangeNotifier {
           email: rrrr.docs[0]['email'],
           fullname: rrrr.docs[0]['firstName'] + " " + rrrr.docs[0]['lastName'],
           photo: rrrr.docs[0]['photo']);
-      print('-------------------------------------');
-      print(info);
-
-      print('-------------------------------------');
+      print("hhhheeerrrreeee wwweeee ggggooo aaaagggaaaiiinnn");
+      print(rrrr.docs[0]['email']);
       membersInfo.add(info);
-      print('-------------------------------------');
-      print(membersInfo);
-      print(membersInfo[0].email);
-      print('-------------------------------------');
-      // print("infooooo");
-      // print(rrrr.docs[0]['firstName'] + " " + rrrr.docs[0]['lastName']);
-      // print(rrrr.docs[0]['email']);
-      // print(rrrr.docs[0]['categories']);
-      // print(rrrr.docs[0]['uid']);
-      // print("infooooo");
     }
 
     listLoading = false;
