@@ -100,15 +100,6 @@ class _TaskDetailState extends State<TaskDetail> {
             myTask.task,
             style: TextStyle(color: Colors.white),
           ),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Color.fromARGB(255, 255, 255, 255),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
           centerTitle: true,
           backgroundColor: Color(0xff7b39ed),
         ),
@@ -168,12 +159,20 @@ class _TaskDetailState extends State<TaskDetail> {
                                 ///
                                 if (provider.editTask == true &&
                                     provider.imageLoading == false) {
+                                  // await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
+                                  //     {
+                                  //       'Deadline': dateTimeUpdate,
+                                  //       'description': myTask.description,
+                                  //       'Image': myTask.image,
+                                  //       'Task':myTask.task,
+                                  //       'Priority':myTask.priority
+                                  //     });
                                   CoolAlert.show(
                                       context: context,
                                       type: CoolAlertType.confirm,
                                       text: 'Do you want to edit this task?',
                                       confirmBtnText: 'Yes',
-                                      cancelBtnText: 'No',
+                                      cancelBtnText: 'No & Back',
                                       confirmBtnColor: const Color(0xff7b39ed),
                                       title: "Edit",
                                       onCancelBtnTap: () {
@@ -217,10 +216,7 @@ class _TaskDetailState extends State<TaskDetail> {
                           ),
                         Container(
                           child: IconButton(
-                            icon: const Icon(
-                              Icons.delete_sharp,
-                              color: Colors.red,
-                            ),
+                            icon: const Icon(Icons.delete_rounded),
                             onPressed: () {
                               CoolAlert.show(
                                   context: context,
@@ -465,11 +461,11 @@ class _TaskDetailState extends State<TaskDetail> {
                     icon: Icon(Icons.view_list, size: 18),
                     label: myTask.showSubTasks
                         ? Text(
-                            "Hide subtasks",
+                            "hide subtasks",
                             textAlign: TextAlign.center,
                           )
                         : Text(
-                            "View subtasks",
+                            "view subtasks",
                             textAlign: TextAlign.center,
                           )),
                 myTask.showSubTasks

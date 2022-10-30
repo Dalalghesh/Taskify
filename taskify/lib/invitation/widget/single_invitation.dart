@@ -46,7 +46,7 @@ class SingleInvitaionItem extends StatelessWidget {
               //   ),
               // ),
               Text(
-                "$FullName" + " invites you",
+                " " + "$FullName" + " invites you",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -79,7 +79,7 @@ class SingleInvitaionItem extends StatelessWidget {
 
                   onPressed: () async {
                     CoolAlert.show(
-                      title: "Accepted",
+                      title: "Success",
                       context: context,
                       type: CoolAlertType.success,
                       text: 'Invitation accepted successfully!',
@@ -160,7 +160,7 @@ class SingleInvitaionItem extends StatelessWidget {
                     }
 
                     CoolAlert.show(
-                        title: "Reject",
+                        title: "Hmm..",
                         context: context,
                         type: CoolAlertType.confirm,
                         text: 'Are you sure you want to reject the invitation?',
