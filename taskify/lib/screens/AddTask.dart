@@ -713,18 +713,35 @@ void Notify(String Taskname, DateTime TaskdateTime)async{
   print(TaskdateTime);
   DateTime currentdate =DateTime.now();
   print(currentdate);
-   final difference = TaskdateTime.difference(currentdate).inDays;
-   print(difference);
+  print('dalal1');
+   final differenceday = TaskdateTime.difference(currentdate).inDays;
+  final differeneHours = TaskdateTime.difference(currentdate).inHours;
+  final differeneMen = TaskdateTime.difference(currentdate).inMinutes;
+  final differenceONSECONDS = TaskdateTime.difference(currentdate).inSeconds;
+   print(differenceday);
+   print(differeneHours);
+   print(differeneMen);
+   print(differenceONSECONDS);
+   print('dalal2');
+     ////
+int  interval = 5; 
+if(differenceONSECONDS > 86340 ){
+  interval = differenceONSECONDS - 86360;
+}
+print(interval);
    ////
-  int differenceOnDay =  daysBetween(currentdate, TaskdateTime) -1 ;
+ /* int differenceOnDay =  daysBetween(currentdate, TaskdateTime) -1 ;
 
   int differenceONSECONDS= 86400 * differenceOnDay;
+  
   
    if (differenceONSECONDS ==0 ){
     differenceONSECONDS =5;
    }
-   print(differenceONSECONDS);
+   //print(differenceONSECONDS);*/
 
+if (1438 <= differeneMen){
+  print("inside if"); 
  AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 1,
@@ -732,8 +749,8 @@ void Notify(String Taskname, DateTime TaskdateTime)async{
           title:'Reminder for task deadline',
           body:  'One day left to reach "$Taskname" task deadline!'
         ),
-        schedule: NotificationInterval(interval: 5 , timeZone: timezom, repeats: false),
-    );
+        schedule: NotificationInterval(interval: interval , timeZone: timezom, repeats: false),
+    );}
 
    /*AwesomeNotifications().actionStream.listen((receivedNotifiction)
 {
@@ -744,9 +761,17 @@ void Notify(String Taskname, DateTime TaskdateTime)async{
 }
 
 int daysBetween(DateTime from, DateTime to) {
+print("inside daysbetween");
+  Duration diff = to.difference(from);
+  print(diff.inDays);
+ print(diff.inHours);
+
   from = DateTime(from.year, from.month, from.day );
   to = DateTime(to.year, to.month, to.day );
+
   print("daysBetween");
   print((to.difference(from).inHours / 24).round());
   return (to.difference(from).inHours / 24).round();
 }
+
+
