@@ -36,7 +36,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-
   bool listLoading = true;
   getList(cat) async {
     listLoading = true;
@@ -91,12 +90,13 @@ class AppState extends ChangeNotifier {
   List<Tasksss> tasksList = [];
   List<Tasksss> myTasksList = [];
   List<TaskListModelProfile> myList = [];
+  int numberCompletedToday = 0;
+  int numberProgressToday = 0;
   List<TaskListModel> list = [];
 
   bool tasksLoading = true;
 
   getAllTasksProfile() async {
-
     tasksLoading = true;
     notifyListeners();
     //   tasks.clear();
@@ -109,7 +109,23 @@ class AppState extends ChangeNotifier {
         .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
         // .where('status', isEqualTo: 'pending')
         .get();
+    numberProgressToday = 0;
+    numberCompletedToday = 0;
     for (int i = 0; i < res.docs.length; i++) {
+      DateTime date = res.docs[i]['Deadline'].toDate();
+      DateTime today = DateTime.now();
+
+      if (date.year == today.year &&
+          date.month == today.month &&
+          date.day == today.day) {
+        if (res.docs[i]['status'] == "pending") {
+          print("dateee isBefore_pending");
+          numberProgressToday++;
+        } else if (res.docs[i]['status'] == "completed") {
+          print("dateee isBefore_completed");
+          numberCompletedToday++;
+        }
+      }
       try {
         Tasksss taskss = Tasksss(
             id: res.docs[i].id,
@@ -144,7 +160,8 @@ class AppState extends ChangeNotifier {
 
       // tasks.add(res.docs[i]['Task']);
     }
-    myTasksList.sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
+    myTasksList
+        .sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
 
     // print(tasks.length);
     tasksLoading = false;
@@ -152,24 +169,22 @@ class AppState extends ChangeNotifier {
     // return myTasksList ;
   }
 
-  linkData() async{
+  linkData() async {
     myTasksList.forEach((element) {
-      if(element.status == "pending"){
+      if (element.status == "pending") {
         for (var listElement in myList) {
-          if(listElement.list.toString() == element.list.toString()){
-            listElement.pendingTask++ ;
+          if (listElement.list.toString() == element.list.toString()) {
+            listElement.pendingTask++;
           }
         }
-      } else if(element.status == "completed") {
+      } else if (element.status == "completed") {
         for (var listElement in myList) {
-          if(listElement.list.toString() == element.list.toString()){
-            listElement.completedTask++ ;
+          if (listElement.list.toString() == element.list.toString()) {
+            listElement.completedTask++;
           }
         }
       }
-
     });
-
   }
 
   getTasks(cat, list) async {

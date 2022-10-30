@@ -223,6 +223,7 @@ class NavBarState extends State<NavBar> {
               ),
               child: GestureDetector(
                 onTap: () {
+
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) => AddTask()));
                 },

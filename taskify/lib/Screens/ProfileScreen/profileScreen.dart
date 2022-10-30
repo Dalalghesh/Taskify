@@ -1,9 +1,6 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -25,6 +22,7 @@ import 'UpdateProfile.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import '../../firebase_options.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -116,14 +114,16 @@ class _HomeScreen extends State<HomeScreen> {
         .collection('users1')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    setState(() {
-      try {
-        photo = res['photo'];
-      } catch (e) {
-        photo = "";
-      }
-      nameee = res['firstName'] + ' ' + res['lastName'];
-    });
+    if (mounted) {
+      setState(() {
+        try {
+          photo = res['photo'];
+        } catch (e) {
+          photo = "";
+        }
+        nameee = res['firstName'] + ' ' + res['lastName'];
+      });
+    }
   }
 
   @override
@@ -133,7 +133,6 @@ class _HomeScreen extends State<HomeScreen> {
     TextEditingController email = TextEditingController(
         text: '${FirebaseAuth.instance.currentUser!.email}');
     AppState provider = Provider.of<AppState>(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -646,16 +645,76 @@ class _HomeScreen extends State<HomeScreen> {
           ],
         ),
         if (_editMode)
-          SizedBox(
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              ' Today progress:',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+            ),
+          ),
+        SizedBox(height: 10),
+        Card(
+          child: Column(
+            children: [
+              Container(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "You have completed ${provider.numberCompletedToday} tasks of ${(provider.numberProgressToday + provider.numberCompletedToday)}",
+                  // "You have ${provider.numberProgressToday} uncompleted tasks left today ",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: LinearPercentIndicator(
+                      width: MediaQuery.of(context).size.width * 0.90,
+                      // width: 300.0,
+                      lineHeight: 15,
+                      /*percent: (provider.myList[index].completedTask) *
+                      1.0 /
+                      (provider.myList[index].completedTask +
+                          provider.myList[index].pendingTask) *
+                      1.0,*/
+                      animation: true,
+                      animationDuration: 2000,
+                      linearStrokeCap: LinearStrokeCap.round,
+                      percent: getPercentToday(provider)!,
+                      // percent: 0.5,
+                      progressColor: Color(0xff7b39ed),
+                      center: Text(""),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        if (_editMode)
+          const SizedBox(
             height: 20,
           ),
         if (_editMode)
-          Text(
-            "Progress:",
-            style: TextStyle(
-              fontSize: 22,
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0, bottom: 5, left: 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                " Achieved so far:",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
         if (_editMode)
@@ -669,6 +728,20 @@ class _HomeScreen extends State<HomeScreen> {
           ),
       ],
     );
+  }
+
+  double? getPercentToday(AppState provider) {
+    try {
+      if (provider.numberProgressToday + provider.numberCompletedToday != 0) {
+        return double.tryParse((provider.numberCompletedToday /
+                (provider.numberProgressToday + provider.numberCompletedToday))
+            .toString());
+      } else {
+        return 0.0;
+      }
+    } catch (e) {
+      return 0.0;
+    }
   }
 
   Widget buildColumnList(AppState provider) {
@@ -694,12 +767,17 @@ class _HomeScreen extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //  MaterialPageRoute(
-                            //      builder: (context) => TaskScreen(
-                            //            category: widget.category,
-                            //            list: provider.list[index].list)));
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TaskScreen(
+                                            category:
+                                                provider.myList[index].category,
+                                            list: provider.myList[index].list)))
+                                .then((value) {
+                              getList();
+                              setState(() {});
+                            });
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -718,9 +796,9 @@ class _HomeScreen extends State<HomeScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                "${provider.myList[index].list}",
+                                                provider.myList[index].list,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 15,
                                                     color: Colors.black,
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -731,20 +809,15 @@ class _HomeScreen extends State<HomeScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Container(
-                                                padding: EdgeInsets.all(10),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
                                                 child: LinearPercentIndicator(
-                                                  width: 220.0,
-                                                  lineHeight: 15,
-                                                  percent: (provider
-                                                          .myList[index]
-                                                          .completedTask) *
-                                                      1.0 /
-                                                      (provider.myList[index]
-                                                              .completedTask +
-                                                          provider.myList[index]
-                                                              .pendingTask) *
-                                                      1.0,
+                                                  width: 200,
+                                                  lineHeight: 10,
+                                                  // percent: 0.5,
+                                                  percent: getPercentList(
+                                                      provider, index)!,
                                                   animation: true,
                                                   animationDuration: 2000,
                                                   linearStrokeCap:
@@ -757,9 +830,9 @@ class _HomeScreen extends State<HomeScreen> {
                                             ],
                                           ),
                                           Text(
-                                            "You have completed ${provider.myList[index].completedTask}/${provider.myList[index].completedTask + provider.myList[index].pendingTask} Tasks",
+                                            "You complete ${provider.myList[index].completedTask} Tasks from ${provider.myList[index].completedTask + provider.myList[index].pendingTask}",
                                             style: TextStyle(
-                                                fontSize: 17,
+                                                fontSize: 15,
                                                 color: Colors.black),
                                           ),
                                         ],
@@ -775,6 +848,25 @@ class _HomeScreen extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  double? getPercentList(AppState provider, int index) {
+    try {
+      if ((provider.myList[index].completedTask +
+              provider.myList[index].pendingTask) !=
+          0.0) {
+        return double.tryParse(((provider.myList[index].completedTask) *
+                1.0 /
+                (provider.myList[index].completedTask +
+                    provider.myList[index].pendingTask) *
+                1.0)
+            .toString());
+      } else {
+        return 0.0;
+      }
+    } catch (e) {
+      return 0.0;
+    }
   }
 }
 

@@ -52,6 +52,7 @@ class _AddTask extends State<AddTask> {
 
   @override
   void initState() {
+    Provider.of<AppState>(context, listen: false).url = "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg";
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getlists();
     });
@@ -86,18 +87,18 @@ class _AddTask extends State<AddTask> {
   var description;
   DateTime dateTime = new DateTime.now();
   DateTime FdateTime = new DateTime.utc(2024, 1, 1);
-
   final formKey = GlobalKey<FormState>(); //key for form
   late DateTime selectedDateTime;
   bool pressed = false;
   bool buttonenabled = false;
 
+
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context, listen: true);
+    // provider.url =  "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg" ;
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    var imageLink =
-        'https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg';
+    var imageLink = 'https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg';
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -174,7 +175,7 @@ class _AddTask extends State<AddTask> {
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(120),
                                     child: Image.network(
-                                      provider.url,
+                                      provider.url, /// "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg"
                                       fit: BoxFit.fill,
                                     )),
                               ),
@@ -506,6 +507,7 @@ class _AddTask extends State<AddTask> {
 
                                 final snackBar = SnackBar(
                                     content: Text("Created successfully"));
+                                provider.url =  "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg" ;
 
                                 CoolAlert.show(
                                   title: "Success",
