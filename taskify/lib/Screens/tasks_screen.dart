@@ -11,6 +11,7 @@ import 'package:taskify/homePage.dart';
 import 'package:intl/intl.dart';
 import 'package:taskify/util.dart';
 import 'package:taskify/utils/app_colors.dart';
+import 'package:taskify/utils/validators.dart';
 import '../controller/UserController.dart';
 import '../models/sub_tasks.dart';
 import '../models/tasks.dart';
@@ -416,21 +417,22 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           })
                                                     ],
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 10,
                                                   ),
                                                   provider.tasksList[index]
                                                           .showSubTasks
                                                       ? Container(
                                                           margin:
-                                                              EdgeInsets.only(
+                                                              const EdgeInsets
+                                                                      .only(
                                                                   left: 50),
                                                           child: Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 height: 10,
                                                               ),
                                                               ListView.builder(
@@ -443,14 +445,15 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                       (context,
                                                                           index) {
                                                                     return Container(
-                                                                      margin: EdgeInsets.only(
+                                                                      margin: const EdgeInsets
+                                                                              .only(
                                                                           bottom:
                                                                               10),
                                                                       child:
                                                                           Text(
                                                                         "${index + 1} -  ${provider.filteredSubTasks[index].subTask}",
                                                                         style:
-                                                                            TextStyle(
+                                                                            const TextStyle(
                                                                           color:
                                                                               Colors.black,
                                                                           fontSize:
@@ -462,142 +465,8 @@ class _TaskScreenState extends State<TaskScreen> {
                                                               SizedBox(
                                                                 height: 10,
                                                               ),
-                                                              provider.addNewSubTask
-                                                                  ? Container(
-                                                                      height:
-                                                                          40,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width /
-                                                                          2,
-                                                                      //  padding: EdgeInsets.only(bottom: 10),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                      ),
-                                                                      child:
-                                                                          TextFormField(
-                                                                        controller:
-                                                                            subTaskController,
-                                                                        onChanged:
-                                                                            (v) {
-                                                                          setState(
-                                                                              () {});
-                                                                        },
-                                                                        decoration: InputDecoration(
-                                                                            // border: InputBorder.none,
-                                                                            ),
-                                                                      ),
-                                                                    )
-                                                                  : Container(),
-                                                              provider.addNewSubTask
-                                                                  ? SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    )
-                                                                  : Container(),
-                                                              Row(
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      provider.updateAddNewTaskValue(
-                                                                          true);
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      height:
-                                                                          30,
-                                                                      width:
-                                                                          100,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Color.fromARGB(
-                                                                            0,
-                                                                            255,
-                                                                            255,
-                                                                            255),
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        boxShadow: [
-                                                                          BoxShadow(
-                                                                              blurRadius: 3,
-                                                                              color: Color.fromARGB(0, 158, 158, 158)),
-                                                                        ],
-                                                                      ),
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child:
-                                                                          Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            100,
-                                                                        decoration: BoxDecoration(
-                                                                            color:
-                                                                                Color(0xff7b39ed),
-                                                                            borderRadius: BorderRadius.circular(10)),
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        child:
-                                                                            Text(
-                                                                          'Add Subtask',
-                                                                          style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontSize: 15),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  provider.addNewSubTask
-                                                                      ? SizedBox(
-                                                                          width:
-                                                                              10,
-                                                                        )
-                                                                      : Container(),
-                                                                  provider.addNewSubTask
-                                                                      ? GestureDetector(
-                                                                          onTap:
-                                                                              () async {
-                                                                            if (subTaskController.text.length >
-                                                                                2) {
-                                                                              SubTasks task = SubTasks(id: '', uid: FirebaseAuth.instance.currentUser!.email.toString(), task: provider.tasksList[index].task, subTask: subTaskController.text);
 
-                                                                              provider.subTasks.add(task);
-                                                                              provider.fiterSubTask(provider.tasksList[index].task);
-                                                                              provider.updateAddNewTaskValue(false);
-                                                                              await FirebaseFirestore.instance.collection('sub-tasks').add({
-                                                                                'SubTask': subTaskController.text,
-                                                                                'Task': provider.tasksList[index].task,
-                                                                                'UID': FirebaseAuth.instance.currentUser!.email,
-                                                                              });
-                                                                              subTaskController.clear();
-                                                                            }
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                30,
-                                                                            width:
-                                                                                100,
-                                                                            decoration:
-                                                                                BoxDecoration(color: subTaskController.text.length < 3 ? Colors.grey : Color(0xff7b39ed), borderRadius: BorderRadius.circular(10)),
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            child:
-                                                                                Text(
-                                                                              'Save',
-                                                                              style: TextStyle(color: Colors.white, fontSize: 15),
-                                                                            ),
-                                                                          ),
-                                                                        )
-                                                                      : Container()
-                                                                ],
-                                                              ),
+                                                              ///add subtask here
                                                             ],
                                                           ),
                                                         )
@@ -707,11 +576,11 @@ class _TaskScreenState extends State<TaskScreen> {
                     Container(
                       height: MediaQuery.of(context).size.height / 2.5,
                       child: provider.completedtasksLoading
-                          ? Center(
+                          ? const Center(
                               child: CircularProgressIndicator(),
                             )
                           : provider.completedtasksList.isEmpty
-                              ? Center(
+                              ? const Center(
                                   child: Text(
                                   'There are no completed tasks yet',
                                   style: TextStyle(

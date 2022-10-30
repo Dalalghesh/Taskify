@@ -16,8 +16,6 @@ import 'package:taskify/models/task_list.dart';
 import 'models/tasks.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'models/userInfo.dart';
-
 class AppState extends ChangeNotifier {
   List<dynamic> categories = [];
   bool categoriesLoading = true;
@@ -38,9 +36,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<TaskListModel> list = [];
-  List<UserInfoModel> membersInfo = [];
-  String docid = '';
   bool listLoading = true;
   getList(cat) async {
     listLoading = true;
@@ -67,69 +62,131 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  removeMemberrsFromtasks(cat, list1) async {
+  getListAll() async {
     listLoading = true;
     notifyListeners();
-    list.clear();
-    print(cat);
-
-    print(list.length);
-    listLoading = false;
-    notifyListeners();
-  }
-
-  List members = [];
-
-  getMembers(cat, list) async {
-    listLoading = true;
-    notifyListeners();
-    membersInfo.clear();
+    myList.clear();
 
     final res = await FirebaseFirestore.instance
         .collection('List')
-        .where('CategoryName', isEqualTo: cat)
-        .where('List', isEqualTo: list)
+        // .where('CategoryName', isEqualTo: cat)
         .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
         .get();
-
-    docid = res.docs[0].id;
-
     for (int i = 0; i < res.docs.length; i++) {
-      TaskListModel task = TaskListModel(
+      TaskListModelProfile task = TaskListModelProfile(
           docId: res.docs[i].id,
           email: res.docs[i]['UID'],
           category: res.docs[i]['CategoryName'],
           list: res.docs[i]['List'],
           private: res.docs[i]['isPrivate']);
-      members = task.email;
-      // members.add(task.email);
+      myList.add(task);
     }
-
-    for (int i = 0; i < members.length; i++) {
-      final rrrr = await FirebaseFirestore.instance
-          .collection('users1')
-          .where('email', isEqualTo: members[i])
-          .get();
-
-      UserInfoModel info = UserInfoModel(
-          categories: rrrr.docs[0]['categories'],
-          docId: rrrr.docs[0]['uid'],
-          email: rrrr.docs[0]['email'],
-          fullname: rrrr.docs[0]['firstName'] + " " + rrrr.docs[0]['lastName'],
-          photo: rrrr.docs[0]['photo']);
-      print("hhhheeerrrreeee wwweeee ggggooo aaaagggaaaiiinnn");
-      print(rrrr.docs[0]['email']);
-      membersInfo.add(info);
-    }
-
+    print("list.length ${myList.length}");
     listLoading = false;
     notifyListeners();
   }
 
   // List<dynamic> tasks = [];
   List<Tasksss> tasksList = [];
+  List<Tasksss> myTasksList = [];
+  List<TaskListModelProfile> myList = [];
+  int numberCompletedToday = 0;
+  int numberProgressToday = 0;
+  List<TaskListModel> list = [];
 
   bool tasksLoading = true;
+
+  getAllTasksProfile() async {
+    tasksLoading = true;
+    notifyListeners();
+    //   tasks.clear();
+    myTasksList.clear();
+
+    final res = await FirebaseFirestore.instance
+        .collection('tasks')
+        // .where('CategoryName', isEqualTo: cat)
+        // .where('ListName', isEqualTo: list)
+        .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+        // .where('status', isEqualTo: 'pending')
+        .get();
+    numberProgressToday = 0;
+    numberCompletedToday = 0;
+    for (int i = 0; i < res.docs.length; i++) {
+      DateTime date = res.docs[i]['Deadline'].toDate();
+      DateTime today = DateTime.now();
+
+      if (date.year == today.year &&
+          date.month == today.month &&
+          date.day == today.day) {
+        if (res.docs[i]['status'] == "pending") {
+          print("dateee isBefore_pending");
+          numberProgressToday++;
+        } else if (res.docs[i]['status'] == "completed") {
+          print("dateee isBefore_completed");
+          numberCompletedToday++;
+        }
+      }
+      try {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            image: res.docs[i]['Image'],
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            status: res.docs[i]['status'],
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        myTasksList.add(taskss);
+      } catch (e) {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            status: res.docs[i]['status'],
+            image: "",
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            deadline: res.docs[i]['Deadline']);
+
+        myTasksList.add(taskss);
+      }
+
+      // tasks.add(res.docs[i]['Task']);
+    }
+    myTasksList
+        .sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
+
+    // print(tasks.length);
+    tasksLoading = false;
+    notifyListeners();
+    // return myTasksList ;
+  }
+
+  linkData() async {
+    myTasksList.forEach((element) {
+      if (element.status == "pending") {
+        for (var listElement in myList) {
+          if (listElement.list.toString() == element.list.toString()) {
+            listElement.pendingTask++;
+          }
+        }
+      } else if (element.status == "completed") {
+        for (var listElement in myList) {
+          if (listElement.list.toString() == element.list.toString()) {
+            listElement.completedTask++;
+          }
+        }
+      }
+    });
+  }
+
   getTasks(cat, list) async {
     tasksLoading = true;
     notifyListeners();
