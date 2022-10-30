@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:taskify/controller/UserController.dart';
 import 'package:taskify/homePage.dart';
 import 'package:taskify/screens/categories_screen.dart';
-import 'package:taskify/Screens/todo_list_screen.dart';
-import 'package:taskify/Screens/tasks_screen.dart';
+import 'package:taskify/screens/tasks_screen.dart';
+import 'package:taskify/screens/todo_list_screen.dart';
 
 class Home_Screen extends StatelessWidget {
   Home_Screen({Key? key}) : super(key: key);
@@ -28,7 +28,6 @@ class Home_Screen extends StatelessWidget {
               TaskScreen(
                 category: '',
                 list: '',
-                // listId: '',
               ),
             ],
           ),

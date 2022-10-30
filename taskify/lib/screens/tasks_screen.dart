@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:taskify/Screens/TaskDetails.dart';
-import 'package:taskify/Screens/sharedlistdetails.dart';
 import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:intl/intl.dart';
-import 'package:taskify/util.dart';
 import 'package:taskify/utils/app_colors.dart';
+import 'package:taskify/utils/validators.dart';
 import '../controller/UserController.dart';
 import '../models/sub_tasks.dart';
 import '../models/tasks.dart';
@@ -22,20 +21,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:taskify/models/users.dart';
+import 'sharedlistdetails.dart';
+import 'package:taskify/util.dart';
 
 class TaskScreen extends StatefulWidget {
   static String id = "Taskscompleted";
   List<dynamic> UIDS = [];
   final String category;
   final String list;
-  // final String listId;
 
-  TaskScreen({
-    Key? key,
-    required this.category,
-    required this.list,
-    // required this.listId
-  }) : super(key: key);
+  TaskScreen({Key? key, required this.category, required this.list})
+      : super(key: key);
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
@@ -78,6 +74,151 @@ class _TaskScreenState extends State<TaskScreen> {
     return buildColumnNew(context, provider);
   }
 
+  // Column buildColumnOld(BuildContext context, AppState provider) {
+  //   return Column(
+  //     children: [
+  //       Container(
+  //         height: MediaQuery.of(context).size.height / 2.5,
+  //         child: provider.tasksLoading
+  //             ? Center(
+  //                 child: CircularProgressIndicator(),
+  //               )
+  //             : provider.tasksList.isEmpty
+  //                 ? Center(
+  //                     child: Text(
+  //                     'List is empty',
+  //                     style: TextStyle(color: Colors.black, fontSize: 18),
+  //                   ))
+  //                 : ListView.builder(
+  //                     itemCount: provider.tasksList.length,
+  //                     shrinkWrap: true,
+  //                     itemBuilder: (context, index) {
+  //                       return Container(
+  //                         height: 50,
+  //                         width: MediaQuery.of(context).size.width,
+  //                         margin: EdgeInsets.only(
+  //                             left: 20, right: 20, top: 5, bottom: 5),
+  //                         decoration: BoxDecoration(
+  //                             color: Colors.white,
+  //                             // boxShadow: [
+  //                             //   BoxShadow(
+  //                             //     color: Colors.grey,
+  //                             //     blurRadius: 3,
+  //                             //   )
+  //                             // ],
+  //                             borderRadius: BorderRadius.circular(8)),
+  //                         //alignment: Alignment.center,
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             Container(
+  //                               height: 20,
+  //                               width: 20,
+  //                               margin: EdgeInsets.only(left: 16),
+  //                               decoration: BoxDecoration(
+  //                                 color: provider.tasksList[index].priority ==
+  //                                         'High'
+  //                                     ? Color.fromARGB(255, 223, 123, 123)
+  //                                     : provider.tasksList[index].priority ==
+  //                                             'Medium'
+  //                                         ? Color.fromARGB(255, 223, 180, 123)
+  //                                         : Color.fromARGB(255, 152, 224, 154),
+  //                                 shape: BoxShape.circle,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               provider.tasksList[index].task,
+  //                               textAlign: TextAlign.left,
+  //                             ),
+  //                             Checkbox(
+  //                                 value: provider.tasksList[index].value,
+  //                                 onChanged: (v) {
+  //                                   provider.updateCheckboxValue(v!, index);
+  //                                 })
+  //                           ],
+  //                         ),
+  //                       );
+  //                     }),
+  //       ),
+  //       SizedBox(
+  //         height: 10,
+  //       ),
+  //       Text(
+  //         'Completed',
+  //         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+  //       ),
+  //       SizedBox(
+  //         height: 10,
+  //       ),
+  //       Container(
+  //         height: MediaQuery.of(context).size.height / 2.5,
+  //         child: provider.completedtasksLoading
+  //             ? Center(
+  //                 child: CircularProgressIndicator(),
+  //               )
+  //             : provider.completedtasksList.isEmpty
+  //                 ? Center(
+  //                     child: Text(
+  //                     'List is empty',
+  //                     style: TextStyle(color: Colors.black, fontSize: 18),
+  //                   ))
+  //                 : ListView.builder(
+  //                     itemCount: provider.completedtasksList.length,
+  //                     shrinkWrap: true,
+  //                     itemBuilder: (context, index) {
+  //                       return Container(
+  //                         height: 50,
+  //                         width: MediaQuery.of(context).size.width,
+  //                         margin: EdgeInsets.only(
+  //                             left: 20, right: 20, top: 5, bottom: 5),
+  //                         decoration: BoxDecoration(
+  //                             color: Colors.white,
+  //                             // boxShadow: [
+  //                             //   BoxShadow(
+  //                             //     color: Colors.grey,
+  //                             //     blurRadius: 3,
+  //                             //   )
+  //                             // ],
+  //                             borderRadius: BorderRadius.circular(8)),
+  //                         //alignment: Alignment.center,
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             Container(
+  //                               height: 20,
+  //                               width: 20,
+  //                               margin: EdgeInsets.only(left: 16),
+  //                               decoration: BoxDecoration(
+  //                                 color: provider.completedtasksList[index]
+  //                                             .priority ==
+  //                                         'High'
+  //                                     ? Color.fromARGB(255, 223, 123, 123)
+  //                                     : provider.completedtasksList[index]
+  //                                                 .priority ==
+  //                                             'Medium'
+  //                                         ? Color.fromARGB(255, 223, 180, 123)
+  //                                         : Color.fromARGB(255, 152, 224, 154),
+  //                                 shape: BoxShape.circle,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               provider.completedtasksList[index].task,
+  //                               textAlign: TextAlign.left,
+  //                             ),
+  //                             Container(),
+  //
+  //                             // Checkbox(value: provider.tasksList[index].value, onChanged: (v){
+  //                             //   provider.updateCheckboxValue(v!, index);
+  //                             // })
+  //                           ],
+  //                         ),
+  //                       );
+  //                     }),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   List<TasksCn> tasks = [];
 
   Widget buildColumnNew(BuildContext context, AppState provider) {
@@ -87,7 +228,7 @@ class _TaskScreenState extends State<TaskScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
-              widget.list + ' tasks',
+              widget.list,
               style: TextStyle(
                   color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
             ),
@@ -276,6 +417,12 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   bottom: 5),
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
+                                                  // boxShadow: const [
+                                                  //   BoxShadow(
+                                                  //     color: Colors.grey,
+                                                  //     blurRadius: 3,
+                                                  //   )
+                                                  // ],
                                                   borderRadius:
                                                       BorderRadius.circular(8)),
                                               //alignment: Alignment.center,
@@ -416,21 +563,22 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           })
                                                     ],
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 10,
                                                   ),
                                                   provider.tasksList[index]
                                                           .showSubTasks
                                                       ? Container(
                                                           margin:
-                                                              EdgeInsets.only(
+                                                              const EdgeInsets
+                                                                      .only(
                                                                   left: 50),
                                                           child: Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 height: 10,
                                                               ),
                                                               ListView.builder(
@@ -443,14 +591,15 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                       (context,
                                                                           index) {
                                                                     return Container(
-                                                                      margin: EdgeInsets.only(
+                                                                      margin: const EdgeInsets
+                                                                              .only(
                                                                           bottom:
                                                                               10),
                                                                       child:
                                                                           Text(
                                                                         "${index + 1} -  ${provider.filteredSubTasks[index].subTask}",
                                                                         style:
-                                                                            TextStyle(
+                                                                            const TextStyle(
                                                                           color:
                                                                               Colors.black,
                                                                           fontSize:
@@ -462,142 +611,8 @@ class _TaskScreenState extends State<TaskScreen> {
                                                               SizedBox(
                                                                 height: 10,
                                                               ),
-                                                              provider.addNewSubTask
-                                                                  ? Container(
-                                                                      height:
-                                                                          40,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width /
-                                                                          2,
-                                                                      //  padding: EdgeInsets.only(bottom: 10),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                      ),
-                                                                      child:
-                                                                          TextFormField(
-                                                                        controller:
-                                                                            subTaskController,
-                                                                        onChanged:
-                                                                            (v) {
-                                                                          setState(
-                                                                              () {});
-                                                                        },
-                                                                        decoration: InputDecoration(
-                                                                            // border: InputBorder.none,
-                                                                            ),
-                                                                      ),
-                                                                    )
-                                                                  : Container(),
-                                                              provider.addNewSubTask
-                                                                  ? SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    )
-                                                                  : Container(),
-                                                              Row(
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      provider.updateAddNewTaskValue(
-                                                                          true);
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      height:
-                                                                          30,
-                                                                      width:
-                                                                          100,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Color.fromARGB(
-                                                                            0,
-                                                                            255,
-                                                                            255,
-                                                                            255),
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        boxShadow: [
-                                                                          BoxShadow(
-                                                                              blurRadius: 3,
-                                                                              color: Color.fromARGB(0, 158, 158, 158)),
-                                                                        ],
-                                                                      ),
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child:
-                                                                          Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            100,
-                                                                        decoration: BoxDecoration(
-                                                                            color:
-                                                                                Color(0xff7b39ed),
-                                                                            borderRadius: BorderRadius.circular(10)),
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        child:
-                                                                            Text(
-                                                                          'Add Subtask',
-                                                                          style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontSize: 15),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  provider.addNewSubTask
-                                                                      ? SizedBox(
-                                                                          width:
-                                                                              10,
-                                                                        )
-                                                                      : Container(),
-                                                                  provider.addNewSubTask
-                                                                      ? GestureDetector(
-                                                                          onTap:
-                                                                              () async {
-                                                                            if (subTaskController.text.length >
-                                                                                2) {
-                                                                              SubTasks task = SubTasks(id: '', uid: FirebaseAuth.instance.currentUser!.email.toString(), task: provider.tasksList[index].task, subTask: subTaskController.text);
 
-                                                                              provider.subTasks.add(task);
-                                                                              provider.fiterSubTask(provider.tasksList[index].task);
-                                                                              provider.updateAddNewTaskValue(false);
-                                                                              await FirebaseFirestore.instance.collection('sub-tasks').add({
-                                                                                'SubTask': subTaskController.text,
-                                                                                'Task': provider.tasksList[index].task,
-                                                                                'UID': FirebaseAuth.instance.currentUser!.email,
-                                                                              });
-                                                                              subTaskController.clear();
-                                                                            }
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                30,
-                                                                            width:
-                                                                                100,
-                                                                            decoration:
-                                                                                BoxDecoration(color: subTaskController.text.length < 3 ? Colors.grey : Color(0xff7b39ed), borderRadius: BorderRadius.circular(10)),
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            child:
-                                                                                Text(
-                                                                              'Save',
-                                                                              style: TextStyle(color: Colors.white, fontSize: 15),
-                                                                            ),
-                                                                          ),
-                                                                        )
-                                                                      : Container()
-                                                                ],
-                                                              ),
+                                                              ///add subtask here
                                                             ],
                                                           ),
                                                         )
@@ -707,11 +722,11 @@ class _TaskScreenState extends State<TaskScreen> {
                     Container(
                       height: MediaQuery.of(context).size.height / 2.5,
                       child: provider.completedtasksLoading
-                          ? Center(
+                          ? const Center(
                               child: CircularProgressIndicator(),
                             )
                           : provider.completedtasksList.isEmpty
-                              ? Center(
+                              ? const Center(
                                   child: Text(
                                   'There are no completed tasks yet',
                                   style: TextStyle(
