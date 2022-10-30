@@ -8,12 +8,14 @@ import 'package:taskify/appstate.dart';
 import 'package:taskify/controller/UserController.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:taskify/Screens/Task_Detail.dart';
-import 'package:taskify/Screens/todo_list_screen.dart';
+import 'package:taskify/screens/todo_list_screen.dart';
 import 'package:taskify/utils/app_colors.dart';
 import "package:googleapis_auth/auth_io.dart";
 import 'package:taskify/utils.dart';
 
 import 'dart:io' show Platform;
+
+import 'SearchPage.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
@@ -80,6 +82,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       builder: (sx) => sx.isLoading
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
+              resizeToAvoidBottomInset: false,
               body: Padding(
                 padding: EdgeInsets.only(
                     top: Get.height * 0.03, left: 25, right: 25),
@@ -207,6 +210,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    buildSearchBar(),
                     const SizedBox(height: 10),
                     const Text(
                       'Categories',
@@ -519,6 +524,73 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     ])),
           );
         });
+  }
+
+  Widget buildSearchBar() {
+    return Card(
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SearchPage()));
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.only(right: 12, left: 0),
+                child: Icon(
+                  Icons.search,
+                ),
+              ),
+              const Expanded(
+                child: Text(
+                  "Search for task...",
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.fade,
+                  // style: OurTextStyle().title18(fontSize: 12 ,color: ThemeInformation.focusColor),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Opacity(
+                opacity: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    // Get.bottomSheet(
+                    //   FilterBottomSheetWidget(),
+                    //   isScrollControlled: true,
+                    // );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                        right: 10, left: 10, top: 10, bottom: 10),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      // color: ThemeInformation.focusColor.withOpacity(0.1),
+                    ),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 4,
+                      children: const [
+                        Text(
+                          "Filter", //style: OurTextStyle().title14(fontSize: 13 , color: ThemeInformation.PrimaryColor2)
+                        ),
+                        Icon(
+                          Icons.filter_list,
+                          // color: ThemeInformation.PrimaryColor2,
+                          size: 21,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
