@@ -5,7 +5,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:provider/provider.dart';
 import 'package:taskify/Screens/AddList.dart';
 import 'package:taskify/Storing_DB.dart';
 import '../auth/login_screen.dart';
@@ -13,16 +12,11 @@ import 'package:taskify/util.dart';
 import 'package:taskify/widgets/primary_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../appstate.dart';
-import '../../models/tasks.dart';
-import '../../screens/tasks_screen.dart';
-import '../../screens/todo_list_screen.dart';
 import '../../utils/validators.dart';
 import 'UpdateProfile.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import '../../firebase_options.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -36,21 +30,11 @@ class _HomeScreen extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     getName();
-    getList();
   }
 
   File? image;
 
   late String namee;
-
-  getList() async {
-    // print(widget.category);
-    await Future.delayed(Duration(milliseconds: 100));
-    await Provider.of<AppState>(this.context, listen: false).getListAll();
-    await Provider.of<AppState>(this.context, listen: false)
-        .getAllTasksProfile();
-    await Provider.of<AppState>(this.context, listen: false).linkData();
-  }
 
   Future pickImage(ImageSource source) async {
     final image = await ImagePicker().pickImage(source: source);
@@ -114,79 +98,47 @@ class _HomeScreen extends State<HomeScreen> {
         .collection('users1')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    if (mounted) {
-      setState(() {
-        try {
-          photo = res['photo'];
-        } catch (e) {
-          photo = "";
-        }
-        nameee = res['firstName'] + ' ' + res['lastName'];
-      });
-    }
+    setState(() {
+      photo = res['photo'];
+      nameee = res['firstName'] + ' ' + res['lastName'];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    //AppState provider = Provider.of<AppState>(context);
     getName();
     TextEditingController email = TextEditingController(
         text: '${FirebaseAuth.instance.currentUser!.email}');
-    AppState provider = Provider.of<AppState>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: Container(
-          height: 55,
-          width: 320,
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _editMode = !_editMode;
-                pressGeoON = !pressGeoON;
-              });
-              // Util.routeToWidget(context, UpdateProfile());
-            },
-            child: Center(child: Icon(!_editMode ? Icons.save : Icons.edit)
-
-                // Text("Update",
-                //     style: TextStyle(
-                //       fontSize: 12,
-                //       color: Colors.white,
-                //     ))
-
-                ),
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              size: 30,
+              color:
+                  _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
+          onPressed: () {
+            _editMode
+                ? print('')
+                : setState(() {
+                    pressGeoON = !pressGeoON;
+                    _editMode = !_editMode;
+                    _isInvalid = false;
+                  });
+          }, // home page
         ),
-
-        ///
-        // IconButton(
-        //   icon: Icon(Icons.arrow_back,
-        //       size: 30,
-        //       color:
-        //           _editMode ? Color.fromARGB(0, 255, 255, 255) : Colors.white),
-        //   onPressed: () {
-        //     _editMode
-        //         ? print('')
-        //         : setState(() {
-        //             pressGeoON = !pressGeoON;
-        //             _editMode = !_editMode;
-        //             _isInvalid = false;
-        //           });
-        //   }, // home page
-        // ),
         backgroundColor: Color.fromRGBO(123, 57, 237, 1),
         elevation: 0.0,
         centerTitle: true,
-        title: const Text(
-          "My Profile",
+        title: Text(
+          "My profile",
           style: TextStyle(
             fontSize: 30,
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
-
         actions: [
           _editMode
               ? IconButton(
@@ -221,42 +173,32 @@ class _HomeScreen extends State<HomeScreen> {
               : Container(),
         ],
       ),
-      body: buildColumn(context, provider),
-      // body: buildColumnOld(context, provider),
-    );
-  }
-
-  Widget buildColumn(BuildContext context, AppState provider) {
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned.fill(
-              child: SizedBox(
-                height: 400,
-                child: CustomPaint(
-                  painter: HeaderCurvedContainer(),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    // height: 400,
-                  ),
-                ),
-              ),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          CustomPaint(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
             ),
-            Form(
+            painter: HeaderCurvedContainer(),
+          ),
+          Container(
+            child: Form(
               key: formKey,
               child: Column(children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "",
-                      style: TextStyle(
-                        fontSize: 35,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                    Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        "",
+                        style: TextStyle(
+                          fontSize: 35,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -289,15 +231,7 @@ class _HomeScreen extends State<HomeScreen> {
                                               size: Size.fromRadius(
                                                   48), // Image radius
                                               child: Image.network(photo,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (
-                                                BuildContext context,
-                                                Object error,
-                                                StackTrace? stackTrace,
-                                              ) {
-                                                return Image.network(
-                                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
-                                              }),
+                                                  fit: BoxFit.cover),
                                             ),
                                           ),
                                           decoration: BoxDecoration(
@@ -360,19 +294,7 @@ class _HomeScreen extends State<HomeScreen> {
                                                               child: Image.network(
                                                                   photo,
                                                                   fit: BoxFit
-                                                                      .cover,
-                                                                  errorBuilder:
-                                                                      (
-                                                                BuildContext
-                                                                    context,
-                                                                Object error,
-                                                                StackTrace?
-                                                                    stackTrace,
-                                                              ) {
-                                                                return Image
-                                                                    .network(
-                                                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
-                                                              }),
+                                                                      .cover),
                                                             ),
                                                           ),
                                                         )
@@ -503,7 +425,25 @@ class _HomeScreen extends State<HomeScreen> {
                             height: 20,
                           ),
                           pressGeoON
-                              ? SizedBox()
+                              ? Container(
+                                  height: 55,
+                                  width: 320,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _editMode = !_editMode;
+                                        pressGeoON = !pressGeoON;
+                                      });
+                                      // Util.routeToWidget(context, UpdateProfile());
+                                    },
+                                    child: Center(
+                                        child: Text("Update",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                            ))),
+                                  ),
+                                )
                               : Column(
                                   children: [
                                     Container(
@@ -511,7 +451,6 @@ class _HomeScreen extends State<HomeScreen> {
                                       width: 320,
                                       child: ElevatedButton(
                                         onPressed: () async {
-                                          print("ddddd");
                                           if (formKey.currentState!
                                               .validate()) {
                                             setState(() {
@@ -611,8 +550,6 @@ class _HomeScreen extends State<HomeScreen> {
                                     ),
                                   ],
                                 ),
-
-                          // buildColumn(provider),
                         ],
                       ),
                     )
@@ -620,231 +557,10 @@ class _HomeScreen extends State<HomeScreen> {
                 ),
               ]),
             ),
-          ],
-        ),
-        if (_editMode)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              ' Today progress:',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
-            ),
           ),
-        SizedBox(height: 10),
-        Card(
-          child: Column(
-            children: [
-              Container(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "You have completed ${provider.numberCompletedToday} tasks of ${(provider.numberProgressToday + provider.numberCompletedToday)}",
-                  // "You have ${provider.numberProgressToday} uncompleted tasks left today ",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width * 0.90,
-                      // width: 300.0,
-                      lineHeight: 15,
-                      /*percent: (provider.myList[index].completedTask) *
-                      1.0 /
-                      (provider.myList[index].completedTask +
-                          provider.myList[index].pendingTask) *
-                      1.0,*/
-                      animation: true,
-                      animationDuration: 2000,
-                      linearStrokeCap: LinearStrokeCap.round,
-                      percent: getPercentToday(provider)!,
-                      // percent: 0.5,
-                      progressColor: Color(0xff7b39ed),
-                      center: Text(""),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        if (_editMode)
-          const SizedBox(
-            height: 20,
-          ),
-        if (_editMode)
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 5, left: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                " Achieved so far:",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        if (_editMode)
-          SizedBox(
-            height: 20,
-          ),
-        if (_editMode) Expanded(child: buildColumnList(provider)),
-        if (_editMode)
-          SizedBox(
-            height: 30,
-          ),
-      ],
-    );
-  }
-
-  double? getPercentToday(AppState provider) {
-    try {
-      if (provider.numberProgressToday + provider.numberCompletedToday != 0) {
-        return double.tryParse((provider.numberCompletedToday /
-                (provider.numberProgressToday + provider.numberCompletedToday))
-            .toString());
-      } else {
-        return 0.0;
-      }
-    } catch (e) {
-      return 0.0;
-    }
-  }
-
-  Widget buildColumnList(AppState provider) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          provider.listLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : provider.myList.isEmpty
-                  ? const Center(
-                      child: Text(
-                      'There are no lists yet',
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ))
-                  : ListView.builder(
-                      itemCount: provider.myList.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final item = provider.myList[index].docId;
-
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TaskScreen(
-                                            category:
-                                                provider.myList[index].category,
-                                            list: provider.myList[index].list)))
-                                .then((value) {
-                              getList();
-                              setState(() {});
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Card(
-                                  //alignment: Alignment.center,
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                provider.myList[index].list,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: LinearPercentIndicator(
-                                                  width: 200,
-                                                  lineHeight: 10,
-                                                  // percent: 0.5,
-                                                  percent: getPercentList(
-                                                      provider, index)!,
-                                                  animation: true,
-                                                  animationDuration: 2000,
-                                                  linearStrokeCap:
-                                                      LinearStrokeCap.round,
-                                                  progressColor:
-                                                      Color(0xff7b39ed),
-                                                  center: Text(""),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            "You complete ${provider.myList[index].completedTask} Tasks from ${provider.myList[index].completedTask + provider.myList[index].pendingTask}",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
         ],
       ),
     );
-  }
-
-  double? getPercentList(AppState provider, int index) {
-    try {
-      if ((provider.myList[index].completedTask +
-              provider.myList[index].pendingTask) !=
-          0.0) {
-        return double.tryParse(((provider.myList[index].completedTask) *
-                1.0 /
-                (provider.myList[index].completedTask +
-                    provider.myList[index].pendingTask) *
-                1.0)
-            .toString());
-      } else {
-        return 0.0;
-      }
-    } catch (e) {
-      return 0.0;
-    }
   }
 }
 
@@ -853,8 +569,8 @@ class HeaderCurvedContainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Color(0xff7b39ed);
     Path path = Path()
-      ..relativeLineTo(0, 100)
-      ..quadraticBezierTo(size.width / 2, 175, size.width, 100)
+      ..relativeLineTo(0, 150)
+      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
       ..relativeLineTo(0, -150)
       ..close();
     canvas.drawPath(path, paint);

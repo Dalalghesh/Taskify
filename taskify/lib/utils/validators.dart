@@ -60,15 +60,4 @@ class Validators {
     }
     return null;
   }
-
-  static String? lengthVal(String? field, {int length = 15}) {
-    if (field!.isEmpty) {
-      return 'Please Fill in the field';
-    }
-
-    if (field.length < length) {
-      return 'Text must be at most $length characters';
-    }
-    return null;
-  }
 }
