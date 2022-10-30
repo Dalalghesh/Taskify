@@ -96,18 +96,22 @@ class _AddList extends State<AddList> {
     getCategoryy();
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xff7b39ed),
           centerTitle: true,
           title: Text(
             "Add List",
             style: TextStyle(
               fontSize: 25,
-              color: Color.fromARGB(255, 0, 0, 0),
+              color: Color.fromARGB(255, 255, 255, 255),
               //fontWeight: FontWeight.w600,
             ),
           ),
           leadingWidth: 50,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
             onPressed: () {
               Navigator.pop(context);
             }, // home page

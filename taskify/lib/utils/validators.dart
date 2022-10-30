@@ -3,7 +3,7 @@ class Validators {
     if (text!.isEmpty || text == null || text.trim() == '')
       return 'Please Fill in the field';
 
-    final regExp = RegExp(r'^[a-zA-Z0-9]+$');
+    final regExp = RegExp(r'^[a-zA-Z]+$');
 
     if (!regExp.hasMatch(text.trim())) {
       return 'You cannot enter special characters !@#\%^&*()';

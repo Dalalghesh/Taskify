@@ -102,18 +102,22 @@ class _AddTask extends State<AddTask> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          backgroundColor: Color(0xff7b39ed),
           centerTitle: true,
           title: Text(
             "Add Task",
             style: TextStyle(
               fontSize: 25,
-              color: Color.fromARGB(255, 0, 0, 0),
+              color: Color.fromARGB(255, 255, 255, 255),
               //fontWeight: FontWeight.w600,
             ),
           ),
           leadingWidth: 40,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -227,7 +231,7 @@ class _AddTask extends State<AddTask> {
                             ),
                           ),
                           validator: (value) {
-                            final regExp = RegExp(r'^[a-zA-Z0-9 ]+$');
+                            final regExp = RegExp(r'^[a-zA-Z ]+$');
 
                             if (value!.isEmpty ||
                                 value == null ||

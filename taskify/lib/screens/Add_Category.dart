@@ -77,17 +77,21 @@ class _Add_Category extends State<Add_Category> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          backgroundColor: Color(0xff7b39ed),
           title: Text(
             "Add Category",
             style: TextStyle(
               fontSize: 25,
-              color: Color.fromARGB(255, 0, 0, 0),
+              color: Color.fromARGB(255, 255, 255, 255),
               //fontWeight: FontWeight.w600,
             ),
           ),
           leadingWidth: 50,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
             onPressed: () {
               Navigator.pop(context);
             }, // home page
