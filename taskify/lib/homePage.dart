@@ -175,9 +175,9 @@ class NavBarState extends State<NavBar> {
             //dalal
          
             Container(
-              width: Get.width * 0.65,
-              height: Get.width * 0.30,
-              padding: const EdgeInsets.all(20),
+             width: Get.width * 0.55,
+              height: Get.width * 0.25,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Color(0xff7b39ed) ,
                 borderRadius: BorderRadius.circular(8),
@@ -242,9 +242,9 @@ class NavBarState extends State<NavBar> {
             
             const SizedBox(height: 20),
            Container(
-              width: Get.width * 0.65,
-              height: Get.width * 0.30,
-              padding: const EdgeInsets.all(20),
+              width: Get.width * 0.55,
+              height: Get.width * 0.25,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Color(0xff7b39ed) ,
                 borderRadius: BorderRadius.circular(8),
@@ -261,7 +261,7 @@ class NavBarState extends State<NavBar> {
                                             children: <Widget>[
                                               Container(
                                                 child: Icon(
-                                                  Icons.widgets,
+                                                 Icons.note_add,
                                                   color: Colors.white,
                                                 ),
                                               ),
@@ -308,9 +308,9 @@ class NavBarState extends State<NavBar> {
             ),
             const SizedBox(height: 20),
                 Container(
-              width: Get.width * 0.65,
-              height: Get.width * 0.30,
-              padding: const EdgeInsets.all(20),
+                width: Get.width * 0.55,
+              height: Get.width * 0.25,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Color(0xff7b39ed) ,
                 borderRadius: BorderRadius.circular(8),
@@ -327,7 +327,8 @@ class NavBarState extends State<NavBar> {
                                             children: <Widget>[
                                               Container(
                                                 child: Icon(
-                                                  Icons.widgets,
+                                              //   Icons.border_color_rounded,
+                                              Icons.edit_document, 
                                                   color: Colors.white,
                                                 ),
                                               ),
