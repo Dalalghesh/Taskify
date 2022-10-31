@@ -1,3 +1,4 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:taskify/homePage.dart';
 import 'package:taskify/onboarding/onboarding_screen.dart';
 import 'package:taskify/util.dart';
@@ -12,6 +13,7 @@ import '../../utils/app_colors.dart';
 import '../../widgets/custom_header.dart';
 import '../../widgets/platform_dialogue.dart';
 import 'signup_screen.dart';
+import 'package:workmanager/workmanager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -147,6 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (!formKey.currentState!.validate()) return;
                       FocusScope.of(context).unfocus();
                       loginWithEmailAndPassword(email, password);
+
+                       
                     },
                   ),
                   Padding(
@@ -203,7 +207,13 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {});
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
+            /*  print("loged in1");
+            Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
+            var time = DateTime.now().second.toString();
+            Workmanager().registerPeriodicTask(time,'firstTask' , frequency: const Duration(minutes: 15));
+            print("loged in2");*/
         return NavBar(tabs: 0);
+              
       }));
     } catch (e) {
       isLoading = false;
@@ -211,4 +221,15 @@ class _LoginScreenState extends State<LoginScreen> {
       showExceptionDialog(context, e);
     }
   }
+}
+
+void callbackDispatcher(){
+  print("inside callbackDispatcher login");
+  print("ddddddddddddddddaa");
+Workmanager().executeTask((taskName, inputData)async{
+print("inside callbackDispatcher executeTask login1");
+print("inside callbackDispatcher executeTask login2");
+print("inside callbackDispatcher executeTask login3");
+return Future.value(true);
+});
 }

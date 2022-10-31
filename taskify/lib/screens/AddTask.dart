@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  AwesomeNotifications().initialize(
+      null, // icon for your app notification
+      [
+        NotificationChannel(
+          channelKey: 'key1',
+          channelName: 'Proto Coders Point',
+          channelDescription: "Notification example",
+          defaultColor: Color(0xff7b39ed),
+          ledColor: Colors.white,
+          playSound: true,
+          enableLights:true,
+          enableVibration: true
+        )
+      ]
+  );
 
   runApp(AddTask());
 }
@@ -517,11 +534,16 @@ class _AddTask extends State<AddTask> {
                                 provider.url =
                                     "https://www.srilankafoundation.org/wp-content/uploads/2020/12/dummy11-1.jpg";
 
+                                    //call deadline notifaiction
+                                    print(taskk);
+                                    Notify(taskk, dateTime);
+                                    
+
                                 CoolAlert.show(
                                   title: "Success",
                                   context: context,
                                   type: CoolAlertType.success,
-                                  text: "List created successfuly!",
+                                  text: "Task created successfuly!",
                                   confirmBtnColor: const Color(0xff7b39ed),
                                   onConfirmBtnTap: () => route(),
                                 );
@@ -690,3 +712,76 @@ class _DatePickerItem extends StatelessWidget {
     );
   }
 }
+
+
+void Notify(String Taskname, DateTime TaskdateTime)async{
+
+ String timezom = await AwesomeNotifications().getLocalTimeZoneIdentifier(); //get time zone you are in
+
+  print("inside notfiy method");
+  print(Taskname);
+  print(TaskdateTime);
+  DateTime currentdate =DateTime.now();
+  print(currentdate);
+  print('dalal1');
+   final differenceday = TaskdateTime.difference(currentdate).inDays;
+  final differeneHours = TaskdateTime.difference(currentdate).inHours;
+  final differeneMen = TaskdateTime.difference(currentdate).inMinutes;
+  final differenceONSECONDS = TaskdateTime.difference(currentdate).inSeconds;
+   print(differenceday);
+   print(differeneHours);
+   print(differeneMen);
+   print(differenceONSECONDS);
+   print('dalal2');
+     ////
+int  interval = 5; 
+if(differenceONSECONDS > 86340 ){
+  interval = differenceONSECONDS - 86360;
+}
+print(interval);
+   ////
+ /* int differenceOnDay =  daysBetween(currentdate, TaskdateTime) -1 ;
+
+  int differenceONSECONDS= 86400 * differenceOnDay;
+  
+  
+   if (differenceONSECONDS ==0 ){
+    differenceONSECONDS =5;
+   }
+   //print(differenceONSECONDS);*/
+
+if (1438 <= differeneMen){
+  print("inside if"); 
+ AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'key1',
+          title:'Reminder for task deadline',
+          body:  'One day left to reach "$Taskname" task deadline!'
+        ),
+        schedule: NotificationInterval(interval: interval , timeZone: timezom, repeats: false),
+    );}
+
+   /*AwesomeNotifications().actionStream.listen((receivedNotifiction)
+{
+                  Navigator.of(context).pushNamed(
+                    '/navigationPage',
+                  );
+});*/
+}
+
+int daysBetween(DateTime from, DateTime to) {
+print("inside daysbetween");
+  Duration diff = to.difference(from);
+  print(diff.inDays);
+ print(diff.inHours);
+
+  from = DateTime(from.year, from.month, from.day );
+  to = DateTime(to.year, to.month, to.day );
+
+  print("daysBetween");
+  print((to.difference(from).inHours / 24).round());
+  return (to.difference(from).inHours / 24).round();
+}
+
+

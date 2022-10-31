@@ -169,33 +169,84 @@ class NavBarState extends State<NavBar> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            //dalal 
+  
+
+            //dalal
+         
             Container(
-                width: Get.width * 0.75,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: const Color(0xff7b39ed),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Add_Category()));
-                  },
-                  child: const Text(
-                    'Add category',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400),
-                    textAlign: TextAlign.center,
-                  ),
-                )),
-            const SizedBox(height: 20),
-            Container(
-              width: Get.width * 0.75,
-              padding: const EdgeInsets.all(20),
+             width: Get.width * 0.55,
+              height: Get.width * 0.25,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Color(0xff7b39ed),
+                color: Color(0xff7b39ed) ,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => Add_Category()));
+                },
+                child:  Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Icon(
+                                                  Icons.widgets,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                 "Add Category",
+                                                  style: TextStyle(
+                                                      color:Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                          height: 80,
+                                          margin: EdgeInsets.all(4),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.2,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff7b39ed),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            // boxShadow: [
+                                            //   BoxShadow(
+                                            //     blurRadius: 3,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ],
+                                          ),
+                                          alignment: Alignment.center,
+                                          // child: Text(
+                                          //   provider.categories[index],
+                                          //   style: TextStyle(
+                                          //       color: Colors.black,
+                                          //       fontSize: 18,
+                                          //       fontWeight: FontWeight.w600),
+                                          // ),
+                                        ),
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+           Container(
+              width: Get.width * 0.55,
+              height: Get.width * 0.25,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Color(0xff7b39ed) ,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: GestureDetector(
@@ -203,22 +254,65 @@ class NavBarState extends State<NavBar> {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) => AddList()));
                 },
-                child: const Text(
-                  'Add list',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400),
-                  textAlign: TextAlign.center,
-                ),
+                child:  Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Icon(
+                                                 Icons.note_add,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                 "Add List",
+                                                  style: TextStyle(
+                                                      color:Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                          height: 80,
+                                          margin: EdgeInsets.all(4),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.2,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff7b39ed),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            // boxShadow: [
+                                            //   BoxShadow(
+                                            //     blurRadius: 3,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ],
+                                          ),
+                                          alignment: Alignment.center,
+                                          // child: Text(
+                                          //   provider.categories[index],
+                                          //   style: TextStyle(
+                                          //       color: Colors.black,
+                                          //       fontSize: 18,
+                                          //       fontWeight: FontWeight.w600),
+                                          // ),
+                                        ),
               ),
             ),
             const SizedBox(height: 20),
-            Container(
-              width: Get.width * 0.75,
-              padding: const EdgeInsets.all(20),
+                Container(
+                width: Get.width * 0.55,
+              height: Get.width * 0.25,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Color(0xff7b39ed),
+                color: Color(0xff7b39ed) ,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: GestureDetector(
@@ -226,14 +320,57 @@ class NavBarState extends State<NavBar> {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) => AddTask()));
                 },
-                child: const Text(
-                  'Add task',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400),
-                  textAlign: TextAlign.center,
-                ),
+                child:  Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Icon(
+                                              //   Icons.border_color_rounded,
+                                              Icons.edit_document, 
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                 "Add Task",
+                                                  style: TextStyle(
+                                                      color:Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                          height: 80,
+                                          margin: EdgeInsets.all(4),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.2,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff7b39ed),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            // boxShadow: [
+                                            //   BoxShadow(
+                                            //     blurRadius: 3,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ],
+                                          ),
+                                          alignment: Alignment.center,
+                                          // child: Text(
+                                          //   provider.categories[index],
+                                          //   style: TextStyle(
+                                          //       color: Colors.black,
+                                          //       fontSize: 18,
+                                          //       fontWeight: FontWeight.w600),
+                                          // ),
+                                        ),
               ),
             ),
           ],

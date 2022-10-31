@@ -668,7 +668,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             () async {
                                                           getUsers(
                                                               widget.category,
-                                                              widget.list);
+                                                              widget.list  );
                                                           tasks.forEach(
                                                               (element) {
                                                             provider.updateCheckboxValue(
@@ -1006,6 +1006,7 @@ sendNotification(String title, String token) async {
   print(token);
   print('dalal');
   print('raghad');
+  print (title);
 
   final data = {
     'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -1040,12 +1041,16 @@ sendNotification(String title, String token) async {
   } catch (e) {}
 }
 
-getUsers(String CategoryName, String ListName) async {
+getUsers(String CategoryName, String ListName ) async {
   print('1');
   List<dynamic> UIDS = [];
   final _firebaseFirestore = FirebaseFirestore.instance;
   print(CategoryName);
   print(ListName);
+   /*tasks.forEach(
+                                                              (element) {
+                                                                print(element);
+                                                              });*/
   final res = await _firebaseFirestore
       .collection('List')
       .where("CategoryName", isEqualTo: CategoryName)
@@ -1061,14 +1066,14 @@ getUsers(String CategoryName, String ListName) async {
           print('Inside loop+i');
           final String useremail = UIDS[i];
           print(useremail);
-          getUsersToken(useremail);
+          getUsersToken(useremail , ListName);
         }
       }
     }
   }
 }
 
-Future getUsersToken(String receiver) async {
+Future getUsersToken(String receiver , String ListName) async {
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   print(receiver);
@@ -1088,7 +1093,7 @@ Future getUsersToken(String receiver) async {
         // print(res.docs[i]['token']);
         print('alll');
         final String receivertoken = res.docs[i]['token'];
-        sendNotification('New task completed', receivertoken);
+        sendNotification("New tasks completed in $ListName list", receivertoken);
       }
     }
   }
