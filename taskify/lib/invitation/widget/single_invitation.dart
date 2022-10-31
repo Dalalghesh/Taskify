@@ -160,10 +160,10 @@ class SingleInvitaionItem extends StatelessWidget {
                     }
 
                     CoolAlert.show(
-                        title: "Hmm..",
+                        title: "Reject",
                         context: context,
                         type: CoolAlertType.confirm,
-                        text: 'Are you sure you want to reject the invitation?',
+                        text: 'Are you sure you want to reject this invitation?',
                         confirmBtnText: 'Yes',
                         cancelBtnText: 'No',
                         confirmBtnColor: Colors.green,
