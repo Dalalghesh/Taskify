@@ -217,10 +217,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       'Categories',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 30,
+                        fontSize: 25,
                       ),
                     ),
                     Container(
+                        margin: const EdgeInsets.only(top: 0.0),
                         height: MediaQuery.of(context).size.height / 2.9,
                         child: provider.categoriesLoading
                             ? Center(

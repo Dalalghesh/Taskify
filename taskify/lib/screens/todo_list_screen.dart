@@ -19,6 +19,8 @@ import 'package:taskify/models/task_list.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../util.dart';
+
 class TodoList extends StatefulWidget {
   final String category;
   TodoList({Key? key, required this.category}) : super(key: key);
@@ -124,10 +126,6 @@ class _TodoListState extends State<TodoList> {
                             });
 
                             //2: delete tasks
-                            print("Ssss");
-                            print(widget.category);
-                            print(provider.list[index].list);
-
                             final res = await FirebaseFirestore.instance
                                 .collection('tasks')
                                 .where('CategoryName',
@@ -139,13 +137,8 @@ class _TodoListState extends State<TodoList> {
                                         .instance.currentUser!.email)
                                 .get();
 
-                            print("Sssjjjjss");
                             if (res.docs.length != 0)
                               for (int i = 0; i < res.docs.length; i++) {
-                                print("111Ssss");
-                                print(res.docs[i].id);
-                                print(res.docs[i]['Task']);
-
                                 DocumentReference docRef2 =
                                     await FirebaseFirestore.instance
                                         .collection('tasks')
@@ -204,7 +197,7 @@ class _TodoListState extends State<TodoList> {
                                     Text(
                                       provider.list[index].list,
                                       style: TextStyle(
-                                          fontSize: 15, color: Colors.black),
+                                          fontSize: 17, color: Colors.black),
                                     ),
                                     provider.list[index].private
                                         ? IconButton(
@@ -216,12 +209,17 @@ class _TodoListState extends State<TodoList> {
                                         : IconButton(
                                             onPressed: () {
                                               //////////////////////////////////////////////////////////////////////////////////////////
-
+                                              Util.routeToWidget(
+                                                  context,
+                                                  sharedlistdetails(
+                                                    category: widget.category,
+                                                    list: provider
+                                                        .list[index].list,
+                                                  ));
                                               //////////////////////////////////////////////////////////////////////////////////////////
                                             },
-                                            icon: Icon(Icons.share,
-                                                color: Color.fromARGB(
-                                                    255, 126, 14, 14)),
+                                            icon: Icon(Icons.more_horiz,
+                                                color: Colors.grey.shade600),
                                           )
                                   ],
                                 ),

@@ -17,7 +17,7 @@ class SingleInvitaionItem extends StatelessWidget {
   }) : super(key: key);
   static String id = "ReceivedInvitation";
   final InvitationModel invitationModel;
-  static String FullName = "Dalal";
+  static String FullName = "Dalal hazim";
 
   @override
   Widget build(BuildContext context) {

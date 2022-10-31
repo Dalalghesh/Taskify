@@ -147,15 +147,16 @@ class _HomeScreen extends State<HomeScreen> {
               });
               // Util.routeToWidget(context, UpdateProfile());
             },
-            child: Center(child: Icon(!_editMode ? Icons.save : Icons.edit)
+            child:
+                Center(child: Icon(!_editMode ? Icons.arrow_back : Icons.edit)
 
-                // Text("Update",
-                //     style: TextStyle(
-                //       fontSize: 12,
-                //       color: Colors.white,
-                //     ))
+                    // Text("Update",
+                    //     style: TextStyle(
+                    //       fontSize: 12,
+                    //       color: Colors.white,
+                    //     ))
 
-                ),
+                    ),
           ),
         ),
 
@@ -558,7 +559,7 @@ class _HomeScreen extends State<HomeScreen> {
                                           height: 55,
                                           width: 320,
                                           child: SizedBox(
-                                            child: ElevatedButton.icon(
+                                            child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Color.fromARGB(
                                                     255, 216, 58, 47),
@@ -592,12 +593,9 @@ class _HomeScreen extends State<HomeScreen> {
                                                       );
                                                     });
                                               },
-                                              icon: Icon(
-                                                Icons.delete_forever_rounded,
-                                                size: 25,
-                                              ),
+
                                               //  color: Color.fromARGB(255, 240, 96, 86),
-                                              label: Text(
+                                              child: Text(
                                                 'Delete my account',
                                                 style: TextStyle(
                                                   fontSize: 20,
@@ -644,62 +642,72 @@ class _HomeScreen extends State<HomeScreen> {
             ),
           ],
         ),
+        // if (_editMode)
+        //   Align(
+        //     alignment: Alignment.centerLeft,
+        //     child: Text(
+        //       ' Today progress',
+        //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+        //     ),
+        //   ),
+        SizedBox(height: 1),
         if (_editMode)
           Align(
+            heightFactor: 1,
             alignment: Alignment.centerLeft,
             child: Text(
-              ' Today progress:',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+              ' Today\'s progress',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
             ),
           ),
-        SizedBox(height: 10),
-        Card(
-          child: Column(
-            children: [
-              Container(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "You have completed ${provider.numberCompletedToday} tasks of ${(provider.numberProgressToday + provider.numberCompletedToday)}",
-                  // "You have ${provider.numberProgressToday} uncompleted tasks left today ",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width * 0.90,
-                      // width: 300.0,
-                      lineHeight: 15,
-                      /*percent: (provider.myList[index].completedTask) *
+        if (_editMode)
+          Card(
+            margin: const EdgeInsets.only(left: 11.0, right: 11.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: LinearPercentIndicator(
+                        width: MediaQuery.of(context).size.width * 0.90,
+                        // width: 300.0,
+                        lineHeight: 15,
+                        /*percent: (provider.myList[index].completedTask) *
                       1.0 /
                       (provider.myList[index].completedTask +
                           provider.myList[index].pendingTask) *
                       1.0,*/
-                      animation: true,
-                      animationDuration: 2000,
-                      linearStrokeCap: LinearStrokeCap.round,
-                      percent: getPercentToday(provider)!,
-                      // percent: 0.5,
-                      progressColor: Color(0xff7b39ed),
-                      center: Text(""),
+                        animation: true,
+                        animationDuration: 2000,
+                        linearStrokeCap: LinearStrokeCap.round,
+                        percent: getPercentToday(provider)!,
+                        // percent: 0.5,
+                        progressColor: Color(0xff7b39ed),
+                        center: Text(""),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                    child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    "You have completed ${provider.numberCompletedToday} tasks of ${(provider.numberProgressToday + provider.numberCompletedToday)}",
+                    // "You have ${provider.numberProgressToday} uncompleted tasks left today ",
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
                     ),
                   ),
-                ],
-              ),
-            ],
+                )),
+              ],
+            ),
           ),
-        ),
         if (_editMode)
           const SizedBox(
-            height: 20,
+            height: 5,
           ),
         if (_editMode)
           const Padding(
@@ -707,24 +715,24 @@ class _HomeScreen extends State<HomeScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                " Achieved so far:",
+                "Achieved so far",
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   color: Colors.black,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
           ),
         if (_editMode)
           SizedBox(
-            height: 20,
+            height: 1,
           ),
         if (_editMode) Expanded(child: buildColumnList(provider)),
         if (_editMode)
           SizedBox(
-            height: 30,
+            height: 35,
           ),
       ],
     );
@@ -785,6 +793,12 @@ class _HomeScreen extends State<HomeScreen> {
                             children: [
                               Expanded(
                                 child: Card(
+                                  margin: const EdgeInsets.only(
+                                      top: 4,
+                                      bottom: 4,
+                                      left: 11.0,
+                                      right: 11.0),
+
                                   //alignment: Alignment.center,
                                   child: Center(
                                     child: Padding(
@@ -798,10 +812,9 @@ class _HomeScreen extends State<HomeScreen> {
                                               Text(
                                                 provider.myList[index].list,
                                                 style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -832,7 +845,7 @@ class _HomeScreen extends State<HomeScreen> {
                                           Text(
                                             "You complete ${provider.myList[index].completedTask} Tasks from ${provider.myList[index].completedTask + provider.myList[index].pendingTask}",
                                             style: TextStyle(
-                                                fontSize: 15,
+                                                fontSize: 13,
                                                 color: Colors.black),
                                           ),
                                         ],
