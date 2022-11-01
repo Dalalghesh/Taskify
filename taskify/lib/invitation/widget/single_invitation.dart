@@ -159,19 +159,49 @@ class SingleInvitaionItem extends StatelessWidget {
                           .update({'status': 'rejected'});
                     }
 
-                    CoolAlert.show(
-                        title: "Reject",
-                        context: context,
-                        type: CoolAlertType.confirm,
-                        text: 'Are you sure you want to reject this invitation?',
-                        confirmBtnText: 'Yes',
-                        cancelBtnText: 'No',
-                        confirmBtnColor: Colors.green,
-                        onConfirmBtnTap: () {
-                          reject(invitationModel);
+                    // set up the buttons
+                    Widget cancelButton = TextButton(
+                      child: Text(
+                        "Yes",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      onPressed: () async {
+                        reject(invitationModel);
+                        Navigator.of(context).pop(true);
+                      },
+                    );
+                    Widget continueButton = TextButton(
+                      child: Text(
+                        "No",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                    );
 
-                          Navigator.of(context).pop();
-                        });
+                    // set up the AlertDialog
+                    AlertDialog alert = AlertDialog(
+                      title: Text("Reject"),
+                      content: Text(
+                          'Are you sure you want to reject this invitation?'),
+                      actions: [
+                        cancelButton,
+                        continueButton,
+                      ],
+                    );
+
+                    // show the dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alert;
+                      },
+                    );
                   },
                   icon: Icon(
                     Icons.highlight_off_rounded,

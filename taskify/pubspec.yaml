@@ -63,8 +63,8 @@ dependencies:
   permission_handler: ^10.1.0
   percent_indicator: ^4.0.1
   cron:
-  awesome_notifications: ^0.7.4
-  awesome_notifications_fcm: ^0.7.4
+  awesome_notifications: ^0.7.0
+  awesome_notifications_fcm: ^0.7.0
   workmanager: ^0.5.1
 
 dev_dependencies:

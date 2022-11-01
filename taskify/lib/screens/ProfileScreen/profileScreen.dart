@@ -18,7 +18,6 @@ import '../../models/tasks.dart';
 import '../../screens/tasks_screen.dart';
 import '../../screens/todo_list_screen.dart';
 import '../../utils/validators.dart';
-import 'UpdateProfile.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import '../../firebase_options.dart';
@@ -195,22 +194,33 @@ class _HomeScreen extends State<HomeScreen> {
                     right: 15,
                   ),
                   onPressed: () async {
-                    CoolAlert.show(
-                        context: context,
-                        type: CoolAlertType.confirm,
-                        text: 'Do you want to logout?',
-                        confirmBtnText: 'Yes',
-                        cancelBtnText: 'No',
-                        title: "Logout",
-                        confirmBtnColor: Color(0xff7b39ed),
-                        onConfirmBtnTap: () async {
-                          await FirebaseAuth.instance.signOut();
+                    // print('loooogoooouuutttt???');
+                    showAlertDialog(context);
+                    // AlertDialog(
+                    //   title: const Text('Logout'),
+                    //   content: const Text('Are you sure you want to logout?'),
+                    //   actions: [
+                    //     TextButton(
+                    //       onPressed: () async {
+                    //         await FirebaseAuth.instance.signOut();
+                    //         Navigator.of(context).pushReplacement(
+                    //           MaterialPageRoute(
+                    //               builder: (context) => const LoginScreen()),
+                    //         );
+                    //         ///////?????
 
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                          );
-                        });
+                    //         // Navigator.of(context).pop(true);
+                    //       },
+                    //       child: const Text('Yes'),
+                    //     ),
+                    //     TextButton(
+                    //       onPressed: () {
+                    //         Navigator.of(context).pop(false);
+                    //       },
+                    //       child: const Text('No'),
+                    //     )
+                    //   ],
+                    // );
                   },
                   icon: Icon(
                     Icons.logout_outlined,
@@ -371,7 +381,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                               ) {
                                                                 return Image
                                                                     .network(
-                                                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+                                                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                                                                );
                                                               }),
                                                             ),
                                                           ),
@@ -568,30 +579,40 @@ class _HomeScreen extends State<HomeScreen> {
                                                 minimumSize: Size(2000000, 15),
                                               ),
                                               onPressed: () async {
-                                                CoolAlert.show(
-                                                    context: context,
-                                                    type: CoolAlertType.confirm,
-                                                    text:
-                                                        'Do you want to delete your account?',
-                                                    confirmBtnText: 'Yes',
-                                                    cancelBtnText: 'No',
-                                                    title: "Delete My Account",
-                                                    confirmBtnColor:
-                                                        Color(0xff7b39ed),
-                                                    onConfirmBtnTap: () async {
-                                                      print("InsideDelete");
-                                                      DeleteUserAccount();
+                                                deleteacc(context);
+                                                // AlertDialog(
+                                                //   title: const Text('Delete'),
+                                                //   content: const Text(
+                                                //       'Are you sure you want to delete your account?'),
+                                                //   actions: [
+                                                //     TextButton(
+                                                //       onPressed: () async {
+                                                //         print("InsideDelete");
+                                                //         DeleteUserAccount();
 
-                                                      await FirebaseAuth
-                                                          .instance
-                                                          .signOut();
-                                                      Navigator.of(context)
-                                                          .pushReplacement(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const LoginScreen()),
-                                                      );
-                                                    });
+                                                //         await FirebaseAuth
+                                                //             .instance
+                                                //             .signOut();
+                                                //         Navigator.of(context)
+                                                //             .pushReplacement(
+                                                //           MaterialPageRoute(
+                                                //               builder: (context) =>
+                                                //                   const LoginScreen()),
+                                                //         );
+                                                //         //?????????????
+                                                //         //Navigator.of(context).pop(true);
+                                                //       },
+                                                //       child: const Text('Yes'),
+                                                //     ),
+                                                //     TextButton(
+                                                //       onPressed: () {
+                                                //         Navigator.of(context)
+                                                //             .pop(false);
+                                                //       },
+                                                //       child: const Text('No'),
+                                                //     )
+                                                //   ],
+                                                // );
                                               },
 
                                               //  color: Color.fromARGB(255, 240, 96, 86),
@@ -656,8 +677,8 @@ class _HomeScreen extends State<HomeScreen> {
             heightFactor: 1,
             alignment: Alignment.centerLeft,
             child: Text(
-              ' Today\'s progress',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+              '  Today\'s progress',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
             ),
           ),
         if (_editMode)
@@ -711,14 +732,14 @@ class _HomeScreen extends State<HomeScreen> {
           ),
         if (_editMode)
           const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 5, left: 10),
+            padding: EdgeInsets.only(top: 8.0, bottom: 4, left: 10),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 "Achieved so far",
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.w400,
                 ),
@@ -949,4 +970,102 @@ Future<void> DeleteUserAccount() async {
   print(currentid);
   FirebaseFirestore.instance.collection('users1').doc(currentid).delete();
   await FirebaseAuth.instance.currentUser!.delete();
+}
+
+showAlertDialog(BuildContext context) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text(
+      "Yes",
+      style: TextStyle(
+        fontSize: 15,
+      ),
+    ),
+    onPressed: () async {
+      await FirebaseAuth.instance.signOut();
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    },
+  );
+  Widget continueButton = TextButton(
+    child: Text(
+      "No",
+      style: TextStyle(
+        fontSize: 15,
+      ),
+    ),
+    onPressed: () {
+      Navigator.of(context).pop(true);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Logout"),
+    content: Text("Are you sure you want to logout?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+deleteacc(BuildContext context) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text(
+      "Yes",
+      style: TextStyle(
+        fontSize: 15,
+      ),
+    ),
+    onPressed: () async {
+      print("InsideDelete");
+      DeleteUserAccount();
+
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    },
+  );
+  Widget continueButton = TextButton(
+    child: Text(
+      "No",
+      style: TextStyle(
+        fontSize: 15,
+      ),
+    ),
+    onPressed: () {
+      Navigator.of(context).pop(true);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete Account"),
+    content: Text('Are you sure you want to delete your account?'),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

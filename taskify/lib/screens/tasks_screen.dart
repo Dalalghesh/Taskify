@@ -642,58 +642,72 @@ class _TaskScreenState extends State<TaskScreen> {
                                         ),
                                         onPressed: tasks.length > 0
                                             ? () {
-                                                CoolAlert.show(
-                                                  title: "Complete",
-                                                  context: context,
-                                                  type: CoolAlertType.confirm,
-                                                  text:
-                                                      'Do you want to mark selected tasks as completed?',
-                                                  confirmBtnText: 'Yes',
-                                                  cancelBtnText: 'No',
-                                                  onCancelBtnTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  onConfirmBtnTap: () {
-                                                    CoolAlert.show(
-                                                        title: "Successful",
-                                                        context: context,
-                                                        type: CoolAlertType
-                                                            .success,
-                                                        text:
-                                                            "Task maked as completed successfully!",
-                                                        confirmBtnColor:
-                                                            const Color(
-                                                                0xff7b39ed),
-                                                        onConfirmBtnTap:
-                                                            () async {
-                                                          getUsers(
-                                                              widget.category,
-                                                              widget.list  );
-                                                          tasks.forEach(
-                                                              (element) {
-                                                            provider.updateCheckboxValue(
-                                                                element.second!,
-                                                                tasks.indexOf(
-                                                                    element));
-                                                          });
-                                                          tasks.clear();
-                                                          provider.tasksList
-                                                              .forEach(
-                                                                  (element) {
-                                                            element.value =
-                                                                false;
-                                                          });
+                                                // set up the buttons
+                                                Widget cancelButton =
+                                                    TextButton(
+                                                  child: Text(
+                                                    "Yes",
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  onPressed: () async {
+                                                    getUsers(widget.category,
+                                                        widget.list);
+                                                    tasks.forEach((element) {
+                                                      provider
+                                                          .updateCheckboxValue(
+                                                              element.second!,
+                                                              tasks.indexOf(
+                                                                  element));
+                                                    });
+                                                    tasks.clear();
+                                                    provider.tasksList
+                                                        .forEach((element) {
+                                                      element.value = false;
+                                                    });
 
-                                                          await getTask();
-                                                          setState(() {});
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        });
+                                                    await getTask();
+                                                    setState(() {});
+                                                    Navigator.of(context).pop();
+                                                    // Navigator.of(context).pop();
+                                                    //?????????????
+                                                    //Navigator.of(context).pop(true);
                                                   },
-                                                  confirmBtnColor:
-                                                      Color(0xff7b39ed),
+                                                );
+                                                Widget continueButton =
+                                                    TextButton(
+                                                  child: Text(
+                                                    "No",
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(true);
+                                                  },
+                                                );
+
+                                                // set up the AlertDialog
+                                                AlertDialog alert = AlertDialog(
+                                                  title:
+                                                      Text("Mark as completed"),
+                                                  content: Text(
+                                                      'Are you sure you want to mark selected tasks as completed?'),
+                                                  actions: [
+                                                    cancelButton,
+                                                    continueButton,
+                                                  ],
+                                                );
+
+                                                // show the dialog
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return alert;
+                                                  },
                                                 );
 
                                                 // tasks.forEach((element) {
@@ -1006,7 +1020,7 @@ sendNotification(String title, String token) async {
   print(token);
   print('dalal');
   print('raghad');
-  print (title);
+  print(title);
 
   final data = {
     'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -1041,13 +1055,13 @@ sendNotification(String title, String token) async {
   } catch (e) {}
 }
 
-getUsers(String CategoryName, String ListName ) async {
+getUsers(String CategoryName, String ListName) async {
   print('1');
   List<dynamic> UIDS = [];
   final _firebaseFirestore = FirebaseFirestore.instance;
   print(CategoryName);
   print(ListName);
-   /*tasks.forEach(
+  /*tasks.forEach(
                                                               (element) {
                                                                 print(element);
                                                               });*/
@@ -1066,14 +1080,14 @@ getUsers(String CategoryName, String ListName ) async {
           print('Inside loop+i');
           final String useremail = UIDS[i];
           print(useremail);
-          getUsersToken(useremail , ListName);
+          getUsersToken(useremail, ListName);
         }
       }
     }
   }
 }
 
-Future getUsersToken(String receiver , String ListName) async {
+Future getUsersToken(String receiver, String ListName) async {
   final _firebaseFirestore = FirebaseFirestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
   print(receiver);
@@ -1093,7 +1107,8 @@ Future getUsersToken(String receiver , String ListName) async {
         // print(res.docs[i]['token']);
         print('alll');
         final String receivertoken = res.docs[i]['token'];
-        sendNotification("New tasks completed in $ListName list", receivertoken);
+        sendNotification(
+            "New tasks completed in $ListName list", receivertoken);
       }
     }
   }

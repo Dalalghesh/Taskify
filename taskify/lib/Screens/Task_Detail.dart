@@ -143,13 +143,13 @@ class _TaskDetailState extends State<TaskDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      "Task Details:",
+                      "Task Details",
                       maxLines: 1,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          // fontWeight: FontWeight.bold,
                           fontSize: 18),
                     ),
                     Row(
@@ -168,47 +168,73 @@ class _TaskDetailState extends State<TaskDetail> {
                                 ///
                                 if (provider.editTask == true &&
                                     provider.imageLoading == false) {
-                                  CoolAlert.show(
-                                      context: context,
-                                      type: CoolAlertType.confirm,
-                                      text: 'Do you want to edit this task?',
-                                      confirmBtnText: 'Yes',
-                                      cancelBtnText: 'No',
-                                      confirmBtnColor: const Color(0xff7b39ed),
-                                      title: "Edit",
-                                      onCancelBtnTap: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                        // Navigator.of(context).pop();
-                                        provider
-                                            .updateEditTask(!provider.editTask);
-                                      },
-                                      onConfirmBtnTap: () async {
-                                        await FirebaseFirestore.instance
-                                            .collection('tasks')
-                                            .doc(myTask.id)
-                                            .update({
-                                          'Deadline': dateTimeUpdate,
-                                          'description': myTask.description,
-                                          'Image': myTask.image,
-                                          'Task': myTask.task,
-                                          'Priority': myTask.priority
-                                        });
-                                        CoolAlert.show(
-                                          title: "Success",
-                                          context: context,
-                                          type: CoolAlertType.success,
-                                          text: "Task Edited successfuly!",
-                                          confirmBtnColor:
-                                              const Color(0xff7b39ed),
-                                          onConfirmBtnTap: () {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                            provider.updateEditTask(
-                                                !provider.editTask);
-                                          },
-                                        );
+                                  // set up the buttons
+                                  Widget cancelButton = TextButton(
+                                    child: Text(
+                                      "Yes",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection('tasks')
+                                          .doc(myTask.id)
+                                          .update({
+                                        'Deadline': dateTimeUpdate,
+                                        'description': myTask.description,
+                                        'Image': myTask.image,
+                                        'Task': myTask.task,
+                                        'Priority': myTask.priority
                                       });
+                                      CoolAlert.show(
+                                        title: "Success",
+                                        context: context,
+                                        type: CoolAlertType.success,
+                                        text: "Task Edited successfuly!",
+                                        confirmBtnColor:
+                                            const Color(0xff7b39ed),
+                                        onConfirmBtnTap: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                          provider.updateEditTask(
+                                              !provider.editTask);
+                                        },
+                                      );
+                                      //?????????????
+                                      //Navigator.of(context).pop(true);
+                                    },
+                                  );
+                                  Widget continueButton = TextButton(
+                                    child: Text(
+                                      "No",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                  );
+
+                                  // set up the AlertDialog
+                                  AlertDialog alert = AlertDialog(
+                                    title: Text("Edit task"),
+                                    content: Text(
+                                        'Are you sure you want to edit this task?'),
+                                    actions: [
+                                      cancelButton,
+                                      continueButton,
+                                    ],
+                                  );
+
+                                  // show the dialog
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return alert;
+                                    },
+                                  );
                                 } else {
                                   provider.updateEditTask(!provider.editTask);
                                 }
@@ -222,34 +248,66 @@ class _TaskDetailState extends State<TaskDetail> {
                               color: Colors.red,
                             ),
                             onPressed: () {
-                              CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.confirm,
-                                  text: 'Do you want to delete this task?',
-                                  confirmBtnText: 'Yes',
-                                  cancelBtnText: 'No',
-                                  confirmBtnColor: const Color(0xff7b39ed),
-                                  title: "Delete",
-                                  onConfirmBtnTap: () async {
-                                    await FirebaseFirestore.instance
-                                        .collection('tasks')
-                                        .doc(myTask.id)
-                                        .update({'status': 'deleted'});
-                                    // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: myTask.category,)), (route) => false);
+                              Widget cancelButton = TextButton(
+                                child: Text(
+                                  "Yes",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  await FirebaseFirestore.instance
+                                      .collection('tasks')
+                                      .doc(myTask.id)
+                                      .update({'status': 'deleted'});
+                                  // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: myTask.category,)), (route) => false);
 
-                                    CoolAlert.show(
-                                      title: "Success",
-                                      context: context,
-                                      type: CoolAlertType.success,
-                                      text: "Task Deleted successfuly!",
-                                      confirmBtnColor: const Color(0xff7b39ed),
-                                      onConfirmBtnTap: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                    );
-                                  });
+                                  CoolAlert.show(
+                                    title: "Success",
+                                    context: context,
+                                    type: CoolAlertType.success,
+                                    text: "Task Deleted successfuly!",
+                                    confirmBtnColor: const Color(0xff7b39ed),
+                                    onConfirmBtnTap: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  );
+                                  //?????????????
+                                  //Navigator.of(context).pop(true);
+                                },
+                              );
+                              Widget continueButton = TextButton(
+                                child: Text(
+                                  "No",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                              );
+
+                              // set up the AlertDialog
+                              AlertDialog alert = AlertDialog(
+                                title: Text('Delete task'),
+                                content: Text(
+                                    'Are you sure you want to delete this task?'),
+                                actions: [
+                                  cancelButton,
+                                  continueButton,
+                                ],
+                              );
+
+                              // show the dialog
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return alert;
+                                },
+                              );
                             },
                           ),
                         ),

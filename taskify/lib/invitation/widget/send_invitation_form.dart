@@ -145,14 +145,15 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   .where("senderEmail", isEqualTo: senderEmail)
                   .where("listId", isEqualTo: widget.listId)
                   .get();*/
-                    final res = await _firebaseFirestore
+              final res = await _firebaseFirestore
                   .collection('invitations')
                   .where("recieverEmail", isEqualTo: recieverEmail)
                   .where("senderEmail", isEqualTo: senderEmail)
-                  .where("listId", isEqualTo: widget.listId).where("status", isEqualTo:"pending")
+                  .where("listId", isEqualTo: widget.listId)
+                  .where("status", isEqualTo: "pending")
                   .get();
 
-       //Case1 pending
+              //Case1 pending
               if (res.docs.isNotEmpty) {
                 print("helloooooooo");
                 print("dublicate00");
@@ -164,35 +165,33 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   confirmBtnColor: const Color(0xff7b39ed),
                 );
                 _typeAheadController.clear();
+              } else {
+                final res1 = await _firebaseFirestore
+                    .collection('invitations')
+                    .where("recieverEmail", isEqualTo: recieverEmail)
+                    .where("senderEmail", isEqualTo: senderEmail)
+                    .where("listId", isEqualTo: widget.listId)
+                    .where("status", isEqualTo: "accepted")
+                    .get();
 
-              
-              } else { 
-                
-                   final res1 = await _firebaseFirestore
-                  .collection('invitations')
-                  .where("recieverEmail", isEqualTo: recieverEmail)
-                  .where("senderEmail", isEqualTo: senderEmail)
-                  .where("listId", isEqualTo: widget.listId).where("status", isEqualTo:"accepted")
-                  .get();
-
-                  //Case2 accepted
-                  if(res1.docs.isNotEmpty){
-                     print("accepted");
-                    CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.error,
-                  title: "Invitation",
-                  text: "Friend already has this list!",
-                  confirmBtnColor: const Color(0xff7b39ed),
-                );
-                   
-                  }
-                  //case3+4 Fisrt Time or rejected
-                  else{
-                     await sendInviation(query, widget.listId);
-                   getUsersToken(email.toString());
+                //Case2 accepted
+                if (res1.docs.isNotEmpty) {
+                  print("accepted");
+                  CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.error,
+                    title: "Invitation",
+                    text: "Friend already has this list!",
+                    confirmBtnColor: const Color(0xff7b39ed),
+                  );
+                }
+                //case3+4 Fisrt Time or rejected
+                else {
+                  await sendInviation(query, widget.listId);
+                  getUsersToken(email.toString());
+                }
               }
-              }_typeAheadController.clear();
+              _typeAheadController.clear();
             },
             child: const Text(
               'Invite',
