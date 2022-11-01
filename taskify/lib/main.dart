@@ -22,6 +22,9 @@ import 'homePage.dart';
 // #7b39ed - primary color
 
 Future<void> main() async {
+  ///add subtask here
+  ///
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -68,16 +71,15 @@ class MyApp extends StatelessWidget {
   initNotification() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print("onMessage:$message");
-    }); 
-                
+    });
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       print("onMessageOpenedApp: $message");
       // Navigator.of(context).pushNamed("ReceivedInvitation");
       //Util.routeToWidget(context, NavBar(tabs: 0));
-      
     });
   }
-  
+
   void initState() {
     initNotification();
     // TODO: implement initState
@@ -179,4 +181,3 @@ modify({
 
 // For deleting a calendar event
 Future<void> delete(String eventId, bool shouldNotify) async {}
-

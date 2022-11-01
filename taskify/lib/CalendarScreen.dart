@@ -9,6 +9,7 @@ import 'package:taskify/controller/UserController.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:taskify/Screens/Task_Detail.dart';
 import 'package:taskify/screens/todo_list_screen.dart';
+import 'package:taskify/send_message.dart';
 import 'package:taskify/utils/app_colors.dart';
 import "package:googleapis_auth/auth_io.dart";
 import 'package:taskify/utils.dart';
@@ -30,134 +31,204 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<AppState>(context, listen: false).getChatRooms();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     AppState provider = Provider.of<AppState>(context, listen: true);
 
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: Get.height * 0.03, left: 25, right: 25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            TableCalendar(
-              focusedDay: focusedDay,
-              firstDay: DateTime(1990),
-              lastDay: DateTime(2024),
-              calendarBuilders: CalendarBuilders(
-                defaultBuilder: (context, day, focusedDay) {
-                  for (DateTime d in provider.toHighlight) {
-                    if (day.day == d.day &&
-                        day.month == d.month &&
-                        day.year == d.year) {
-                      String type = provider.getColorofDate(d);
-                      print('$d $type');
+    return buildScaffold(provider);
+    // return buildScaffoldOld(provider, context);
 
-                      return Container(
+  }
+
+  Scaffold buildScaffold(AppState provider) {
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            'Chats',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: const Color(0xff7b39ed),
+        ),
+        body: provider.chatLoading ?
+        const Center(child: CircularProgressIndicator(),):
+
+
+        ListView.builder(
+
+            shrinkWrap: true,
+            itemCount: provider.chatGroups.length,
+            itemBuilder: (context, index){
+              return      GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> SendMessagePage(groups: provider.chatGroups[index])));
+                },
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  margin: const EdgeInsets.only(
+                      left: 20, right: 20, top: 6, bottom: 5),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                            blurRadius: 2,
+                            color: Colors.grey
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(8)),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  //alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: [
+                      const  Icon(
+                        Icons.people,
+                        color: Color(0xff7b39ed),
+                      ),
+                      Text(
+                        provider.chatGroups[index].list,
+                        style: const TextStyle(
+                            fontSize: 15, color: Colors.black),
+                      ),
+                      Container()
+                    ],
+                  ),
+                ),
+              );
+            })
+    );
+  }
+
+  Scaffold buildScaffoldOld(AppState provider, BuildContext context) {
+    return Scaffold(
+    body: Padding(
+      padding: EdgeInsets.only(top: Get.height * 0.03, left: 25, right: 25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          TableCalendar(
+            focusedDay: focusedDay,
+            firstDay: DateTime(1990),
+            lastDay: DateTime(2024),
+            calendarBuilders: CalendarBuilders(
+              defaultBuilder: (context, day, focusedDay) {
+                for (DateTime d in provider.toHighlight) {
+                  if (day.day == d.day &&
+                      day.month == d.month &&
+                      day.year == d.year) {
+                    String type = provider.getColorofDate(d);
+                    print('$d $type');
+
+                    return Container(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      height: 46,
+                      width: 33,
+                      child: Container(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                        height: 46,
-                        width: 33,
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: type == 'High'
-                                ? Color.fromARGB(255, 223, 123, 123)
-                                : type == 'Medium'
-                                    ? Color.fromARGB(255, 241, 207, 65)
-                                    : Color.fromARGB(255, 152, 224, 154),
-                          ),
-                          child: Center(
-                            widthFactor: 10,
-                            heightFactor: 10,
-                            child: Text(
-                              '${day.day}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: type == 'High'
+                              ? Color.fromARGB(255, 223, 123, 123)
+                              : type == 'Medium'
+                                  ? Color.fromARGB(255, 241, 207, 65)
+                                  : Color.fromARGB(255, 152, 224, 154),
+                        ),
+                        child: Center(
+                          widthFactor: 10,
+                          heightFactor: 10,
+                          child: Text(
+                            '${day.day}',
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
-                      );
-                    }
+                      ),
+                    );
                   }
-                  return null;
-                },
+                }
+                return null;
+              },
+            ),
+
+            //changing calendar format
+            calendarFormat: format,
+            onFormatChanged: (CalendarFormat _format) {
+              setState(() {
+                format = _format;
+              });
+            },
+            startingDayOfWeek: StartingDayOfWeek.sunday,
+            daysOfWeekVisible: true,
+
+            //Day Changed on select
+            onDaySelected: (DateTime selectDay, DateTime focusDay) {
+              setState(() {
+                selectedDay = selectDay;
+                focusedDay = focusDay;
+              });
+              var datee = DateFormat("yyyy-MM-dd").format(selectDay);
+              print(datee);
+              provider.filterTasksByDate(datee);
+              showTasksDialog(context, datee);
+              //print(selectDay);
+
+              // print(focusedDay);
+            },
+            selectedDayPredicate: (DateTime date) {
+              return isSameDay(selectedDay, date);
+            },
+
+            //To style the Calendar
+            calendarStyle: CalendarStyle(
+              isTodayHighlighted: true,
+              selectedDecoration: BoxDecoration(
+                color: Color(0xff7b39ed),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
               ),
-
-              //changing calendar format
-              calendarFormat: format,
-              onFormatChanged: (CalendarFormat _format) {
-                setState(() {
-                  format = _format;
-                });
-              },
-              startingDayOfWeek: StartingDayOfWeek.sunday,
-              daysOfWeekVisible: true,
-
-              //Day Changed on select
-              onDaySelected: (DateTime selectDay, DateTime focusDay) {
-                setState(() {
-                  selectedDay = selectDay;
-                  focusedDay = focusDay;
-                });
-                var datee = DateFormat("yyyy-MM-dd").format(selectDay);
-                print(datee);
-                provider.filterTasksByDate(datee);
-                showTasksDialog(context, datee);
-                //print(selectDay);
-
-                // print(focusedDay);
-              },
-              selectedDayPredicate: (DateTime date) {
-                return isSameDay(selectedDay, date);
-              },
-
-              //To style the Calendar
-              calendarStyle: CalendarStyle(
-                isTodayHighlighted: true,
-                selectedDecoration: BoxDecoration(
-                  color: Color(0xff7b39ed),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                selectedTextStyle: TextStyle(color: Colors.white),
-                todayDecoration: BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                defaultDecoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                weekendDecoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
+              selectedTextStyle: TextStyle(color: Colors.white),
+              todayDecoration: BoxDecoration(
+                color: Colors.grey,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
               ),
-              headerStyle: HeaderStyle(
-                formatButtonVisible: true,
-                titleCentered: true,
-                formatButtonShowsNext: false,
-                formatButtonDecoration: BoxDecoration(
-                  color: Color(0xff7b39ed),
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                formatButtonTextStyle: TextStyle(
-                  color: Colors.white,
-                ),
+              defaultDecoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              weekendDecoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
               ),
             ),
-            const SizedBox(height: 10),
-          ],
-        ),
+            headerStyle: HeaderStyle(
+              formatButtonVisible: true,
+              titleCentered: true,
+              formatButtonShowsNext: false,
+              formatButtonDecoration: BoxDecoration(
+                color: Color(0xff7b39ed),
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              formatButtonTextStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
       ),
-    );
+    ),
+  );
   }
 
   showTasksDialog(context, date) {

@@ -9,6 +9,7 @@ import 'package:taskify/appstate.dart';
 import 'package:taskify/homePage.dart';
 import 'package:intl/intl.dart';
 import 'package:taskify/utils/app_colors.dart';
+import 'package:taskify/utils/validators.dart';
 import '../controller/UserController.dart';
 import '../models/sub_tasks.dart';
 import '../models/tasks.dart';
@@ -541,21 +542,22 @@ class _TaskScreenState extends State<TaskScreen> {
                                                           })
                                                     ],
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 10,
                                                   ),
                                                   provider.tasksList[index]
                                                           .showSubTasks
                                                       ? Container(
                                                           margin:
-                                                              EdgeInsets.only(
+                                                              const EdgeInsets
+                                                                      .only(
                                                                   left: 50),
                                                           child: Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 height: 10,
                                                               ),
                                                               ListView.builder(
@@ -568,14 +570,15 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                       (context,
                                                                           index) {
                                                                     return Container(
-                                                                      margin: EdgeInsets.only(
+                                                                      margin: const EdgeInsets
+                                                                              .only(
                                                                           bottom:
                                                                               10),
                                                                       child:
                                                                           Text(
                                                                         "${index + 1} -  ${provider.filteredSubTasks[index].subTask}",
                                                                         style:
-                                                                            TextStyle(
+                                                                            const TextStyle(
                                                                           color:
                                                                               Colors.black,
                                                                           fontSize:
@@ -587,6 +590,8 @@ class _TaskScreenState extends State<TaskScreen> {
                                                               SizedBox(
                                                                 height: 10,
                                                               ),
+
+                                                              ///add subtask here
                                                               provider.addNewSubTask
                                                                   ? Container(
                                                                       height:
@@ -613,14 +618,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                           setState(
                                                                               () {});
                                                                         },
-                                                                        decoration: InputDecoration(
+                                                                        decoration: const InputDecoration(
                                                                             // border: InputBorder.none,
                                                                             ),
                                                                       ),
                                                                     )
                                                                   : Container(),
                                                               provider.addNewSubTask
-                                                                  ? SizedBox(
+                                                                  ? const SizedBox(
                                                                       height:
                                                                           10,
                                                                     )
@@ -639,7 +644,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                       width:
                                                                           100,
                                                                       decoration:
-                                                                          BoxDecoration(
+                                                                          const BoxDecoration(
                                                                         color: Color.fromARGB(
                                                                             0,
                                                                             255,
@@ -669,7 +674,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                         alignment:
                                                                             Alignment.center,
                                                                         child:
-                                                                            Text(
+                                                                            const Text(
                                                                           'Add Subtask',
                                                                           style: TextStyle(
                                                                               color: Colors.white,
@@ -679,7 +684,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                     ),
                                                                   ),
                                                                   provider.addNewSubTask
-                                                                      ? SizedBox(
+                                                                      ? const SizedBox(
                                                                           width:
                                                                               10,
                                                                         )
@@ -702,6 +707,10 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                               });
                                                                               subTaskController.clear();
                                                                             }
+                                                                            // if (subTaskController.text.length >
+                                                                            //     15) {
+                                                                            //   Validators.lengthVal(subTaskController.text);
+                                                                            // }
                                                                           },
                                                                           child:
                                                                               Container(
@@ -832,11 +841,11 @@ class _TaskScreenState extends State<TaskScreen> {
                     Container(
                       height: MediaQuery.of(context).size.height / 2.5,
                       child: provider.completedtasksLoading
-                          ? Center(
+                          ? const Center(
                               child: CircularProgressIndicator(),
                             )
                           : provider.completedtasksList.isEmpty
-                              ? Center(
+                              ? const Center(
                                   child: Text(
                                   'There are no completed tasks yet',
                                   style: TextStyle(

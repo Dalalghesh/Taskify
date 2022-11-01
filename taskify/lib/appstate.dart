@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:taskify/models/sub_tasks.dart';
 import 'package:taskify/models/task_list.dart';
 
+import 'models/chat_groups.dart';
 import 'models/tasks.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -36,7 +37,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<TaskListModel> list = [];
   bool listLoading = true;
   getList(cat) async {
     listLoading = true;
@@ -63,10 +63,142 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  getListAll() async {
+    listLoading = true;
+    notifyListeners();
+    myList.clear();
+
+    final res = await FirebaseFirestore.instance
+        .collection('List')
+        // .where('CategoryName', isEqualTo: cat)
+        .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+        .get();
+    for (int i = 0; i < res.docs.length; i++) {
+      TaskListModelProfile task = TaskListModelProfile(
+          docId: res.docs[i].id,
+          email: res.docs[i]['UID'],
+          category: res.docs[i]['CategoryName'],
+          list: res.docs[i]['List'],
+          private: res.docs[i]['isPrivate']);
+      myList.add(task);
+    }
+    print("list.length ${myList.length}");
+    listLoading = false;
+    notifyListeners();
+  }
+
   // List<dynamic> tasks = [];
   List<Tasksss> tasksList = [];
+  List<Tasksss> myTasksList = [];
+  List<TaskListModelProfile> myList = [];
+  int numberCompletedToday = 0;
+  int numberProgressToday = 0;
+  List<TaskListModel> list = [];
 
   bool tasksLoading = true;
+
+  getAllTasksProfile() async {
+    tasksLoading = true;
+    notifyListeners();
+    //   tasks.clear();
+    myTasksList.clear();
+
+    final res = await FirebaseFirestore.instance
+        .collection('tasks')
+        // .where('CategoryName', isEqualTo: cat)
+        // .where('ListName', isEqualTo: list)
+        .where('UID', arrayContains: FirebaseAuth.instance.currentUser!.email)
+        // .where('status', isEqualTo: 'pending')
+        .get();
+    numberProgressToday = 0;
+    numberCompletedToday = 0;
+    for (int i = 0; i < res.docs.length; i++) {
+      DateTime date = res.docs[i]['Deadline'].toDate();
+      DateTime today = DateTime.now();
+
+      if (date.year == today.year &&
+          date.month == today.month &&
+          date.day == today.day) {
+        if (res.docs[i]['status'] == "pending") {
+          print("dateee isBefore_pending");
+          numberProgressToday++;
+        } else if (res.docs[i]['status'] == "completed") {
+          print("dateee isBefore_completed");
+          numberCompletedToday++;
+        }
+      }
+      try {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            image: res.docs[i]['Image'],
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            status: res.docs[i]['status'],
+            showSubTasks: false,
+            showAssignedMembers: false,
+            // assignedMembers: res.docs[i]['assignedMembers'],
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
+
+            manage: false,
+            deadline: res.docs[i]['Deadline']);
+
+        myTasksList.add(taskss);
+      } catch (e) {
+        Tasksss taskss = Tasksss(
+            id: res.docs[i].id,
+            status: res.docs[i]['status'],
+            image: "",
+            task: res.docs[i]['Task'],
+            priority: res.docs[i]['Priority'],
+            category: res.docs[i]['CategoryName'],
+            list: res.docs[i]['ListName'],
+            description: res.docs[i]['description'],
+            value: false,
+            showSubTasks: false,
+            showAssignedMembers: false,
+            //assignedMembers: [],
+            manage: false,
+            // assignedMembers: res.docs[i]['assignedMembers'],
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
+
+            deadline: res.docs[i]['Deadline']);
+
+        myTasksList.add(taskss);
+      }
+
+      // tasks.add(res.docs[i]['Task']);
+    }
+    myTasksList
+        .sort((Tasksss a, Tasksss b) => a.deadline.compareTo(b.deadline));
+
+    // print(tasks.length);
+    tasksLoading = false;
+    notifyListeners();
+    // return myTasksList ;
+  }
+
+  linkData() async {
+    myTasksList.forEach((element) {
+      if (element.status == "pending") {
+        for (var listElement in myList) {
+          if (listElement.list.toString() == element.list.toString()) {
+            listElement.pendingTask++;
+          }
+        }
+      } else if (element.status == "completed") {
+        for (var listElement in myList) {
+          if (listElement.list.toString() == element.list.toString()) {
+            listElement.completedTask++;
+          }
+        }
+      }
+    });
+  }
+
   getTasks(cat, list) async {
     tasksLoading = true;
     notifyListeners();
@@ -94,6 +226,9 @@ class AppState extends ChangeNotifier {
             value: false,
             status: res.docs[i]['status'],
             showSubTasks: false,
+            showAssignedMembers: false,
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
+            manage: false,
             deadline: res.docs[i]['Deadline']);
 
         tasksList.add(taskss);
@@ -109,6 +244,11 @@ class AppState extends ChangeNotifier {
             description: res.docs[i]['description'],
             value: false,
             showSubTasks: false,
+            showAssignedMembers: false,
+            //assignedMembers: [],
+            manage: false,
+            // assignedMembers: [],
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
             deadline: res.docs[i]['Deadline']);
 
         tasksList.add(taskss);
@@ -153,6 +293,11 @@ class AppState extends ChangeNotifier {
             value: false,
             showSubTasks: false,
             status: res.docs[i]['status'],
+            showAssignedMembers: false,
+            // assignedMembers: [],
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
+
+            manage: false,
             deadline: res.docs[i]['Deadline']);
 
         completedtasksList.add(taskss);
@@ -168,6 +313,11 @@ class AppState extends ChangeNotifier {
             description: res.docs[i]['description'],
             value: false,
             showSubTasks: false,
+            showAssignedMembers: false,
+            // assignedMembers: [],
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
+
+            manage: false,
             deadline: res.docs[i]['Deadline']);
 
         completedtasksList.add(taskss);
@@ -256,6 +406,13 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  updateShowAssignedMembers(val, i) {
+    // task.showSubTasks = val;
+    tasksList[i].showAssignedMembers = val;
+
+    notifyListeners();
+  }
+
   List<Tasksss> allTasks = [];
   List<DateTime> toHighlight = [];
   bool allTasksLoading = false;
@@ -286,6 +443,11 @@ class AppState extends ChangeNotifier {
             status: res.docs[i]['status'],
             value: false,
             showSubTasks: false,
+            manage: false,
+            showAssignedMembers: false,
+            // assignedMembers: [],
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
+
             deadline: date1);
         allTasks.add(tasks);
       } catch (e) {
@@ -300,6 +462,11 @@ class AppState extends ChangeNotifier {
             description: res.docs[i]['description'],
             value: false,
             showSubTasks: false,
+            showAssignedMembers: false,
+            // assignedMembers: [],
+            assignedMembers: res.docs[i].data().toString().contains('assignedMembers') ? res.docs[i]['assignedMembers'] : [],
+
+            manage: false,
             deadline: date1);
         allTasks.add(tasks);
       }
@@ -460,4 +627,149 @@ class AppState extends ChangeNotifier {
       return '0';
     }
   }
+
+  updateManageStatus(val, index){
+    tasksList[index].showAssignedMembers = val;
+    notifyListeners();
+
+  }
+
+
+  List<dynamic> assigneMembers = [];
+  List<AssignedMembers> assignedMembers = [];
+  bool assignedLoading = false;
+
+
+
+
+  Future<void> getAllUsers(id) async {
+    assigneMembers.clear();
+    assignedMembers.clear();
+    assignedLoading = true;
+    notifyListeners();
+
+
+    final currentUserEmail = FirebaseAuth.instance.currentUser?.email;
+
+    var resss = await FirebaseFirestore.instance.collection('tasks').doc(id).get();
+    try{
+      assigneMembers = resss['assignedMembers'];
+    } catch(e){
+      assigneMembers = [];
+    }
+
+    for(int i =0; i< resss['UID'].length; i++){
+
+
+
+
+      final res = await FirebaseFirestore.instance
+          .collection('users1')
+          .where('email', isEqualTo: resss['UID'][i])
+          .get();
+
+      try{
+        AssignedMembers assignedMember = AssignedMembers(
+            value: assigneMembers.contains(res.docs[0].id)? true: false,
+            userName: res.docs[0]['firstName'],
+            userId: res.docs[0].id);
+        assignedMembers.add(assignedMember);
+      } catch(e){
+
+    }
+  }
+    //assignedMembers.removeWhere((element) => element.userId == FirebaseAuth.instance.currentUser!.uid);
+
+    // final res = await FirebaseFirestore.instance
+    //     .collection('tasks')
+    //     .where("email", isNotEqualTo: currentUserEmail)
+    //     .get();
+    // if (res.docs.isNotEmpty) {
+    //   for (int i = 0; i < res.docs.length; i++) {
+    //     AssignedMembers assignedMember = AssignedMembers(value: assigneMembers.contains(res.docs[i].id)? true: false, userName: res.docs[i]['firstName'], userId: res.docs[i].id);
+    //     // UserModel userModel = UserModel(
+    //     //     email: res.docs[i]['email'].toLowerCase(),
+    //     //     categories: res.docs[i]['categories'],
+    //     //     docId: res.docs[i].id);
+    //     // modelEmails.add(userModel);
+    //     // emails.add(res.docs[i]['email'].toLowerCase());
+    //
+    //   }
+    //
+    // }
+    assignedLoading = false;
+    notifyListeners();
+  }
+
+
+  updateCheckBoxofAssignedMembers(val, index, userId, id)async{
+    assignedMembers[index].value = val;
+    notifyListeners();
+    if(val == true){
+      assigneMembers.add(userId);
+      await FirebaseFirestore.instance.collection('tasks').doc(id)
+          .set({
+        'assignedMembers': FieldValue.arrayUnion([userId])
+      }, SetOptions(merge: true));
+    }else{
+      assignedMembers.remove(userId);
+      await FirebaseFirestore.instance.collection('tasks').doc(id)
+          .update({
+        'assignedMembers': FieldValue.arrayRemove([userId])
+      }, );
+    }
+
+  }
+
+
+  List<ChatGroups> chatGroups = [];
+  bool chatLoading = false;
+
+
+  getChatRooms()async{
+    chatGroups.clear();
+    chatLoading = true;
+    notifyListeners();
+
+    var res =   await FirebaseFirestore.instance.collection('chat-groups').where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid).get();
+    print("res ${FirebaseAuth.instance.currentUser!.uid}");
+    // print("res ${res.docs}");
+
+    for(int i = 0; i< res.docs.length; i++){
+      ChatGroups chatGroup = ChatGroups(
+        id: res.docs[i].id,
+        // list: res.docs[i]['list'],
+        list: res.docs[i].data().toString().contains('list') ? res.docs[i]['list'] : [],
+
+        users: res.docs[i]['users'],
+      );
+      chatGroups.add(chatGroup);
+    }
+    chatLoading = false;
+    notifyListeners();
+
+  }
+
+
+  bool usersLoading = false;
+
+  List<String> chatGroupUsers = [];
+  getChatGroupUsers(users)async{
+    usersLoading = true;
+    chatGroupUsers.clear();
+    notifyListeners();
+    for(
+    int i = 0; i< users.length; i++
+    ){
+      if(users[i] != FirebaseAuth.instance.currentUser!.uid) {
+        var res = await FirebaseFirestore.instance.collection('users1').doc(
+            users[i]).get();
+
+        chatGroupUsers.add('${res['firstName']} ${res['lastName']}');
+      }  }
+
+    usersLoading =false;
+    notifyListeners();
+  }
+
 }

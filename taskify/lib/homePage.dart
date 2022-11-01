@@ -145,11 +145,11 @@ class NavBarState extends State<NavBar> {
         ),
         FABBottomAppBarItem(
             activeIcon: const Icon(
-              Icons.calendar_today_sharp,
+              Icons.message,
               color: Color.fromARGB(255, 170, 170, 170),
             ),
             inActiveIcon: const Icon(
-              Icons.calendar_today_sharp,
+              Icons.message,
               color: Colors.white,
             ),
             text: ''),
@@ -223,6 +223,7 @@ class NavBarState extends State<NavBar> {
               ),
               child: GestureDetector(
                 onTap: () {
+
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) => AddTask()));
                 },

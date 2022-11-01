@@ -14,7 +14,9 @@ import 'package:intl/intl.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import '../models/sub_tasks.dart';
 import '../screens/AddTask.dart';
+import '../utils/app_colors.dart';
 
 class TaskDetail extends StatefulWidget {
   final Tasksss task;
@@ -36,12 +38,14 @@ class TaskDetail extends StatefulWidget {
 class _TaskDetailState extends State<TaskDetail> {
   late Tasksss myTask;
   late Tasksss oldMyTask;
+  bool addNewSubTask = false;
   //DateTime dateTime;
   TextEditingController taskNameController = TextEditingController();
   TextEditingController taskDescriptionController = TextEditingController();
-
+  TextEditingController subTaskController = TextEditingController();
   @override
   void initState() {
+    Provider.of<AppState>(context , listen: false).editTask = false ;
     myTask = widget.task;
     oldMyTask = widget.task;
     // TODO: implement initState
@@ -51,6 +55,7 @@ class _TaskDetailState extends State<TaskDetail> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // print("ddd ${widget.isConpleted}");
       // Provider.of<AppState>(context, listen: false).updateEditTask(false);
+       Provider.of<AppState>(context, listen: false).getAllUsers(myTask.id);
     });
 
     taskDescriptionController.text = myTask.description;
@@ -149,7 +154,12 @@ class _TaskDetailState extends State<TaskDetail> {
                           Container(
                             child: IconButton(
                               icon: provider.editTask
-                                  ? const Icon(Icons.done)
+                                  ?  FittedBox(
+                                    child: Text("Save" , style: TextStyle(
+                                    color: Colors.purple[800],
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),),
+                                  )
                                   : const Icon(Icons.edit),
                               onPressed: () async {
                                 print("myTask ${widget.taskOld.task}");
@@ -167,13 +177,12 @@ class _TaskDetailState extends State<TaskDetail> {
                                   //       'Task':myTask.task,
                                   //       'Priority':myTask.priority
                                   //     });
-                                  //edit alert
                                   CoolAlert.show(
                                       context: context,
                                       type: CoolAlertType.confirm,
                                       text: 'Do you want to edit this task?',
                                       confirmBtnText: 'Yes',
-                                      cancelBtnText: 'No',
+                                      cancelBtnText: 'No & Back',
                                       confirmBtnColor: const Color(0xff7b39ed),
                                       title: "Edit",
                                       onCancelBtnTap: () {
@@ -218,6 +227,7 @@ class _TaskDetailState extends State<TaskDetail> {
                         Container(
                           child: IconButton(
                             icon: const Icon(Icons.delete_rounded),
+                            color: Colors.red,
                             onPressed: () {
                               CoolAlert.show(
                                   context: context,
@@ -402,10 +412,38 @@ class _TaskDetailState extends State<TaskDetail> {
                               ? Center(
                                   child: CircularProgressIndicator(),
                                 )
-                              : Image.network(
-                                  myTask.image,
-                                  fit: BoxFit.cover,
-                                ),
+                              : Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(120),
+                                      child: Image.network(
+                                          myTask.image,
+                                          fit: BoxFit.fitWidth ,
+                                        ),
+                                    ),
+                                  ),
+                                  if(provider.editTask)
+                                  Positioned(
+                                      bottom: 2,
+                                      right: 10,
+                                      child: Container(
+                                          padding: EdgeInsets.all(4),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+
+                                            color: AppColors.deepPurple,
+
+                                            // width: 2
+
+                                            // )
+                                          ),
+                                          child: Icon(
+                                            Icons.camera_alt_outlined,
+                                            color: Colors.white,
+                                          )))
+                                ],
+                              ),
                         ),
                       ),
                     ),
@@ -460,15 +498,61 @@ class _TaskDetailState extends State<TaskDetail> {
                       // Respond to button press
                     },
                     icon: Icon(Icons.view_list, size: 18),
-                    label: myTask.showSubTasks
-                        ? Text(
-                            "hide subtasks",
-                            textAlign: TextAlign.center,
-                          )
-                        : Text(
-                            "view subtasks",
-                            textAlign: TextAlign.center,
-                          )),
+                    label: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        myTask.showSubTasks
+                            ? Text(
+                                "hide subtasks",
+                                textAlign: TextAlign.center,
+                              )
+                            : Text(
+                                "view subtasks",
+                                textAlign: TextAlign.center,
+                              ),
+                        Row(
+                          children: [
+                            if(!addNewSubTask && myTask.showSubTasks)
+                            GestureDetector(
+                              onTap: () {
+                                // provider.updateAddNewTaskValue(true);
+                                addNewSubTask = true;
+                                setState(() {});
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(0, 255, 255, 255),
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 3,
+                                        color:
+                                            Color.fromARGB(0, 158, 158, 158)),
+                                  ],
+                                ),
+                                alignment: Alignment.center,
+                                child: Container(
+                                  height: 30,
+                                  width: 100,
+                                  // decoration: BoxDecoration(
+                                  //     color: Color(0xff7b39ed),
+                                  //     borderRadius: BorderRadius.circular(10)),
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'Add Subtask',
+                                    style: TextStyle(
+                                        color: Color(0xff7b39ed), fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+                /// No sub tasks
                 myTask.showSubTasks
                     ? Container(
                         margin: EdgeInsets.only(left: 50),
@@ -490,8 +574,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                         return Container(
                                           margin: EdgeInsets.only(bottom: 10),
                                           child: Text(
-                                            provider.filteredSubTasks[index]
-                                                .subTask,
+                                            "- ${provider.filteredSubTasks[index].subTask}",
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,
@@ -501,29 +584,305 @@ class _TaskDetailState extends State<TaskDetail> {
                                       }),
                             ]))
                     : Container(),
-                /* TextButton.icon(
-                       onPressed: () {
-                      //if (!widget.isConpleted) {
-                        provider.updateShowSubTasks(
-                            !myTask.showMembers, widget.index);
-                      }
-                      //if (widget.isConpleted) {
-                        setState(() {
-                          myTask.showMembers = !myTask.showMembers;
-                        });
-                      }
-                      // Respond to button press
-                    },
-                         icon: Icon(Icons.view_list, size: 18),
-                    label: myTask.showSubTasks
-                        ? Text(
-                            "Assigned to",
-                            textAlign: TextAlign.center,
+                if (addNewSubTask) Container(
+                        height: subTaskController.text.length > 15 ? 60 : 50,
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width / 1.7,
+                        //  padding: EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: TextFormField(
+                            controller: subTaskController,
+                            onChanged: (v) {
+                              setState(() {});
+                            },
+                            decoration:  InputDecoration(
+                              errorText: subTaskController.text.length > 15 ? "You can’t enter more than 15 letters" : null
+                                // border: InputBorder.none,
+                                ),
+                          ),
+                        ),
+                      ) else Container(),
+                addNewSubTask
+                    ? const SizedBox(
+                        height: 10,
+                      )
+                    : Container(),
+
+
+                Row(
+                  children: [
+                    addNewSubTask
+                        ? const SizedBox(
+                            width: 10,
                           )
-                        : Text(
-                            "Assign to",
-                            textAlign: TextAlign.center,
-                          )),*/
+                        : Container(),
+                    addNewSubTask
+                        ? GestureDetector(
+                            onTap: () async {
+                              if (subTaskController.text.length > 2 && subTaskController.text.length < 15) {
+                                SubTasks task = SubTasks(
+                                    id: '',
+                                    uid: FirebaseAuth
+                                        .instance.currentUser!.email
+                                        .toString(),
+                                    task: myTask.task,
+                                    subTask: subTaskController.text);
+
+                                provider.subTasks.add(task);
+                                provider.fiterSubTask(myTask.task);
+                                // updateAddNewTaskValue(false);
+                                addNewSubTask = false;
+                                setState(() {});
+                                await FirebaseFirestore.instance
+                                    .collection('sub-tasks')
+                                    .add({
+                                  'SubTask': subTaskController.text,
+                                  'Task': myTask.task,
+                                  'UID':
+                                      FirebaseAuth.instance.currentUser!.email,
+                                });
+                                subTaskController.clear();
+                              }
+                              // if (subTaskController.text.length >
+                              //     15) {
+                              //   Validators.lengthVal(subTaskController.text);
+                              // }
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: subTaskController.text.length < 3  || subTaskController.text.length > 15
+                                      ? Colors.grey
+                                      : Color(0xff7b39ed),
+                                  borderRadius: BorderRadius.circular(10)),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Save',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15),
+                              ),
+                            ),
+
+                          )
+                        : Container()
+                  ],
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton.icon(
+                        onPressed: () {
+                          if (!widget.isConpleted) {
+                            provider.updateShowAssignedMembers(
+                                !myTask.showAssignedMembers, widget.index);
+                          }
+                          if (widget.isConpleted) {
+                            setState(() {
+                              myTask.showAssignedMembers = !myTask.showAssignedMembers;
+                            });
+                          }
+                          // Respond to button press
+                        },
+                        icon: Icon(Icons.view_list, size: 18),
+                        label: myTask.showAssignedMembers
+                            ? Text(
+                          "hide assigned members",
+                          textAlign: TextAlign.center,
+                        )
+                            : Text(
+                          "view assigned members",
+                          textAlign: TextAlign.center,
+                        )),
+                    myTask.showAssignedMembers?
+                    GestureDetector(
+                      onTap: (){
+                        myTask.manage ?
+                        CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.confirm,
+                            text: 'Do you want to assign this task to these users?',
+                            confirmBtnText: 'Yes',
+                            cancelBtnText: 'No & Back',
+                            confirmBtnColor: const Color(0xff7b39ed),
+                            title: "Assign Task",
+                            onCancelBtnTap: () {
+                              Navigator.of(context).pop();
+                              //  Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              // provider
+                              //     .updateEditTask(!provider.editTask);
+                            },
+                            onConfirmBtnTap: () async {
+                              setState(() {
+                                myTask.manage = !myTask.manage;
+                              });
+
+                              CoolAlert.show(
+                                title: "Success",
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: "Task Assigned successfuly!",
+                                confirmBtnColor:
+                                const Color(0xff7b39ed),
+                                onConfirmBtnTap: () {
+                                  Navigator.of(context).pop();
+                                  //
+                                  Navigator.of(context).pop();
+                                  // provider.updateEditTask(
+                                  //     !provider.editTask);
+                                },
+                              );
+                            }) : setState(() {
+                          myTask.manage = !myTask.manage;
+                        });
+
+
+                        //provider.updateManageStatus(myTask.manage, widget.index);
+                      },
+                      child:
+
+                      Container(
+                        height: 30,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          color: Color.fromARGB(0, 255, 255, 255),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 3,
+                                color:
+                                Color.fromARGB(0, 158, 158, 158)),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 30,
+                          width: 100,
+                          // decoration: BoxDecoration(
+                          //     color: Color(0xff7b39ed),
+                          //     borderRadius: BorderRadius.circular(10)),
+                          alignment: Alignment.center,
+                          child:
+                            Text(
+                              myTask.manage ? 'Save' : 'Manage',
+                              style: TextStyle(color: Color(0xff7b39ed), fontSize: 15),
+                            ),
+                        ),
+                      ),
+                      // Container(
+                      //   height:
+                      //   30,
+                      //   width:
+                      //   90,
+                      //   decoration:
+                      //   BoxDecoration(color:  Color(0xff7b39ed), borderRadius: BorderRadius.circular(10)),
+                      //   alignment:
+                      //   Alignment.center,
+                      //   child:
+                      //   Text(
+                      //     myTask.manage ? 'Save' : 'Manage',
+                      //     style: TextStyle(color: Colors.white, fontSize: 14),
+                      //   ),
+                      // ),
+
+
+                    ): Container(),
+                  ],
+                ),
+                myTask.showAssignedMembers
+                    ? Container(
+                    margin: EdgeInsets.only(left: 50),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          myTask.manage ?
+                          provider.assignedMembers.isEmpty? Center(
+                            child: Text('No members found', style: TextStyle(color: Colors.black)),
+                          ):
+
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: provider.assignedMembers.length,
+
+                              itemBuilder: (context, index){
+                                return Row(
+                                  children: [
+                                    Checkbox(value: provider.assignedMembers[index].value, onChanged: (v){
+
+                                      provider.updateCheckBoxofAssignedMembers(v, index, provider.assignedMembers[index].userId, myTask.id);
+                                    }),
+
+
+                                    provider.assignedMembers[index].userId == FirebaseAuth.instance.currentUser!.uid ?
+                                    Text('${provider.assignedMembers[index].userName} (Me)' , style: TextStyle(
+                                      fontSize: 13 ,color: Colors.black
+                                    ),)         :
+
+                                    Text(provider.assignedMembers[index].userName, style: TextStyle(
+                                        fontSize: 13 ,color: Colors.black
+                                    ),)
+                                  ],
+                                );
+                              })
+                              :
+
+
+
+
+
+                          provider.assignedLoading ?Center(
+                            child: CircularProgressIndicator(),
+                          )
+                              :provider.assignedMembers.isEmpty ||  (provider.assignedMembers.where((element) => element.value == true)).length < 1
+                              ? Center(
+                            child: Text('No assigned members', style: TextStyle(color: Colors.black),),
+                          )
+                              : ListView.builder(
+                              itemCount:
+                              provider.assignedMembers.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                int indexN = 0 ;
+                                provider.assignedMembers.forEach((element) {
+
+                                });
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child:
+                                  provider.assignedMembers[index].value ?
+                                  // provider.assignedMembers[index].userId == FirebaseAuth.instance.currentUser!.uid ?
+                                  // Text('${provider.assignedMembers[index].userName} (Me)' ,      style: TextStyle(
+                                  //   color: Colors.black,
+                                  //   fontSize: 18,
+                                  // ),)         :
+
+
+                                  Text(
+                                        "- ${provider.assignedMembers[index].userId == FirebaseAuth.instance.currentUser!.uid ? '${provider.assignedMembers[index].userName} (Me)' : provider.assignedMembers[index].userName}"
+                                    ,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ): Container(),
+                                );
+                              }),
+                          SizedBox(
+                            height: 20,
+
+                          ),
+
+                        ]))
+                    : Container()
               ],
             ),
           ),
@@ -531,14 +890,6 @@ class _TaskDetailState extends State<TaskDetail> {
       ),
     );
   }
-  // await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
-  //     {
-  //       'Deadline': dateTimeUpdate,
-  //       'description': myTask.description,
-  //       'Image': myTask.image,
-  //       'Task':myTask.task,
-  //       'Priority':myTask.priority
-  //     });
 
   // SingleChildScrollView buildSingleChildScrollViewOld(BuildContext context, AppState provider)  {
   //   return SingleChildScrollView(

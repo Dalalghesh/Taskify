@@ -111,6 +111,13 @@ class SingleInvitaionItem extends StatelessWidget {
                       'UID': FieldValue.arrayUnion(
                           [FirebaseAuth.instance.currentUser!.email])
                     }, SetOptions(merge: true));
+                    await FirebaseFirestore.instance
+                        .collection('chat-groups')
+                        .doc(invitationModel.listId)
+                        .set({
+                      'users': FieldValue.arrayUnion(
+                          [FirebaseAuth.instance.currentUser!.uid])
+                    }, SetOptions(merge: true));
 
                     var res = await FirebaseFirestore.instance
                         .collection('tasks')
