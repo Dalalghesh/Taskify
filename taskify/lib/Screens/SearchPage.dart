@@ -148,10 +148,10 @@ class _SearchPageState extends State<SearchPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                tasksListSearch.isEmpty
+                tasksListSearch.isEmpty && textController.text.isNotEmpty
                     ? const Center(
                         child: Text(
-                        '',
+                        'No task with this name',
                         style: TextStyle(color: Colors.black, fontSize: 18),
                       ))
                     : ListView.builder(
