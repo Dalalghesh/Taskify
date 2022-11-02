@@ -461,3 +461,48 @@ class AppState extends ChangeNotifier {
     }
   }
 }
+  List<ChatGroups> chatGroups = [];
+  bool chatLoading = false;
+
+  
+  getChatRooms()async{
+    chatGroups.clear();
+    chatLoading = true;
+    notifyListeners();
+
+ var res =   await FirebaseFirestore.instance.collection('chat-groups').where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid).get();
+ for(int i = 0; i< res.docs.length; i++){
+   ChatGroups chatGroup = ChatGroups(
+     id: res.docs[i].id,
+     list: res.docs[i]['list'],
+     users: res.docs[i]['users'],
+   );
+   chatGroups.add(chatGroup);
+ }
+ chatLoading = false;
+ notifyListeners();
+    
+  }
+  
+  
+  bool usersLoading = false;
+  
+  List<String> chatGroupUsers = [];
+  getChatGroupUsers(users)async{
+    usersLoading = true;
+    chatGroupUsers.clear();
+    notifyListeners();
+    for(
+    int i = 0; i< users.length; i++
+    ){
+      if(users[i] != FirebaseAuth.instance.currentUser!.uid) {
+        var res = await FirebaseFirestore.instance.collection('users1').doc(
+            users[i]).get();
+        
+        chatGroupUsers.add('${res['firstName']} ${res['lastName']}');
+      }  }
+
+    usersLoading =false;
+    notifyListeners();
+  }
+
