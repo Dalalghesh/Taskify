@@ -630,7 +630,6 @@ class _HomeScreen extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
                       child: LinearPercentIndicator(
                         width: MediaQuery.of(context).size.width * 0.90,
                         // width: 300.0,
