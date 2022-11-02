@@ -273,7 +273,6 @@ class _TaskDetailState extends State<TaskDetail> {
                                       .collection('tasks')
                                       .doc(myTask.id)
                                       .update({'status': 'deleted'});
-                                  // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: myTask.category,)), (route) => false);
 
                                   CoolAlert.show(
                                     title: "Success",
@@ -496,12 +495,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                               padding: EdgeInsets.all(4),
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-
                                                 color: AppColors.deepPurple,
-
-                                                // width: 2
-
-                                                // )
                                               ),
                                               child: Icon(
                                                 Icons.camera_alt_outlined,
@@ -521,22 +515,14 @@ class _TaskDetailState extends State<TaskDetail> {
                   height: 20,
                 ),
                 Container(
-                  //    margin: EdgeInsets.only(left: 16),
                   width: MediaQuery.of(context).size.width / 1.3,
-
                   child: provider.editTask
                       ? TextField(
                           controller: taskDescriptionController,
                           onChanged: (v) {
                             myTask.description = v;
                           },
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              // focusedBorder: InputBorder.none,
-                              // enabledBorder: InputBorder.none,
-                              // errorBorder: InputBorder.none,
-                              // disabledBorder: InputBorder.none,
-                              ),
+                          decoration: InputDecoration(),
                         )
                       : Text(
                           myTask.description,
@@ -568,12 +554,14 @@ class _TaskDetailState extends State<TaskDetail> {
                       children: [
                         myTask.showSubTasks
                             ? Text(
-                                "hide subtasks",
+                                "Hide subtasks",
                                 textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 15),
                               )
                             : Text(
-                                "view subtasks",
+                                "View subtasks",
                                 textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 15),
                               ),
                         Row(
                           children: [
@@ -601,13 +589,11 @@ class _TaskDetailState extends State<TaskDetail> {
                                   child: Container(
                                     height: 30,
                                     width: 100,
-                                    // decoration: BoxDecoration(
-                                    //     color: Color(0xff7b39ed),
-                                    //     borderRadius: BorderRadius.circular(10)),
                                     alignment: Alignment.center,
                                     child: const Text(
                                       'Add Subtask',
                                       style: TextStyle(
+                                          decoration: TextDecoration.underline,
                                           color: Color(0xff7b39ed),
                                           fontSize: 15),
                                     ),
@@ -631,7 +617,10 @@ class _TaskDetailState extends State<TaskDetail> {
                               ),
                               provider.filteredSubTasks.isEmpty
                                   ? Center(
-                                      child: Text('No sub tasks'),
+                                      child: Text(
+                                        'No subtasks',
+                                        textAlign: TextAlign.center,
+                                      ),
                                     )
                                   : ListView.builder(
                                       itemCount:
@@ -661,19 +650,21 @@ class _TaskDetailState extends State<TaskDetail> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
-                      child: TextFormField(
-                        controller: subTaskController,
-                        onChanged: (v) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                            errorText: subTaskController.text.length > 15
-                                ? "You can’t enter more than 15 letters"
-                                : null
-                            // border: InputBorder.none,
-                            ),
-                      ),
-                    ),
+                        child: myTask.showSubTasks
+                            ? TextFormField(
+                                controller: subTaskController,
+                                onChanged: (v) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                    errorText: subTaskController.text.length >
+                                            15
+                                        ? "You can’t enter more than 15 letters"
+                                        : null
+                                    // border: InputBorder.none,
+                                    ),
+                              )
+                            : Container()),
                   )
                 else
                   Container(),
@@ -718,28 +709,28 @@ class _TaskDetailState extends State<TaskDetail> {
                                 });
                                 subTaskController.clear();
                               }
-                              // if (subTaskController.text.length >
-                              //     15) {
-                              //   Validators.lengthVal(subTaskController.text);
-                              // }
                             },
-                            child: Container(
-                              height: 30,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  color: subTaskController.text.length < 3 ||
-                                          subTaskController.text.length > 15
-                                      ? Colors.grey
-                                      : Color(0xff7b39ed),
-                                  borderRadius: BorderRadius.circular(10)),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Save',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                              ),
-                            ),
-                          )
+                            child: myTask.showSubTasks
+                                ? Container(
+                                    height: 30,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: subTaskController.text.length <
+                                                    3 ||
+                                                subTaskController.text.length >
+                                                    15
+                                            ? Colors.grey
+                                            : Color(0xff7b39ed),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Save',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 15),
+                                    ),
+                                  )
+                                : Container())
                         : Container()
                   ],
                 ),
@@ -764,59 +755,57 @@ class _TaskDetailState extends State<TaskDetail> {
                         icon: Icon(Icons.view_list, size: 18),
                         label: myTask.showAssignedMembers
                             ? Text(
-                                "hide assigned members",
+                                "Hide assigned members",
                                 textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 15),
                               )
                             : Text(
-                                "view assigned members",
+                                "View assigned members",
                                 textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 15),
                               )),
                     myTask.showAssignedMembers
                         ? GestureDetector(
                             onTap: () {
                               myTask.manage
-                                  ? CoolAlert.show(
-                                      context: context,
-                                      type: CoolAlertType.confirm,
-                                      text:
-                                          'Do you want to assign this task to these users?',
-                                      confirmBtnText: 'Yes',
-                                      cancelBtnText: 'No & Back',
-                                      confirmBtnColor: const Color(0xff7b39ed),
-                                      title: "Assign Task",
-                                      onCancelBtnTap: () {
-                                        Navigator.of(context).pop();
-                                        //  Navigator.of(context).pop();
-                                        // Navigator.of(context).pop();
-                                        // provider
-                                        //     .updateEditTask(!provider.editTask);
-                                      },
-                                      onConfirmBtnTap: () async {
-                                        setState(() {
-                                          myTask.manage = !myTask.manage;
-                                        });
+                                  ? Assign(context)
+                                  // CoolAlert.show(
+                                  //     context: context,
+                                  //     type: CoolAlertType.confirm,
+                                  //     text:
+                                  //         'Do you want to assign this task to these users?',
+                                  //     confirmBtnText: 'Yes',
+                                  //     cancelBtnText: 'No & Back',
+                                  //     confirmBtnColor: const Color(0xff7b39ed),
+                                  //     title: "Assign Task",
+                                  //     onCancelBtnTap: () {
+                                  //       Navigator.of(context).pop();
+                                  //       //  Navigator.of(context).pop();
+                                  //       // Navigator.of(context).pop();
+                                  //       // provider
+                                  //       //     .updateEditTask(!provider.editTask);
+                                  //     },
+                                  //     onConfirmBtnTap: () async {
+                                  //       setState(() {
+                                  //         myTask.manage = !myTask.manage;
+                                  //       });
 
-                                        CoolAlert.show(
-                                          title: "Success",
-                                          context: context,
-                                          type: CoolAlertType.success,
-                                          text: "Task Assigned successfuly!",
-                                          confirmBtnColor:
-                                              const Color(0xff7b39ed),
-                                          onConfirmBtnTap: () {
-                                            Navigator.of(context).pop();
-                                            //
-                                            Navigator.of(context).pop();
-                                            // provider.updateEditTask(
-                                            //     !provider.editTask);
-                                          },
-                                        );
-                                      })
+                                  //       CoolAlert.show(
+                                  //         title: "Success",
+                                  //         context: context,
+                                  //         type: CoolAlertType.success,
+                                  //         text: "Task Assigned successfuly!",
+                                  //         confirmBtnColor:
+                                  //             const Color(0xff7b39ed),
+                                  //         onConfirmBtnTap: () {
+                                  //           Navigator.of(context).pop();
+                                  //           Navigator.of(context).pop();
+                                  //         },
+                                  //       );
+                                  //     })
                                   : setState(() {
                                       myTask.manage = !myTask.manage;
                                     });
-
-                              //provider.updateManageStatus(myTask.manage, widget.index);
                             },
                             child: Container(
                               height: 30,
@@ -834,32 +823,16 @@ class _TaskDetailState extends State<TaskDetail> {
                               child: Container(
                                 height: 30,
                                 width: 100,
-                                // decoration: BoxDecoration(
-                                //     color: Color(0xff7b39ed),
-                                //     borderRadius: BorderRadius.circular(10)),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  myTask.manage ? 'Save' : 'Manage',
+                                  myTask.manage ? 'Save' : 'Assign',
                                   style: TextStyle(
-                                      color: Color(0xff7b39ed), fontSize: 15),
+                                      decoration: TextDecoration.underline,
+                                      color: Color(0xff7b39ed),
+                                      fontSize: 15),
                                 ),
                               ),
                             ),
-                            // Container(
-                            //   height:
-                            //   30,
-                            //   width:
-                            //   90,
-                            //   decoration:
-                            //   BoxDecoration(color:  Color(0xff7b39ed), borderRadius: BorderRadius.circular(10)),
-                            //   alignment:
-                            //   Alignment.center,
-                            //   child:
-                            //   Text(
-                            //     myTask.manage ? 'Save' : 'Manage',
-                            //     style: TextStyle(color: Colors.white, fontSize: 14),
-                            //   ),
-                            // ),
                           )
                         : Container(),
                   ],
@@ -877,6 +850,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                   ? provider.assignedMembers.isEmpty
                                       ? Center(
                                           child: Text('No members found',
+                                              textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.black)),
                                         )
@@ -941,6 +915,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                           ? Center(
                                               child: Text(
                                                 'No assigned members',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.black),
                                               ),
@@ -960,14 +935,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                                           .assignedMembers[
                                                               index]
                                                           .value
-                                                      ?
-                                                      // provider.assignedMembers[index].userId == FirebaseAuth.instance.currentUser!.uid ?
-                                                      // Text('${provider.assignedMembers[index].userName} (Me)' ,      style: TextStyle(
-                                                      //   color: Colors.black,
-                                                      //   fontSize: 18,
-                                                      // ),)         :
-
-                                                      Text(
+                                                      ? Text(
                                                           "- ${provider.assignedMembers[index].userId == FirebaseAuth.instance.currentUser!.uid ? '${provider.assignedMembers[index].userName} (Me)' : provider.assignedMembers[index].userName}",
                                                           style: TextStyle(
                                                             color: Colors.black,
@@ -990,274 +958,6 @@ class _TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  // SingleChildScrollView buildSingleChildScrollViewOld(BuildContext context, AppState provider)  {
-  //   return SingleChildScrollView(
-  //       child: Column(
-  //         children: [
-  //
-  //           Container(
-  //             width: MediaQuery.of(context).size.width,
-  //             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-  //             padding: EdgeInsets.all(16),
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.circular(10),
-  //                 boxShadow: [
-  //                   BoxShadow(
-  //                     blurRadius: 3,
-  //                     color: Colors.grey,
-  //                   ),
-  //                 ]),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.end,
-  //                   children: [
-  //                     Container(
-  //                       child: IconButton(
-  //                         icon:
-  //                         provider.editTask ?
-  //                         Icon(Icons.done):
-  //                         Icon(Icons.edit),
-  //                         onPressed: ()async {
-  //
-  //                           if(provider.editTask== true && provider.imageLoading== false ){
-  //                             await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
-  //                                 {
-  //                                   'Deadline': dateTimeUpdate,
-  //                                   'description': myTask.description,
-  //                                   'Image': myTask.image,
-  //                                   'Task':myTask.task,
-  //                                   'Priority':myTask.priority
-  //                                 });
-  //                           }
-  //
-  //                           provider.updateEditTask(!provider.editTask);
-  //                         },
-  //                       ),
-  //                     ),
-  //                     //SizedBox(width: 6,),
-  //                     Container(
-  //                       child: IconButton(
-  //                         icon: Icon(Icons.delete_rounded),
-  //                         onPressed: () {
-  //
-  //
-  //                           CoolAlert.show(
-  //                               context: context,
-  //                               type: CoolAlertType.confirm,
-  //                               text: 'Do you want to delete this task?',
-  //                               confirmBtnText: 'Yes',
-  //                               cancelBtnText: 'No',
-  //                               confirmBtnColor: Color(0xff7b39ed),
-  //                               title: "Delete",
-  //                               onConfirmBtnTap: () async {
-  //                                 await FirebaseFirestore.instance.collection('tasks').doc(myTask.id).update(
-  //                                     {
-  //                                       'status': 'deleted'
-  //                                     });
-  //                                 // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TodoList(category: myTask.category,)), (route) => false);
-  //                                 Navigator.of(context).pop();
-  //                                 Navigator.of(context).pop();
-  //                               });
-  //                         },
-  //                       ),
-  //                     ),
-  //
-  //                   ],
-  //                 ),
-  //                 SizedBox(height: 10,),
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children: [
-  //                     Container(
-  //                       // provider.editTask
-  //
-  //                       decoration: provider.editTask ? BoxDecoration(
-  //                         borderRadius: BorderRadius.circular(10),
-  //                         border: Border.all(color: Colors.grey, width: 1),
-  //                       ) :BoxDecoration(
-  //                       ),
-  //                       child: Padding(
-  //                         padding: const EdgeInsets.all(19.0),
-  //                         child: GestureDetector(
-  //                           onTap:(){
-  //
-  //                             provider.editTask?
-  //                          showPriorityDialog(context).then((value) => setState((){})) :"" ;
-  //                         },
-  //                           child: Container(
-  //                             height: 20,
-  //                             width: 20,
-  //                             // margin: EdgeInsets.only(left: 16),
-  //                             decoration: BoxDecoration(
-  //                               color: myTask.priority == 'High'
-  //                                   ? Color.fromARGB(255, 223, 123, 123)
-  //                                   : myTask.priority == 'Medium'
-  //                                       ? Color.fromARGB(255, 223, 180, 123)
-  //                                       : Color.fromARGB(255, 152, 224, 154),
-  //                               shape: BoxShape.circle,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       //    margin: EdgeInsets.only(left: 16),
-  //                       width: MediaQuery.of(context).size.width/3,
-  //                       alignment: Alignment.center,
-  //
-  //                       child: provider.editTask ?
-  //                       TextField(
-  //                         controller: taskNameController,
-  //                         onChanged: (v) {
-  //                           myTask.task = v;
-  //                         },
-  //                         decoration: InputDecoration(
-  //                           // border: InputBorder.none,
-  //                           // focusedBorder: InputBorder.none,
-  //                           // enabledBorder: InputBorder.none,
-  //                           // errorBorder: InputBorder.none,
-  //                           // disabledBorder: InputBorder.none,
-  //                         ),
-  //                       ):
-  //                       Text(
-  //                         myTask.task,
-  //                         maxLines: 3,
-  //                         overflow: TextOverflow.ellipsis,
-  //                         style: TextStyle(color: Colors.grey.shade700, fontSize: 18),
-  //                       ),
-  //                     ),
-  //                     GestureDetector(
-  //                       onTap: ()async{
-  //
-  //                         if(provider.editTask) {
-  //                           _selectDate();
-  //
-  //                         }
-  //                       },
-  //                       child: Container(
-  //                         // provider.editTask
-  //
-  //                         decoration: provider.editTask ? BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(10),
-  //                           border: Border.all(color: Colors.grey, width: 1),
-  //                         ) :BoxDecoration(
-  //                         ),
-  //                         child: Padding(
-  //                           padding: const EdgeInsets.all(19.0),
-  //                           child: Text(
-  //                             "${dateOnly}",
-  //                             style: TextStyle(
-  //                               color: Colors.grey.shade700,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 SizedBox(height: 16,),
-  //                 GestureDetector(
-  //                   onTap:()async{
-  //                     if(provider.editTask){
-  //                   String res =  await  provider.uploadTaskImage();
-  //                   print("response"+res.toString());
-  //                   if(res != '0'){
-  //
-  //                     setState(() {
-  //                       myTask.image = res;
-  //                     });
-  //                   }
-  //
-  //                     }
-  //                   },
-  //                   child: Container(
-  //                     height: 130,
-  //                     width: MediaQuery.of(context).size.width * 0.4,
-  //                     child: provider.imageLoading ? Center(
-  //                       child: CircularProgressIndicator(),
-  //                     ):
-  //
-  //                     Image.network(myTask.image, fit: BoxFit.cover,),
-  //                   ),
-  //                 ),
-  //                 SizedBox(
-  //                   height: 20,
-  //                 ),
-  //             Container(
-  //               //    margin: EdgeInsets.only(left: 16),
-  //               width: MediaQuery.of(context).size.width/1.3,
-  //
-  //               child: provider.editTask ?
-  //               TextField(
-  //                 controller: taskDescriptionController,
-  //                 onChanged: (v) {
-  //                   myTask.description = v;
-  //                 },
-  //                 decoration: InputDecoration(
-  //                   // border: InputBorder.none,
-  //                   // focusedBorder: InputBorder.none,
-  //                   // enabledBorder: InputBorder.none,
-  //                   // errorBorder: InputBorder.none,
-  //                   // disabledBorder: InputBorder.none,
-  //                 ),
-  //               ):
-  //                 Text(
-  //                   myTask.description,
-  //                   maxLines: 3,
-  //                   overflow: TextOverflow.ellipsis,
-  //                   style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
-  //                 )
-  //               ,),
-  //                 SizedBox(
-  //                   height: 10,
-  //                 ),
-  //                 TextButton.icon(
-  //                     onPressed: () {
-  //                       provider.updateShowSubTasks(!myTask.showSubTasks, widget.index);
-  //                       // Respond to button press
-  //                     },
-  //                     icon: Icon(Icons.view_list, size: 18),
-  //                     label:
-  //                     myTask.showSubTasks ? Text(
-  //                       "hide subtasks",
-  //                       textAlign: TextAlign.center,
-  //                     ) :
-  //                     Text(
-  //                       "view subtasks",
-  //                       textAlign: TextAlign.center,
-  //                     )),
-  //                 myTask.showSubTasks? Container(
-  //                   margin: EdgeInsets.only(left: 50),
-  //                   child:
-  //                   Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       SizedBox(height: 10,),
-  //
-  //                       provider.filteredSubTasks.isEmpty ? Center(child: Text('No sub tasks'),):
-  //                       ListView.builder(
-  //                           itemCount: provider.filteredSubTasks.length,
-  //                           shrinkWrap: true,
-  //                           itemBuilder: (context, index){
-  //                             return   Container(
-  //                               margin: EdgeInsets.only(bottom: 10),
-  //                               child: Text(provider.filteredSubTasks[index].subTask, style: TextStyle(
-  //                                 color: Colors.black,
-  //                                 fontWeight: FontWeight.w600,
-  //                                 fontSize: 18,
-  //                               ),),
-  //                             );
-  //                           }),])): Container()
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  // }
   Future<DateTime?> pickDate() => showDatePicker(
         context: context,
         initialDate: dateTimeUpdate,
@@ -1488,5 +1188,64 @@ class _TaskDetailState extends State<TaskDetail> {
                     ])),
           );
         });
+  }
+
+  Assign(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text(
+        "Yes",
+        style: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+      onPressed: () async {
+        setState(() {
+          myTask.manage = !myTask.manage;
+        });
+
+        CoolAlert.show(
+          title: "Success",
+          context: context,
+          type: CoolAlertType.success,
+          text: "Task Assigned successfuly!",
+          confirmBtnColor: const Color(0xff7b39ed),
+          onConfirmBtnTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text(
+        "No",
+        style: TextStyle(
+          fontSize: 15,
+        ),
+      ),
+      onPressed: () {
+        Navigator.of(context).pop(true);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Assign Task"),
+      content:
+          Text('Are you sure you want to assign this task to these users?'),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
