@@ -72,14 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   )
                 ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+
   final Database _db;
 
   const SqfliteDatasource(this._db);
@@ -197,3 +190,64 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 }
+void initState() {
+    
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<AppState>(context, listen: false).getChatGroupUsers(widget.chatGroups.users);
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    AppState provider = Provider.of<AppState>(context);
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.deepPurple,
+        elevation: 0.0,
+        leadingWidth: 90,
+
+        title: Text(
+          widget.chatGroups.list,
+          style:TextStyle(
+            //fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white),
+        ),
+        centerTitle: true,
+
+      ),
+      body: provider.usersLoading?
+      Center(
+        child: CircularProgressIndicator(),
+      ): Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Users', style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w600),),
+
+            SizedBox(height: 20,),
+            Text('${FirebaseAuth.instance.currentUser!.displayName} (Me)', style: TextStyle(fontSize: 16),),
+            SizedBox(height: 10,),
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: provider.chatGroupUsers.length,
+                itemBuilder: (context, index){
+
+              return Padding(padding: EdgeInsets.only(bottom: 10),
+              child:  Text(provider.chatGroupUsers[index], style: TextStyle(color: Colors.black, fontSize: 16, ),),
+
+
+              );
+            })
+
+
+          ],
+        ),
+      )
+
+
+    );
+  }
+}
+
