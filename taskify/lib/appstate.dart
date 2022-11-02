@@ -467,20 +467,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateCheckboxValue(bool v, int index) async {
-    tasksList[index].value = v;
-    // notifyListeners();
-    completedtasksList.add(tasksList[index]);
-    await FirebaseFirestore.instance
-        .collection('tasks')
-        .doc(tasksList[index].id)
-        .update({'status': 'completed'});
-    tasksList.removeLast();
-    // tasksList.removeAt(index);
-    print("tasksList_3 ${tasksList.length}");
-    notifyListeners();
-  }
-
   updateCheckboxValueNew(Tasksss element) async {
     element.value = false;
     // notifyListeners();
@@ -488,6 +474,20 @@ class AppState extends ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('tasks')
         .doc(element.id)
+        .update({'status': 'completed'});
+    tasksList.removeLast();
+    // tasksList.removeAt(index);
+    print("tasksList_3 ${tasksList.length}");
+    notifyListeners();
+  }
+
+  updateCheckboxValue(bool v, int index) async {
+    tasksList[index].value = v;
+    // notifyListeners();
+    completedtasksList.add(tasksList[index]);
+    await FirebaseFirestore.instance
+        .collection('tasks')
+        .doc(tasksList[index].id)
         .update({'status': 'completed'});
     tasksList.removeLast();
     // tasksList.removeAt(index);

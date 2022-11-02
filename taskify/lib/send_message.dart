@@ -275,7 +275,7 @@ class SendMessagePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        backgroundColor: AppColors.deepPurple,
+        backgroundColor: Color(0xff7b39ed),
         elevation: 0.0,
         leadingWidth: 90,
         title: Text(
@@ -353,7 +353,7 @@ class SendMessagePage extends StatelessWidget {
                                                 snapshot.data!.docs[index]
                                                     ['senderName'],
                                                 style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 12,
                                                   //fontWeight: FontWeight.w500,
                                                   color:
                                                       snapshot.data!.docs[index]
@@ -376,7 +376,7 @@ class SendMessagePage extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: AppColors.deepPurple),
+                                            color: Color(0xff7b39ed),),
                                         child: Text(
                                           snapshot.data!.docs[index]['message'],
                                           style: TextStyle(
@@ -449,8 +449,7 @@ class SendMessagePage extends StatelessWidget {
                                               // color: Colors.deepPurple,
 
                                               decoration: BoxDecoration(
-                                                color: Colors.deepPurple
-                                                    .withOpacity(0.7),
+                                                color: Color(0xff7b39ed),
                                                 borderRadius:
                                                     BorderRadius.circular(12),
                                               ),
@@ -528,7 +527,7 @@ class SendMessagePage extends StatelessWidget {
                 ? Container(
                     height: 140,
                     child: Center(
-                      child: Text('No restaurants added yet'),
+                      child: Text('No tasks added yet'),
                     )
 
                     // ListView.builder(
@@ -644,7 +643,7 @@ class SendMessagePage extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.attach_file,
-                      color: AppColors.deepPurple,
+                      color: Color(0xff7b39ed),
                     ),
                   ),
                   Expanded(
@@ -670,7 +669,7 @@ class SendMessagePage extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                      icon: Icon(Icons.send, color: AppColors.deepPurple),
+                      icon: Icon(Icons.send, color: Color(0xff7b39ed)),
                       onPressed: () {
                         onSendMessage(_message.text, 'text');
                       }),

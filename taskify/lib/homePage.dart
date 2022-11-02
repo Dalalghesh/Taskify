@@ -175,7 +175,7 @@ class NavBarState extends State<NavBar> {
             Container(
               width: Get.width * 0.5,
               height: Get.width * 0.2,
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
                 color: Color(0xff7b39ed),
                 borderRadius: BorderRadius.circular(8),
@@ -236,7 +236,7 @@ class NavBarState extends State<NavBar> {
             Container(
               width: Get.width * 0.5,
               height: Get.width * 0.2,
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
                 color: Color(0xff7b39ed),
                 borderRadius: BorderRadius.circular(8),
@@ -296,7 +296,7 @@ class NavBarState extends State<NavBar> {
             Container(
               width: Get.width * 0.5,
               height: Get.width * 0.2,
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
                 color: Color(0xff7b39ed),
                 borderRadius: BorderRadius.circular(8),

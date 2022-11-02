@@ -213,15 +213,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     const SizedBox(height: 10),
                     buildSearchBar(),
                     const SizedBox(height: 10),
-                    const Text(
+                    Text(
                       'Categories',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 30,
+                        fontSize: 25,
                       ),
                     ),
                     Container(
-                        height: MediaQuery.of(context).size.height / 2.9,
+                        height: MediaQuery.of(context).size.height / 2.1,
                         child: provider.categoriesLoading
                             ? Center(
                                 child: CircularProgressIndicator(),
@@ -234,7 +234,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            childAspectRatio: 2 / 1.5),
+                                            childAspectRatio: 2 / 1.3),
                                     itemCount: provider.categories.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
