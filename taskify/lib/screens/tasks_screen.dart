@@ -54,6 +54,7 @@ class _TaskScreenState extends State<TaskScreen> {
   getTask() async {
     print(widget.category);
     await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(seconds: 2));
     // Provider.of<AppState>(context, listen: false).updateShowSubTasks(false);
     Provider.of<AppState>(context, listen: false).clearTask();
 
@@ -219,7 +220,7 @@ class _TaskScreenState extends State<TaskScreen> {
   //   );
   // }
 
-  List<TasksCn> tasks = [];
+  List<Tasksss> tasks = [];
 
   Widget buildColumnNew(BuildContext context, AppState provider) {
     return DefaultTabController(
@@ -548,14 +549,11 @@ class _TaskScreenState extends State<TaskScreen> {
                                                                   .value = v!;
                                                             });
                                                             if (v! == true) {
-                                                              tasks.add(TasksCn(
-                                                                  index, v));
+                                                              tasks.add(provider.tasksList[index]);
                                                             } else {
                                                               tasks.removeWhere(
                                                                   (element) =>
-                                                                      element
-                                                                          .first ==
-                                                                      index);
+                                                                      element == provider.tasksList[index]);
                                                             }
 
                                                             print(tasks.length);
@@ -645,39 +643,40 @@ class _TaskScreenState extends State<TaskScreen> {
                                                 // set up the buttons
                                                 Widget cancelButton =
                                                     TextButton(
-                                                  child: Text(
+                                                  child: const Text(
                                                     "Yes",
                                                     style: TextStyle(
                                                       fontSize: 15,
                                                     ),
                                                   ),
                                                   onPressed: () async {
+
                                                     getUsers(widget.category,
                                                         widget.list);
+                                                   // print("tasks ${tasks.first.first}");
+                                                   // print("tasks ${tasks.first.second}");
+
                                                     tasks.forEach((element) {
-                                                      provider
-                                                          .updateCheckboxValue(
-                                                              element.second!,
-                                                              tasks.indexOf(
-                                                                  element));
+                                                      provider.updateCheckboxValueNew(element);
+                                                      // provider.updateCheckboxValue(element.second!, tasks.indexOf(element));
                                                     });
+
+
                                                     tasks.clear();
                                                     provider.tasksList
                                                         .forEach((element) {
                                                       element.value = false;
                                                     });
-
                                                     await getTask();
                                                     setState(() {});
                                                     Navigator.of(context).pop();
-                                                    // Navigator.of(context).pop();
-                                                    //?????????????
-                                                    //Navigator.of(context).pop(true);
+                                                  //
+
                                                   },
                                                 );
                                                 Widget continueButton =
                                                     TextButton(
-                                                  child: Text(
+                                                  child: const Text(
                                                     "No",
                                                     style: TextStyle(
                                                       fontSize: 15,
@@ -1010,11 +1009,11 @@ class _TaskScreenState extends State<TaskScreen> {
   }
 }
 
-class TasksCn {
-  int first;
-  bool? second;
-  TasksCn(this.first, this.second);
-}
+// class TasksCn {
+//   int first;
+//   bool? second;
+//   TasksCn(this.first, this.second);
+// }
 
 sendNotification(String title, String token) async {
   print(token);
