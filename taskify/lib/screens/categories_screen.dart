@@ -221,7 +221,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       ),
                     ),
                     Container(
-                        height: MediaQuery.of(context).size.height / 2.1,
+                        height: MediaQuery.of(context).size.height / 2.9,
                         child: provider.categoriesLoading
                             ? Center(
                                 child: CircularProgressIndicator(),
@@ -234,7 +234,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            childAspectRatio: 2 / 1.3),
+                                            childAspectRatio: 2 / 1.5),
                                     itemCount: provider.categories.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
