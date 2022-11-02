@@ -30,7 +30,7 @@ class _ChatGroupUsersState extends State<ChatGroupUsers> {
     AppState provider = Provider.of<AppState>(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.deepPurple,
+          backgroundColor: Color(0xff7b39ed),
           elevation: 0.0,
           leadingWidth: 90,
           title: Text(
