@@ -275,6 +275,20 @@ class _AddList extends State<AddList> {
                             }).then((value) => listId = value.id);
                             ListController.clear();
 
+                            isChecked
+                                ? await FirebaseFirestore.instance
+                                    .collection('chat-groups')
+                                    .doc(listId)
+                                    .set({
+                                    'list': listt,
+                                    'users': FieldValue.arrayUnion([
+                                      FirebaseAuth.instance.currentUser!.uid
+                                    ]),
+                                    'chatId': listId,
+                                    'date': DateTime.now(),
+                                  })
+                                : '';
+
                             CoolAlert.show(
                               title: "Success",
                               context: context,

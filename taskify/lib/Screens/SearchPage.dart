@@ -47,7 +47,14 @@ class _SearchPageState extends State<SearchPage> {
             value: false,
             status: res.docs[i]['status'],
             showSubTasks: false,
-            deadline: res.docs[i]['Deadline']);
+            deadline: res.docs[i]['Deadline'],
+            showAssignedMembers: false,
+            // assignedMembers: [],
+            assignedMembers:
+                res.docs[i].data().toString().contains('assignedMembers')
+                    ? res.docs[i]['assignedMembers']
+                    : [],
+            manage: false);
 
         tasksList.add(taskss);
       } catch (e) {
@@ -62,6 +69,13 @@ class _SearchPageState extends State<SearchPage> {
             description: res.docs[i]['description'],
             value: false,
             showSubTasks: false,
+            showAssignedMembers: false,
+            // assignedMembers: [],
+            assignedMembers:
+                res.docs[i].data().toString().contains('assignedMembers')
+                    ? res.docs[i]['assignedMembers']
+                    : [],
+            manage: false,
             deadline: res.docs[i]['Deadline']);
 
         tasksList.add(taskss);

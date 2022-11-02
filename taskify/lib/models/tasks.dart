@@ -16,6 +16,9 @@ class Tasksss {
   String task;
   bool value;
   bool showSubTasks;
+  bool showAssignedMembers;
+  List<dynamic> assignedMembers;
+  bool manage;
 
   Tasksss({
     required this.image,
@@ -29,5 +32,17 @@ class Tasksss {
     required this.value,
     required this.status,
     required this.showSubTasks,
+    required this.showAssignedMembers,
+    required this.assignedMembers,
+    required this.manage,
   });
+}
+
+class AssignedMembers {
+  String userId;
+  String userName;
+  bool value;
+
+  AssignedMembers(
+      {required this.value, required this.userName, required this.userId});
 }

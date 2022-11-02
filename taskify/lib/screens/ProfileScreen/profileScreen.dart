@@ -129,8 +129,8 @@ class _HomeScreen extends State<HomeScreen> {
   Widget build(BuildContext context) {
     //AppState provider = Provider.of<AppState>(context);
     getName();
-    TextEditingController email = TextEditingController(
-        text: '${FirebaseAuth.instance.currentUser!.email}');
+    // TextEditingController email = TextEditingController(
+    //     text: '${FirebaseAuth.instance.currentUser!.email}');
     AppState provider = Provider.of<AppState>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -146,16 +146,15 @@ class _HomeScreen extends State<HomeScreen> {
               });
               // Util.routeToWidget(context, UpdateProfile());
             },
-            child:
-                Center(child: Icon(!_editMode ? Icons.arrow_back : Icons.edit)
+            child: Center(child: Icon(!_editMode ? Icons.save : Icons.edit)
 
-                    // Text("Update",
-                    //     style: TextStyle(
-                    //       fontSize: 12,
-                    //       color: Colors.white,
-                    //     ))
+                // Text("Update",
+                //     style: TextStyle(
+                //       fontSize: 12,
+                //       color: Colors.white,
+                //     ))
 
-                    ),
+                ),
           ),
         ),
 
@@ -194,33 +193,7 @@ class _HomeScreen extends State<HomeScreen> {
                     right: 15,
                   ),
                   onPressed: () async {
-                    // print('loooogoooouuutttt???');
                     showAlertDialog(context);
-                    // AlertDialog(
-                    //   title: const Text('Logout'),
-                    //   content: const Text('Are you sure you want to logout?'),
-                    //   actions: [
-                    //     TextButton(
-                    //       onPressed: () async {
-                    //         await FirebaseAuth.instance.signOut();
-                    //         Navigator.of(context).pushReplacement(
-                    //           MaterialPageRoute(
-                    //               builder: (context) => const LoginScreen()),
-                    //         );
-                    //         ///////?????
-
-                    //         // Navigator.of(context).pop(true);
-                    //       },
-                    //       child: const Text('Yes'),
-                    //     ),
-                    //     TextButton(
-                    //       onPressed: () {
-                    //         Navigator.of(context).pop(false);
-                    //       },
-                    //       child: const Text('No'),
-                    //     )
-                    //   ],
-                    // );
                   },
                   icon: Icon(
                     Icons.logout_outlined,
@@ -381,8 +354,7 @@ class _HomeScreen extends State<HomeScreen> {
                                                               ) {
                                                                 return Image
                                                                     .network(
-                                                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                                                                );
+                                                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
                                                               }),
                                                             ),
                                                           ),
@@ -580,39 +552,6 @@ class _HomeScreen extends State<HomeScreen> {
                                               ),
                                               onPressed: () async {
                                                 deleteacc(context);
-                                                // AlertDialog(
-                                                //   title: const Text('Delete'),
-                                                //   content: const Text(
-                                                //       'Are you sure you want to delete your account?'),
-                                                //   actions: [
-                                                //     TextButton(
-                                                //       onPressed: () async {
-                                                //         print("InsideDelete");
-                                                //         DeleteUserAccount();
-
-                                                //         await FirebaseAuth
-                                                //             .instance
-                                                //             .signOut();
-                                                //         Navigator.of(context)
-                                                //             .pushReplacement(
-                                                //           MaterialPageRoute(
-                                                //               builder: (context) =>
-                                                //                   const LoginScreen()),
-                                                //         );
-                                                //         //?????????????
-                                                //         //Navigator.of(context).pop(true);
-                                                //       },
-                                                //       child: const Text('Yes'),
-                                                //     ),
-                                                //     TextButton(
-                                                //       onPressed: () {
-                                                //         Navigator.of(context)
-                                                //             .pop(false);
-                                                //       },
-                                                //       child: const Text('No'),
-                                                //     )
-                                                //   ],
-                                                // );
                                               },
 
                                               //  color: Color.fromARGB(255, 240, 96, 86),
@@ -681,6 +620,7 @@ class _HomeScreen extends State<HomeScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
             ),
           ),
+
         if (_editMode)
           Card(
             margin: const EdgeInsets.only(left: 11.0, right: 11.0),
@@ -819,7 +759,6 @@ class _HomeScreen extends State<HomeScreen> {
                                       bottom: 4,
                                       left: 11.0,
                                       right: 11.0),
-
                                   //alignment: Alignment.center,
                                   child: Center(
                                     child: Padding(
