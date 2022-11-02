@@ -662,7 +662,6 @@ class _TaskDetailState extends State<TaskDetail> {
                     ),
                     child: Center(
                       child: TextFormField(
-                        maxLength: 15,
                         controller: subTaskController,
                         onChanged: (v) {
                           setState(() {});
@@ -782,7 +781,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                       text:
                                           'Do you want to assign this task to these users?',
                                       confirmBtnText: 'Yes',
-                                      cancelBtnText: 'Cancel',
+                                      cancelBtnText: 'No & Back',
                                       confirmBtnColor: const Color(0xff7b39ed),
                                       title: "Assign Task",
                                       onCancelBtnTap: () {

@@ -481,20 +481,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateCheckboxValueNew(Tasksss element) async {
-    element.value = false;
-    // notifyListeners();
-    completedtasksList.add(element);
-    await FirebaseFirestore.instance
-        .collection('tasks')
-        .doc(element.id)
-        .update({'status': 'completed'});
-    tasksList.removeLast();
-    // tasksList.removeAt(index);
-    print("tasksList_3 ${tasksList.length}");
-    notifyListeners();
-  }
-
   updateShowAssignedMembers(val, i) {
     // task.showSubTasks = val;
     tasksList[i].showAssignedMembers = val;
