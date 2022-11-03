@@ -171,6 +171,40 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                             Widget cancelButton = TextButton(
                                               child: Text("Yes"),
                                               onPressed: () async {
+                                                 final resremove =
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('invitations')
+                                                        .where('category',
+                                                            isEqualTo:
+                                                                widget.category)
+                                                        .where('list',
+                                                            isEqualTo: provider
+                                                                .list[index]
+                                                                .list)
+                                                        .where('status',
+                                                            isEqualTo: "accepted") 
+                                                        .get();
+
+                                                             if (resremove.docs.length != 0)
+                                                  for (int i = 0;
+                                                      i < resremove.docs.length;
+                                                      i++) {
+
+                                                    DocumentReference docRef2 =
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('invitations')
+                                                            .doc(
+                                                                resremove.docs[i].id);
+
+                                                    docRef2.update({
+                                                      'status': "rejected" 
+                                                    });
+                                                  }
+
+                                                  
+                                                // });
                                                 DocumentReference docRef =
                                                     await FirebaseFirestore
                                                         .instance
@@ -246,6 +280,7 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                                 Navigator.of(context).pop(true);
                                               },
                                             );
+                                            
                                             // set up the AlertDialog
                                             AlertDialog alert = AlertDialog(
                                               title: Text("Remove member"),
