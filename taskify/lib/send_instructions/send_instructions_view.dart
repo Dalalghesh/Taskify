@@ -69,7 +69,7 @@ class _SendInstructionsView extends State<SendInstructionsView> {
               height: 16,
             ),
             Image.asset(
-              'assets/ForgotPassword.png',
+              'assets/Forgot password-bro.png',
               height: 300,
               width: 300,
             ),
