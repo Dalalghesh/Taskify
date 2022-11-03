@@ -32,6 +32,12 @@ class ChatGroupUsers extends StatefulWidget {
 
   @override
   State<ChatGroupUsers> createState() => _ChatGroupUsersState();
+  // final ChatGroups chatGroups;
+
+  // const ChatGroupUsers({Key? key, required this.chatGroups}) : super(key: key);
+
+  // @override
+  // State<ChatGroupUsers> createState() => _ChatGroupUsersState();
 }
 
 class _ChatGroupUsersState extends State<ChatGroupUsers> {
@@ -156,6 +162,18 @@ class _ChatGroupUsersState extends State<ChatGroupUsers> {
                                               fontSize: 13,
                                               color: Color.fromARGB(
                                                   255, 104, 104, 104)),
+                                        ),
+                                      if (FirebaseAuth.instance.currentUser!
+                                                  .email ==
+                                              provider.membersInfo[0].email &&
+                                          FirebaseAuth.instance.currentUser!
+                                                  .email !=
+                                              provider.membersInfo[index].email)
+                                        IconButton(
+                                          onPressed: () async {},
+                                          icon: Icon(Icons.close,
+                                              color: Color.fromARGB(
+                                                  0, 117, 117, 117)),
                                         ),
                                     ],
                                   ),

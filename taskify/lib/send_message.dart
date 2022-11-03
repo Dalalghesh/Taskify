@@ -280,7 +280,8 @@ class SendMessagePage extends StatelessWidget {
                           ));
                 },
                 child: Icon(
-                  Icons.group_outlined,
+                  Icons.group,
+                  size: 24,
                   color: Colors.white,
                 )),
           )
@@ -640,6 +641,9 @@ class SendMessagePage extends StatelessWidget {
                           color: Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(15.0)),
                       child: TextFormField(
+                        //  maxLines: 10,
+                        minLines: 1,
+                        maxLines: 15,
                         controller: _message,
                         // validator: (val){
                         //   sendMessageController.validateMessage(val.toString());

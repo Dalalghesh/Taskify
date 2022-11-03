@@ -45,6 +45,10 @@ class _SendInstructionsView extends State<SendInstructionsView> {
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 50,
+        title: Text(
+          "Reset password",
+          style: TextStyle(fontSize: 22, color: Colors.black),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -61,15 +65,15 @@ class _SendInstructionsView extends State<SendInstructionsView> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            Text(
-              'Reset Password',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            SizedBox(
-              height: 16,
-            ),
+            // Text(
+            //   'Reset Password',
+            //   style: Theme.of(context).textTheme.headline4,
+            // ),
+            // SizedBox(
+            //   height: 16,
+            // ),
             Image.asset(
-              'assets/Forgot password-bro.png',
+              'assets/ForgotPassword.png',
               height: 300,
               width: 300,
             ),

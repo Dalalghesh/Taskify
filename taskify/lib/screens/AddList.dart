@@ -171,7 +171,7 @@ class _AddList extends State<AddList> {
                         ),
                       ),
                       validator: (value) {
-                        final regExp = RegExp(r'^[a-zA-Z ]+$');
+                        final regExp = RegExp(r'^[a-zA-Z0-9 ]+$');
 
                         if (value!.isEmpty ||
                             value == null ||
