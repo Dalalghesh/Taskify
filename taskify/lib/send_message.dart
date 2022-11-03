@@ -1,20 +1,18 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:taskify/chat_group_users.dart';
+import 'package:taskify/Screens/sharedlistdetails.dart';
+// import 'package:taskify/chat_group_users.dart';
 import 'package:taskify/firebase_api.dart';
 import 'package:taskify/models/chat_groups.dart';
 import 'package:taskify/utils/app_colors.dart';
@@ -23,6 +21,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'chat_group_users.dart';
 
 class SendMessagePage extends StatelessWidget {
   //final UserModel user;//
@@ -142,20 +142,6 @@ class SendMessagePage extends StatelessWidget {
 
     print('Download-Link: $urlDownload');
 
-    // _imageFileList = value;
-    // selectedImage = File(_imageFileList!.path);
-    // //BlocProvider.of<AuthCubit>(context).uploadServiceLicense(selectedImage);
-    //
-    // FirebaseStorage storage = FirebaseStorage.instance;
-    // var ref =
-    // FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
-    // // Reference ref = storage.ref().child("image${DateTime.now()}");
-    // UploadTask uploadTask = ref.putFile(selectedImage);
-    // uploadTask.then((res) async {
-    //   imageUrl = await res.ref.getDownloadURL();
-
-    //_message.clear();
-
     await FirebaseFirestore.instance
         .collection('chat-groups')
         .doc(groups.id)
@@ -224,20 +210,6 @@ class SendMessagePage extends StatelessWidget {
       print("Enter Some Text");
     }
   }
-  // Future getPdfAndUpload()async{
-  //   var rng = Random();
-  //   String randomName="";
-  //   for (var i = 0; i < 20; i++) {
-  //     print(rng.nextInt(100));
-  //     randomName += rng.nextInt(100).toString();
-  //   }
-  //   FilePickerResult? file = await FilePicker.platform.pickFiles() ;
-  //   String fileName = '${randomName}.pdf';
-  //   print(fileName);
-  //   // File files = file.files;
-  //   // print('${file.readAsBytesSync()}');
-  //   // savePdf(file!.readAsBytesSync(), fileName);
-  // }
 
   Future savePdf(List<int> asset, String name) async {
     Uint8List uint8List;
@@ -278,6 +250,13 @@ class SendMessagePage extends StatelessWidget {
         backgroundColor: Color(0xff7b39ed),
         elevation: 0.0,
         leadingWidth: 90,
+        leading: IconButton(
+          icon:
+              Icon(Icons.arrow_back, color: Color.fromARGB(255, 255, 255, 255)),
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+        ),
         title: Text(
           groups.list,
           style: TextStyle(
@@ -294,8 +273,11 @@ class SendMessagePage extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              ChatGroupUsers(chatGroups: groups)));
+                          builder: (context) => ChatGroupUsers(
+                              category: groups.categorey, list: groups.list)
+                          // ChatGroupUsers(chatGroups: groups)
+
+                          ));
                 },
                 child: Icon(
                   Icons.group_outlined,
@@ -353,7 +335,7 @@ class SendMessagePage extends StatelessWidget {
                                                 snapshot.data!.docs[index]
                                                     ['senderName'],
                                                 style: TextStyle(
-                                                  fontSize: 12,
+                                                  fontSize: 13,
                                                   //fontWeight: FontWeight.w500,
                                                   color:
                                                       snapshot.data!.docs[index]
@@ -376,7 +358,13 @@ class SendMessagePage extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: Color(0xff7b39ed),),
+                                            color: snapshot.data!.docs[index]
+                                                        ['sendby'] ==
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.uid
+                                                ? Color.fromARGB(
+                                                    255, 133, 133, 133)
+                                                : Color(0xff7b39ed)),
                                         child: Text(
                                           snapshot.data!.docs[index]['message'],
                                           style: TextStyle(

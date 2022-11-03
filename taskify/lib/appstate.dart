@@ -818,6 +818,7 @@ class AppState extends ChangeNotifier {
 
     for (int i = 0; i < res.docs.length; i++) {
       ChatGroups chatGroup = ChatGroups(
+        categorey: res.docs[i]['CategoryName'],
         id: res.docs[i].id,
         // list: res.docs[i]['list'],
         list: res.docs[i].data().toString().contains('list')

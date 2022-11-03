@@ -48,6 +48,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color.fromARGB(0, 255, 255, 255),
+            ),
+            onPressed: () {},
+          ),
           title: const Text(
             'Chats',
             style: TextStyle(color: Colors.white),
@@ -58,49 +65,58 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView.builder(
-                shrinkWrap: true,
-                itemCount: provider.chatGroups.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SendMessagePage(
-                                  groups: provider.chatGroups[index])));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width / 1.1,
-                      margin: const EdgeInsets.only(
-                          left: 20, right: 20, top: 6, bottom: 5),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 2, color: Colors.grey)
-                          ],
-                          borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      //alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            Icons.people,
-                            color: Color(0xff7b39ed),
-                          ),
-                          Text(
-                            provider.chatGroups[index].list,
-                            style: const TextStyle(
-                                fontSize: 15, color: Colors.black),
-                          ),
-                          Container()
-                        ],
-                      ),
+            : provider.chatGroups.isEmpty
+                ? Padding(
+                    padding: EdgeInsets.only(
+                        top: Get.height * 0.1, left: 125, right: 0),
+                    child: Text(
+                      'There are no chats yet',
+                      style: TextStyle(fontSize: 15),
                     ),
-                  );
-                }));
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: provider.chatGroups.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SendMessagePage(
+                                      groups: provider.chatGroups[index])));
+                        },
+                        child: Container(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width / 1.1,
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 20, top: 6, bottom: 5),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(blurRadius: 2, color: Colors.grey)
+                              ],
+                              borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          //alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(
+                                Icons.people,
+                                color: Color(0xff7b39ed),
+                              ),
+                              Text(
+                                provider.chatGroups[index].list,
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
+                              Container()
+                            ],
+                          ),
+                        ),
+                      );
+                    }));
   }
 
   Scaffold buildScaffoldOld(AppState provider, BuildContext context) {

@@ -280,6 +280,7 @@ class _AddList extends State<AddList> {
                                     .collection('chat-groups')
                                     .doc(listId)
                                     .set({
+                                    'CategoryName': selectCategory,
                                     'list': listt,
                                     'users': FieldValue.arrayUnion([
                                       FirebaseAuth.instance.currentUser!.uid

@@ -655,7 +655,7 @@ class _HomeScreen extends State<HomeScreen> {
                     child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    "You have completed ${provider.numberCompletedToday} tasks of ${(provider.numberProgressToday + provider.numberCompletedToday)}",
+                    "You have completed ${provider.numberCompletedToday} out of ${(provider.numberProgressToday + provider.numberCompletedToday)} tasks",
                     // "You have ${provider.numberProgressToday} uncompleted tasks left today ",
                     style: const TextStyle(
                       fontSize: 15,
@@ -759,7 +759,6 @@ class _HomeScreen extends State<HomeScreen> {
                                       bottom: 4,
                                       left: 11.0,
                                       right: 11.0),
-                                  //alignment: Alignment.center,
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -803,7 +802,7 @@ class _HomeScreen extends State<HomeScreen> {
                                             ],
                                           ),
                                           Text(
-                                            "You complete ${provider.myList[index].completedTask} Tasks from ${provider.myList[index].completedTask + provider.myList[index].pendingTask}",
+                                            "You complete ${provider.myList[index].completedTask} out of ${provider.myList[index].completedTask + provider.myList[index].pendingTask} tasks",
                                             style: TextStyle(
                                                 fontSize: 13,
                                                 color: Colors.black),
@@ -886,17 +885,6 @@ Delete() async {
 // Reauthenticate
   await FirebaseAuth.instance.currentUser!
       .reauthenticateWithCredential(credential);
-
-  /*final res1 = await _firebaseFirestore
-                  .collection('users1')
-                  .where("email", isEqualTo: useremail).get(); 
-                  FirebaseFirestore.instance.collection("users1").where("email", isEqualTo: useremail).get();*/
-
-  /*_firebaseFirestore.collection("users1").doc(userdocid).delete().then(
-                (doc) => print("Account deleted"),
-                 onError: (e) => print("Error updating document $e"),
-
-    );  */
 }
 
 Future<void> DeleteUserAccount() async {

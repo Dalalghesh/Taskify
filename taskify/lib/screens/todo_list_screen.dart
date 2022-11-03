@@ -154,6 +154,17 @@ class _TodoListState extends State<TodoList> {
                             //     .removeMemberrsFromtasks(
                             //         widget.category, provider.list[index].list);
                           }
+
+                          //3: delete list
+                          DocumentReference docReff = await FirebaseFirestore
+                              .instance
+                              .collection('chat-groups')
+                              .doc(provider.list[index].docId);
+
+                          docReff.update({
+                            'users': FieldValue.arrayRemove(
+                                [FirebaseAuth.instance.currentUser?.uid])
+                          });
                         },
                         background: slideLeftBackground(),
                         child: InkWell(

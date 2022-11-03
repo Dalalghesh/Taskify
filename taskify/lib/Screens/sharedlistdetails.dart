@@ -145,7 +145,6 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                               color: Color.fromARGB(
                                                   255, 104, 104, 104)),
                                         ),
-
                                       if (FirebaseAuth.instance.currentUser!
                                                   .email !=
                                               provider.membersInfo[0].email &&
@@ -159,7 +158,6 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                               color: Color.fromARGB(
                                                   255, 104, 104, 104)),
                                         ),
-
                                       if (FirebaseAuth.instance.currentUser!
                                                   .email ==
                                               provider.membersInfo[0].email &&
@@ -248,7 +246,6 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                                 Navigator.of(context).pop(true);
                                               },
                                             );
-
                                             // set up the AlertDialog
                                             AlertDialog alert = AlertDialog(
                                               title: Text("Remove member"),
@@ -272,159 +269,6 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                               color: Color.fromARGB(
                                                   255, 117, 117, 117)),
                                         ),
-
-                                      // FirebaseAuth.instance.currentUser!
-                                      //             .email ==
-                                      //         provider.membersInfo[index].email
-                                      //     ? IconButton(
-                                      //         onPressed: () {
-                                      //           print("clicked");
-                                      // setState(() {
-                                      //   x = provider
-                                      //       .membersInfo[index]
-                                      //       .fullname;
-                                      // });
-                                      //         },
-                                      //         icon: Icon(Icons.close,
-                                      //             color: Colors.grey.shade600))
-                                      //     : FirebaseAuth.instance.currentUser!
-                                      //                 .email ==
-                                      //             provider.membersInfo[0].email
-                                      //         ? IconButton(
-                                      //             onPressed: () async {
-                                      //               print("clicked");
-
-                                      //               Widget cancelButton =
-                                      //                   TextButton(
-                                      //                 child: Text("Yes"),
-                                      //                 onPressed: () async {
-                                      //                   DocumentReference
-                                      //                       docRef =
-                                      //                       await FirebaseFirestore
-                                      //                           .instance
-                                      //                           .collection(
-                                      //                               'List')
-                                      //                           .doc(provider
-                                      //                               .docid);
-                                      //                   docRef.update({
-                                      //                     'UID': FieldValue
-                                      //                         .arrayRemove([
-                                      //                       provider
-                                      //                           .membersInfo[
-                                      //                               index]
-                                      //                           .email
-                                      //                     ])
-                                      //                   });
-
-                                      //                   setState(() {
-                                      //                     provider.membersInfo
-                                      //                         .removeWhere((item) =>
-                                      //                             item.email ==
-                                      //                             provider
-                                      //                                 .membersInfo[
-                                      //                                     index]
-                                      //                                 .email);
-
-                                      //                     provider.membersInfo
-                                      //                         .length;
-                                      //                   });
-
-                                      //                   final res = await FirebaseFirestore
-                                      //                       .instance
-                                      //                       .collection('tasks')
-                                      //                       .where(
-                                      //                           'CategoryName',
-                                      //                           isEqualTo: widget
-                                      //                               .category)
-                                      //                       .where('ListName',
-                                      //                           isEqualTo:
-                                      //                               provider
-                                      //                                   .list[
-                                      //                                       index]
-                                      //                                   .list)
-                                      //                       .where('UID',
-                                      //                           arrayContains:
-                                      //                               provider
-                                      //                                   .membersInfo[
-                                      //                                       index]
-                                      //                                   .email)
-                                      //                       .get();
-
-                                      //                   Navigator.of(context)
-                                      //                       .pop(true);
-
-                                      //                   if (res.docs.length !=
-                                      //                       0)
-                                      //                     for (int i = 0;
-                                      //                         i <
-                                      //                             res.docs
-                                      //                                 .length;
-                                      //                         i++) {
-                                      //                       DocumentReference
-                                      //                           docRef2 =
-                                      //                           await FirebaseFirestore
-                                      //                               .instance
-                                      //                               .collection(
-                                      //                                   'tasks')
-                                      //                               .doc(res
-                                      //                                   .docs[i]
-                                      //                                   .id);
-
-                                      //                       docRef2.update({
-                                      //                         'UID': FieldValue
-                                      //                             .arrayRemove([
-                                      //                           provider
-                                      //                               .membersInfo[
-                                      //                                   index]
-                                      //                               .email
-                                      //                         ])
-                                      //                       });
-                                      //                     }
-                                      //                 },
-                                      //               );
-                                      //               Widget continueButton =
-                                      //                   TextButton(
-                                      //                 child: Text("Cancel"),
-                                      //                 onPressed: () {
-                                      //                   Navigator.of(context)
-                                      //                       .pop(true);
-                                      //                 },
-                                      //               );
-
-                                      //               // set up the AlertDialog
-                                      //               AlertDialog alert =
-                                      //                   AlertDialog(
-                                      //                 title:
-                                      //                     Text("Remove member"),
-                                      //                 content: Text(
-                                      //                     "Are you sure you want to remove ($x) member?"),
-                                      //                 actions: [
-                                      //                   cancelButton,
-                                      //                   continueButton,
-                                      //                 ],
-                                      //               );
-
-                                      //               // show the dialog
-                                      //               showDialog(
-                                      //                 context: context,
-                                      //                 builder: (BuildContext
-                                      //                     context) {
-                                      //                   return alert;
-                                      //                 },
-                                      //               );
-                                      //             },
-                                      //             icon: Icon(Icons.close,
-                                      //                 color: Color.fromARGB(
-                                      //                     255, 117, 117, 117)),
-                                      //           )
-                                      //         : Text(
-                                      //             "Admin",
-                                      //             textAlign: TextAlign.right,
-                                      //             style: TextStyle(
-                                      //                 fontSize: 13,
-                                      //                 color: Color.fromARGB(
-                                      //                     255, 104, 104, 104)),
-                                      //           ),
                                     ],
                                   ),
                                 ),
@@ -447,7 +291,6 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                         print('||||||||||||||||||||||||||||||||');
                         print(widget.category);
                         print(widget.list);
-                        // print(widget.listid);
                         print('||||||||||||||||||||||||||||||||');
 
                         Navigator.pushReplacement(
@@ -458,8 +301,6 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                     list: widget.list,
                                     listId: provider.docid)));
                       },
-
-                      //  color: Color.fromARGB(255, 240, 96, 86),
                       child: Text(
                         'Invite Friend',
                         style: TextStyle(
@@ -474,100 +315,4 @@ class _sharedlistdetails extends State<sharedlistdetails> {
           ],
         ));
   }
-}
-
-// showAlertDialog(
-//     BuildContext context, DocumentReference<Object?> docRef, String email) {
-//   // set up the buttons
-//   print('....................................');
-//   print('....................................');
-//   print('....................................');
-//   print('....................................');
-//   print('....................................');
-//   print(email);
-//   print(docRef);
-//   print('....................................');
-//   print('....................................');
-//   print('....................................');
-//   Widget cancelButton = TextButton(
-//     child: Text("Yes"),
-//     onPressed: () async {
-//       // docRef.update({
-//       //   'UID': FieldValue.arrayRemove([
-//       //     email,
-//       //   ])
-//       // });
-//     },
-//   );
-//   Widget continueButton = TextButton(
-//     child: Text("Cancel"),
-//     onPressed: () {
-//       Navigator.of(context).pop(true);
-//     },
-//   );
-
-//   // set up the AlertDialog
-//   AlertDialog alert = AlertDialog(
-//     title: Text("Remove member"),
-//     content: Text("Are you sure you want to remove this member?"),
-//     actions: [
-//       cancelButton,
-//       continueButton,
-//     ],
-//   );
-
-//   // show the dialog
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return alert;
-//     },
-//   );
-// }
-
-showAlertDialog2(BuildContext context, String name) {
-  print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-  // set up the buttons
-  Widget cancelButton = TextButton(
-    child: Text("Yes"),
-    onPressed: () async {
-      // if (provider.list[index].email.contains(
-      //   provider.membersInfo[index].email,
-      // )) {
-      //   DocumentReference docRef = await FirebaseFirestore.instance
-      //       .collection('List')
-      //       .doc(provider.docid);
-
-      //   docRef.update({
-      //     'UID': FieldValue.arrayRemove([
-      //       provider.membersInfo[index].email,
-      //     ])
-      //   });
-      // }
-    },
-  );
-  Widget continueButton = TextButton(
-    child: Text("Cancel"),
-    onPressed: () {
-      Navigator.of(context).pop(true);
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Remove member"),
-    content: Text("Are you sure you want to remove ($name) member?"),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }
