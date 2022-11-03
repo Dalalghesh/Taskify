@@ -187,6 +187,7 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                                         .get();
 
                                                              if (resremove.docs.length != 0)
+                                                             print("inside if"); 
                                                   for (int i = 0;
                                                       i < resremove.docs.length;
                                                       i++) {
@@ -198,9 +199,15 @@ class _sharedlistdetails extends State<sharedlistdetails> {
                                                             .doc(
                                                                 resremove.docs[i].id);
 
-                                                    docRef2.update({
+                                                                  await FirebaseFirestore
+                                                            .instance
+                                                            .collection('invitations')
+                                                            .doc(
+                                                                resremove.docs[i].id).delete();
+
+                                                    /*docRef2.update({
                                                       'status': "rejected" 
-                                                    });
+                                                    });*/
                                                   }
 
                                                   
