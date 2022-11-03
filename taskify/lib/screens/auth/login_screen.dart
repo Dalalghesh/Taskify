@@ -36,9 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        // backgroundColor: Color(0xff7b39ed),
+        title: Text(
+          "Sign in",
+          style: TextStyle(fontSize: 22, color: Colors.black),
+
+          //   style: TextStyle(color: Colors.black),
+        ),
         leadingWidth: 50,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            // color: Colors.white,
+          ),
           onPressed: () {
             Util.routeToWidget(context, OnboardingScreen());
           },
@@ -58,10 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ListView(
                 //padding: const EdgeInsets.all(16),
                 children: [
-                  Text(
-                    'Sign In',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -149,8 +156,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (!formKey.currentState!.validate()) return;
                       FocusScope.of(context).unfocus();
                       loginWithEmailAndPassword(email, password);
-
-                       
                     },
                   ),
                   Padding(
@@ -207,13 +212,12 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {});
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-            /*  print("loged in1");
+        /*  print("loged in1");
             Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
             var time = DateTime.now().second.toString();
             Workmanager().registerPeriodicTask(time,'firstTask' , frequency: const Duration(minutes: 15));
             print("loged in2");*/
         return NavBar(tabs: 0);
-              
       }));
     } catch (e) {
       isLoading = false;
@@ -223,13 +227,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-void callbackDispatcher(){
+void callbackDispatcher() {
   print("inside callbackDispatcher login");
   print("ddddddddddddddddaa");
-Workmanager().executeTask((taskName, inputData)async{
-print("inside callbackDispatcher executeTask login1");
-print("inside callbackDispatcher executeTask login2");
-print("inside callbackDispatcher executeTask login3");
-return Future.value(true);
-});
+  Workmanager().executeTask((taskName, inputData) async {
+    print("inside callbackDispatcher executeTask login1");
+    print("inside callbackDispatcher executeTask login2");
+    print("inside callbackDispatcher executeTask login3");
+    return Future.value(true);
+  });
 }

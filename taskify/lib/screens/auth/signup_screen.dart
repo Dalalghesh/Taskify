@@ -41,6 +41,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 50,
+        centerTitle: true,
+        title: Text(
+          "Sign up",
+          style: TextStyle(fontSize: 22, color: Colors.black),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -62,13 +67,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: ListView(
                 //padding: const EdgeInsets.all(16),
                 children: [
-                  Text(
-                    'Sign Up',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  // Text(
+                  //   'Sign Up',
+                  //   style: Theme.of(context).textTheme.headline4,
+                  // ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
                   Align(
                       alignment: Alignment.center,
                       child: Image.asset(

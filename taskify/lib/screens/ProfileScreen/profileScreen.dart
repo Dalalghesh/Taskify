@@ -725,7 +725,7 @@ class _HomeScreen extends State<HomeScreen> {
                   ? const Center(
                       child: Text(
                       'There are no lists yet',
-                      style: TextStyle(color: Colors.black, fontSize: 18),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ))
                   : ListView.builder(
                       itemCount: provider.myList.length,
