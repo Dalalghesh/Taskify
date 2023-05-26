@@ -54,41 +54,6 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
 
-  Future<void> sendInviation(String recieverEmail, String listId) async {
-    try {
-      // final senderEmail = _firebaseAuth.currentUser?.email;
-      final validate = _formKey.currentState?.validate();
-
-      if (validate ?? false) {
-        _formKey.currentState?.save();
-        // print(email.toString());
-        await context.read<InvitaitonProvider>().sendInvitation(
-            email!, widget.category, widget.list, widget.listId);
-
-        // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.success,
-          text: "Invitation sent successfully",
-          confirmBtnColor: const Color(0xff7b39ed),
-          // onConfirmBtnTap: () => route(isChecked),
-        );
-        // showPlatformDialogue(
-        //     context: context, title: "Invitation sent successfully");
-        _formKey.currentState?.reset();
-      }
-    } catch (e) {
-      _formKey.currentState?.reset();
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.error,
-        text: "You can't invite yourself!",
-        confirmBtnColor: const Color(0xff7b39ed),
-      );
-    }
-    _typeAheadController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
     InvitaitonProvider provider = Provider.of<InvitaitonProvider>(context);
@@ -153,7 +118,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   .where("status", isEqualTo: "pending")
                   .get();
 
-              //Case1 pending
+              //Case1 
               if (res.docs.isNotEmpty) {
                 print("helloooooooo");
                 print("dublicate00");
@@ -174,7 +139,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                     .where("status", isEqualTo: "accepted")
                     .get();
 
-                //Case2 accepted
+                //Case2 
                 if (res1.docs.isNotEmpty) {
                   print("accepted");
                   CoolAlert.show(
@@ -185,9 +150,39 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                     confirmBtnColor: const Color(0xff7b39ed),
                   );
                 }
-                //case3+4 Fisrt Time or rejected
+                //case3+4 
                 else {
-                  await sendInviation(query, widget.listId);
+                         try {
+      // final senderEmail = _firebaseAuth.currentUser?.email;
+      final validate = _formKey.currentState?.validate();
+
+      if (validate ?? false) {
+        _formKey.currentState?.save();
+        // print(email.toString());
+        await context.read<InvitaitonProvider>().sendInvitation(
+            email!, widget.category, widget.list, widget.listId);
+
+        // Provider.of<InvitaitonProvider>(context, listen: false).selectedUser(email);
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Invitation sent successfully",
+          confirmBtnColor: const Color(0xff7b39ed),
+          // onConfirmBtnTap: () => route(isChecked),
+        );
+        // showPlatformDialogue(
+        //     context: context, title: "Invitation sent successfully");
+        _formKey.currentState?.reset();
+      }
+    } catch (e) {
+      _formKey.currentState?.reset();
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "You can't invite yourself!",
+        confirmBtnColor: const Color(0xff7b39ed),
+      );
+    }
                   getUsersToken(email.toString());
                 }
               }
