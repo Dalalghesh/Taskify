@@ -245,15 +245,18 @@ class AppState extends ChangeNotifier {
     // return myTasksList ;
   }
 
+  bool done = true;
   linkData() async {
     myTasksList.forEach((element) {
       if (element.status == "pending") {
+        done = false;
         for (var listElement in myList) {
           if (listElement.list.toString() == element.list.toString()) {
             listElement.pendingTask++;
           }
         }
       } else if (element.status == "completed") {
+        done = true;
         for (var listElement in myList) {
           if (listElement.list.toString() == element.list.toString()) {
             listElement.completedTask++;

@@ -160,12 +160,12 @@ class _Add_Category extends State<Add_Category> {
                             value == null ||
                             value.trim() == '')
                           return "Please enter category name";
-                        else if (!regExp.hasMatch(value.trim())) {
-                          return 'You cannot enter special characters !@#\%^&*()';
-                        } else if (categoriesList.contains(value))
-                          return "This category already exist";
-                        else
-                          return null;
+                        else {
+                          if (!regExp.hasMatch(value.trim())) {
+                            return 'You cannot enter special characters !@#\%^&*()';
+                          } else if (categoriesList.contains(value))
+                            return "This category already exist";
+                        }
                       },
                       style: Theme.of(context).textTheme.subtitle1),
                   SizedBox(
