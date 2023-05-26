@@ -160,18 +160,38 @@ class _Add_Category extends State<Add_Category> {
                             value == null ||
                             value.trim() == '')
                           return "Please enter category name";
-                        // else {
                         else if (!regExp.hasMatch(value.trim())) {
                           return 'You cannot enter special characters !@#\%^&*()';
                         } else if (categoriesList.contains(value))
                           return "This category already exist";
-                        // }
+                        else
+                          return null;
                       },
                       style: Theme.of(context).textTheme.subtitle1),
                   SizedBox(
                     height: 8,
                   ),
-
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(vertical: 5.0.wp),
+                  //   child: Wrap(
+                  //     spacing: 2.0.wp,
+                  //     children: icons
+                  //         .map((e) => Obx(() {
+                  //               final index = icons.indexOf(e);
+                  //               return ChoiceChip(
+                  //                 label: e,
+                  //                 selectedColor: Colors.grey[200],
+                  //                 pressElevation: 0,
+                  //                 backgroundColor: Colors.white,
+                  //                 selected: chipIndex.value == index,
+                  //                 onSelected: (bool selected) {
+                  //                   chipIndex.value = selected ? index : 0;
+                  //                 },
+                  //               );
+                  //             }))
+                  //         .toList(),
+                  //   ),
+                  // ),
                   Row(
                     children: [
                       Expanded(
