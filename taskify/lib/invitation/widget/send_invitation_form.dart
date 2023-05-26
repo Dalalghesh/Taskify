@@ -54,6 +54,7 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
     FirebaseMessaging.instance.subscribeToTopic('subscription');
   }
 
+//Extracted method.
   Future<void> sendInviation(String recieverEmail, String listId) async {
     try {
       // final senderEmail = _firebaseAuth.currentUser?.email;
@@ -139,24 +140,30 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
               final _firebaseFirestore = FirebaseFirestore.instance;
               final senderEmail = _firebaseAuth.currentUser?.email;
 
-              /*final res = await _firebaseFirestore
-                  .collection('invitations')
-                  .where("recieverEmail", isEqualTo: recieverEmail)
-                  .where("senderEmail", isEqualTo: senderEmail)
-                  .where("listId", isEqualTo: widget.listId)
-                  .get();*/
-              final res = await _firebaseFirestore
+             //Rename Variables 
+              final PendingInvitations = await _firebaseFirestore
                   .collection('invitations')
                   .where("recieverEmail", isEqualTo: recieverEmail)
                   .where("senderEmail", isEqualTo: senderEmail)
                   .where("listId", isEqualTo: widget.listId)
                   .where("status", isEqualTo: "pending")
                   .get();
+                
+              //Rename Variables 
+              final AcceptedInvitations = await _firebaseFirestore
+                  .collection('invitations')
+                  .where("recieverEmail", isEqualTo: recieverEmail)
+                  .where("senderEmail", isEqualTo: senderEmail)
+                  .where("listId", isEqualTo: widget.listId)
+                  .where("status", isEqualTo: "accepted")
+                  .get();
 
+
+
+              //Solving Nested if
               //Case1 pending
-              if (res.docs.isNotEmpty) {
-                print("helloooooooo");
-                print("dublicate00");
+              if (PendingInvitations.docs.isNotEmpty) {
+                print("PendingInvitations");
                 CoolAlert.show(
                   context: context,
                   type: CoolAlertType.error,
@@ -164,35 +171,31 @@ class _SendInvitationFormState extends State<SendInvitationForm> {
                   text: "The invitation has already been sent",
                   confirmBtnColor: const Color(0xff7b39ed),
                 );
-                _typeAheadController.clear();
-              } else {
-                final res1 = await _firebaseFirestore
-                    .collection('invitations')
-                    .where("recieverEmail", isEqualTo: recieverEmail)
-                    .where("senderEmail", isEqualTo: senderEmail)
-                    .where("listId", isEqualTo: widget.listId)
-                    .where("status", isEqualTo: "accepted")
-                    .get();
-
-                //Case2 accepted
-                if (res1.docs.isNotEmpty) {
-                  print("accepted");
+                _typeAheadController.clear();}
+              
+              // Solving Nested if
+              //Case2 accepted
+              if (AcceptedInvitations.docs.isNotEmpty) {
+                  print("AcceptedInvitations");
                   CoolAlert.show(
                     context: context,
                     type: CoolAlertType.error,
                     title: "Invitation",
                     text: "Friend already has this list!",
                     confirmBtnColor: const Color(0xff7b39ed),
-                  );
-                }
+                  );}     
+
+                //Solving Nested if
                 //case3+4 Fisrt Time or rejected
-                else {
+              if (AcceptedInvitations.docs.isEmpty && PendingInvitations.docs.isEmpty){
+                  print("Fisrt Time or rejected");      
+                  //calling Extracted method
                   await sendInviation(query, widget.listId);
                   getUsersToken(email.toString());
-                }
-              }
+                }              
               _typeAheadController.clear();
             },
+            
             child: const Text(
               'Invite',
               style: TextStyle(fontSize: 20),
