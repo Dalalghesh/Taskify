@@ -8,13 +8,13 @@ class InvitationModel {
   String list;
   String listId;
   String status;
-  String x;
+ // String x;
   InvitationModel(
       {required this.recivereEmail,
       required this.senderEmail,
       this.id,
       required this.status,
-      required this.x,
+      //required this.x,
       required this.category,
       required this.list,
       required this.listId});
@@ -27,7 +27,7 @@ class InvitationModel {
         "category": category,
         "list": list,
         "listId": listId,
-        "x": x
+       // "x": x
       };
 
   static List<InvitationModel> firebaseToObject(
@@ -44,7 +44,8 @@ class InvitationModel {
             category: doc.data()["category"],
             list: doc.data()["list"],
             listId: doc.data()["listId"],
-            x: "s"),
+            //x: "s"
+            ),
       );
     }
     return [...invitations];

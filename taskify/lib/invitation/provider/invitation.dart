@@ -46,7 +46,7 @@ class InvitaitonProvider with ChangeNotifier {
 
   Future<String> getUsersToken() async {
     final currentUserEmail = _firebaseAuth.currentUser?.email;
-    final sendEmail = '';
+   // final sendEmail = '';
 
     final res = await _firebaseFirestore
         .collection('users1')
@@ -74,31 +74,48 @@ class InvitaitonProvider with ChangeNotifier {
         modelEmails.where((element) => element.email == email) as UserModel;
     notifyListeners();
   }
+  Future<bool> getCurrentUserEmail(email) async{return _firebaseAuth.currentUser?.email;}
 
+  checkTosendInvitation(String email) throws Exception {
+    if (await getCurrentUserEmail(email).isEmpty) throw "user did not sign up";
+    if (await getCurrentUserEmail(email).trim() == email.trim()) throw "You are inviting your own email address";
+    if (!(await _checkIfEmailExists(email))) throw "A user with that email does not exists";
+  }
   Future<void> sendInvitation(
       String email, String category, String list, String listId) async {
+        await checkTosendInvitation(email);
     //Getting current user email
-    final currentUserEmail = _firebaseAuth.currentUser?.email;
-    if (currentUserEmail == null || currentUserEmail.isEmpty) {
-      throw "";
-    } else if (currentUserEmail.trim() == email.trim()) {
-      throw "You are inviting your own email address";
-    }
-    final temp = await _checkIfEmailExists(email);
-    if (!temp) {
-      throw "A user with that email does not exists";
-    }
-    final InvitationModel invitationModel = InvitationModel(
+    //final currentUserEmail = _firebaseAuth.currentUser?.email;
+    //if (currentUserEmail == null || currentUserEmail.isEmpty) {
+     // throw "";
+   // } else if (currentUserEmail.trim() == email.trim()) {
+     // throw "You are inviting your own email address";
+   // }
+   // final temp = await _checkIfEmailExists(email);
+   // if (!temp) {
+      //throw "A user with that email does not exists";
+   // }
+   // final InvitationModel invitationModel = InvitationModel(
+        //recivereEmail: email.toLowerCase(),
+        //senderEmail: currentUserEmail.toLowerCase(),
+       // status: 'pending',
+       // category: category,
+      //  list: list,
+      //  x: "s",
+       // listId: listId);
+    try{
+    _firebaseFirestore
+        .collection(InvitationModel.collectionName)
+        .add(InvitationModel(
         recivereEmail: email.toLowerCase(),
         senderEmail: currentUserEmail.toLowerCase(),
         status: 'pending',
         category: category,
         list: list,
-        x: "s",
-        listId: listId);
-    _firebaseFirestore
-        .collection(InvitationModel.collectionName)
-        .add(invitationModel.getMap());
+        listId: listId).getMap());
+    }catch(error){
+       print(error);
+    }
   }
 
   Future<bool> _checkIfEmailExists(String email) async {
